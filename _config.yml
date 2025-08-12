@@ -1,3 +1,73 @@
+# Site
 title: Anna Foldberg
 #show_downloads: false
-#theme: 
+
+# Theme
+remote_theme: mmistakes/minimal-mistakes
+minimal_mistakes_skin: "air"
+search: true # built-in search
+
+# Languages
+languages: ["en","da","it"]
+default_lang: "en"
+exclude_from_localization: ["assets","images","favicon.ico"] # keeps assets, images, and favicons global instead of language-scoped
+
+# Plugins
+plugins:
+  - jekyll-remote-theme # enables remote_theme
+  - jekyll-polyglot   # needs GitHub Actions build
+
+# NOTE: Consider the following plugins for later:
+#  - jekyll-archives # auto-generates archive pages by year/tag/category
+
+# Permalinks
+permalink: /:categories/:title/
+
+# Collections
+collections:
+  projects:
+    output: true
+    permalink: /projects/:path/
+  notes:
+    output: true
+    permalink: /notes/:path/
+  log:
+    output: true
+    permalink: /log/:path/
+
+# Defaults for front matter
+defaults:
+  # Projects (Trackunit + mini projects)
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: single
+      toc: false
+      sidebar: false
+      classes: wide
+      lang: en
+  # Notes
+  - scope:
+      path: ""
+      type: "notes"
+    values:
+      layout: single
+      toc: true
+      sidebar: false
+      classes: wide
+      lang: en
+  # Log
+  - scope:
+      path: ""
+      type: "log"
+    values:
+      layout: single
+      toc: true
+      sidebar: false
+      lang: en
+
+# NOTE: Each page or post not in English must have a 'lang' key in its front matter
+
+# Header/footer options
+breadcrumbs: true
