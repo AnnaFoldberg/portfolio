@@ -16,6 +16,7 @@ exclude_from_localization: ["assets","images","favicon.ico"] # keeps assets, ima
 plugins:
   - jekyll-remote-theme # enables remote_theme
   - jekyll-polyglot # needs GitHub Actions build
+  - jekyll-include-cache
 
 # NOTE: Consider the following plugins for later:
 #  - jekyll-archives # auto-generates archive pages by year/tag/category
