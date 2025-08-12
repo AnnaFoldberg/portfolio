@@ -1,0 +1,12 @@
+<div class="lang-switcher" style="margin: 0.5rem 0;">
+  {% assign current_path = page.url | remove_first: '/' | split: '/' %}
+  {% assign path_without_lang = current_path | slice: 1, current_path.size | join: '/' %}
+  {% for lang in site.languages %}
+    {% if lang == site.active_lang %}
+      <span style="font-weight:bold;">{{ lang | upcase }}</span>
+    {% else %}
+      <a href="{{ site.baseurl }}/{{ lang }}/{{ path_without_lang }}">{{ lang | upcase }}</a>
+    {% endif %}
+    {% unless forloop.last %} | {% endunless %}
+  {% endfor %}
+</div>
