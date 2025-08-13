@@ -50,24 +50,24 @@ defaults:
       path: ""
       type: "projects"
     values:
-      toc: true
-      sidebar: true
+      toc: false
+      sidebar: false
       classes: wide
   # Notes
   - scope:
       path: ""
       type: "notes"
     values:
-      toc: true
-      sidebar: true
+      toc: false
+      sidebar: false
       classes: wide
   # Log
   - scope:
       path: ""
       type: "log"
     values:
-      toc: true
-      sidebar: true
+      toc: false
+      sidebar: false
       classes: wide
 
 # NOTE: Each page or post not in English must have a 'lang' key in its front matter
