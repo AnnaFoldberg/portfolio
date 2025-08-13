@@ -1,6 +1,7 @@
 ---
-layout: collection
+layout: single
 title: "Projects"
-collection: projects
-entries_layout: grid
+sidebar: true
+collection_name: projects
 ---
+{% include collection-stream.html %}
