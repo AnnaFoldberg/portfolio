@@ -1,6 +1,7 @@
 ---
-layout: collection
+layout: single
 title: "Notes"
-collection: notes
-entries_layout: list
+sidebar: true
+collection_name: notes
 ---
+{% include collection-stream.html %}
