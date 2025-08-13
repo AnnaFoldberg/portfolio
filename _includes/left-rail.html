@@ -1,0 +1,44 @@
+{%- comment -%}
+Left rail with profile card + filters.
+Expects the landing page to set:  page.collection_name  (projects | notes | log)
+Respects language via site.active_lang (polyglot).
+{%- endcomment -%}
+
+{%- assign items = site[page.collection_name] | where: "lang", site.active_lang -%}
+
+{%- assign catset = "" | split: "" -%}
+{%- assign tagset = "" | split: "" -%}
+{%- for d in items -%}
+  {%- for c in d.categories -%}{%- unless catset contains c -%}{%- assign catset = catset | push: c -%}{%- endunless -%}{%- endfor -%}
+  {%- for t in d.tags       -%}{%- unless tagset contains t -%}{%- assign tagset = tagset | push: t -%}{%- endunless -%}{%- endfor -%}
+{%- endfor -%}
+{%- assign catset = catset | sort -%}
+{%- assign tagset = tagset | sort -%}
+
+<aside class="left-rail">
+  <div class="lr-card lr-profile">
+    <img class="lr-avatar" src="{{ site.profile.avatar | relative_url }}" alt="{{ site.profile.name }}">
+    <div class="lr-name">{{ site.profile.name }}</div>
+    <div class="lr-bio">{{ site.profile.bio }}</div>
+  </div>
+
+  <div class="lr-card">
+    <div class="lr-title">Categories</div>
+    <ul class="lr-list">
+      {%- for c in catset -%}
+      <li><label><input type="checkbox" class="cat-filter" value="{{ c }}"> {{ c }}</label></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <div class="lr-card">
+    <div class="lr-title">Tags</div>
+    <ul class="lr-list">
+      {%- for t in tagset -%}
+      <li><label><input type="checkbox" class="tag-filter" value="{{ t }}"> {{ t }}</label></li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  <button id="clear-filters" type="button" class="lr-clear">Clear filters</button>
+</aside>
