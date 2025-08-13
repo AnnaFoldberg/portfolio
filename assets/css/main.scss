@@ -48,9 +48,23 @@
 .rail-layout { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; }
 .left-rail { position: sticky; top: 2rem; align-self: start; }
 
+/* align rail with site header logo */
+@media (min-width: 1100px) {
+  .no-page-padding .rail-layout {
+    padding-left: calc((100% - 1100px) / 2); /* aligns with header text */
+  }
+}
+
 @media (max-width: 900px) {
   .rail-layout { grid-template-columns: 1fr; }
   .left-rail { position: static; margin-bottom: 1rem; }
+}
+
+/* Remove the default centered page padding for rail layouts */
+.no-page-padding .page__inner-wrap {
+  max-width: none;   /* allow full width */
+  padding-left: 2rem;
+  padding-right: 2rem;
 }
 
 /* Left rail cards */
