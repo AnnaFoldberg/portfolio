@@ -11,9 +11,72 @@
 
 .stream-card { margin-bottom:3rem; }
 .stream-title { margin:.25rem 0 .5rem; font-size:1.6rem; }
-.stream-meta { font-size:.9rem; opacity:.7; margin-bottom:1rem; }
 .stream-divider { border:none; border-top:1px solid rgba(0,0,0,.08); margin:2rem 0; }
 .stream-body img { max-width:100%; height:auto; }
+
+/* ---------- Minimal compact stream layout ---------- */
+.compact-stream {
+  /* shrink the page title */
+  .page__title { 
+    font-size: 1.6rem; 
+    margin-bottom: 0.75rem; 
+    line-height: 1.25;
+  }
+
+  /* tighter text rhythm */
+  .page__content {
+    font-size: 1rem;         /* base text size */
+    line-height: 1.55;       /* comfortable but compact */
+  }
+
+  /* each entry */
+  .stream-card { 
+    margin: 1.5rem 0; 
+  }
+
+  /* smaller entry titles (no links) */
+  .stream-title {
+    font-size: 1.25rem;      /* ~20px */
+    font-weight: 700;
+    margin: 0 0 .35rem 0;
+    line-height: 1.25;
+  }
+
+  /* subtle meta */
+  .stream-meta {
+    font-size: 0.9rem;
+    opacity: 0.75;
+    margin-bottom: 0.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .35rem .75rem;
+  }
+
+  /* simple dividers */
+  .stream-divider {
+    border: 0;
+    border-top: 1px solid rgba(0,0,0,.12);
+    margin: 1.25rem 0;
+  }
+
+  /* taxonomy chips - minimal */
+  .taxonomy-list { 
+    list-style: none; 
+    margin: 0; 
+    padding: 0; 
+    display: inline-flex; 
+    flex-wrap: wrap; 
+    gap: .3rem; 
+  }
+  .taxonomy-item {
+    padding: .05rem .4rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    line-height: 1.2;
+    background: rgba(0,0,0,.06);
+    color: inherit;
+  }
+}
 
 /* Stream/meta styling */
 .stream-meta {
