@@ -1,0 +1,17 @@
+{%- comment -%}
+Override Minimal Mistakes' sidebar include only for our stream pages.
+If page.collection_name is set (projects/notes/log landing), render our custom sidebar.
+Otherwise, fall back to the theme's original behavior.
+{%- endcomment -%}
+
+{% if page.collection_name %}
+  <aside class="sidebar sticky">
+    {% include custom-sidebar.html %}
+  </aside>
+{% else %}
+  {%- comment -%} Fallback: render the theme's original logic {%- endcomment -%}
+  {% capture _orig %}
+  {% include_cached mm-sidebar.html %}
+  {% endcapture %}
+  {{ _orig }}
+{% endif %}
