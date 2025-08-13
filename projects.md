@@ -5,7 +5,7 @@ collection_name: projects
 sidebar: true
 toc: true
 author_profile: true
-classes: compact-stream wide no-page-padding
+classes: compact-stream no-page-padding
 ---
 <div class="rail-layout">
   {% include left-rail.html %}
