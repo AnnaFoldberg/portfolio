@@ -7,4 +7,9 @@ toc: true
 author_profile: true
 classes: compact-stream
 ---
-{% include collection-stream.html %}
+<div class="rail-layout">
+  {% include left-rail.html %}
+  <main class="rail-main">
+    {% include collection-stream.html %}
+  </main>
+</div>
