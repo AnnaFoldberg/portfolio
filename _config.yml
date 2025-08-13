@@ -10,6 +10,8 @@ minimal_mistakes_skin: "contrast"
 search: true # built-in search
 sass:
   sourcemap: never # disables sourcemaps
+atom_feed:
+  hide: true
 
 # Languages
 languages: ["en","da","it"]
