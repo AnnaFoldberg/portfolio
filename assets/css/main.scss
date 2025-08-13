@@ -65,23 +65,28 @@
 .lr-list li { margin: .25rem 0; }
 .lr-clear { width: 100%; margin-top: .25rem; }
 
-/* Use the same inner width as the masthead so edges align */
-:root { --container-w: 1200px; }  /* adjust: 1100 (default), 1200, 1240, 1280 */
+/* ---------- Wide container & wrappers ---------- */
+:root { --container-w: 1280px; } /* adjust 1200–1360 to taste */
 
-.masthead__inner-wrap {
+/* Make theme wrappers honor the container width */
+.layout--single .page,
+.layout--single .page__inner-wrap {
   max-width: var(--container-w);
-  margin: 0 auto;
-}
-
-/* Page container that matches the masthead exactly */
-.rail-container {
-  max-width: var(--container-w);
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   padding-left: 0;
   padding-right: 0;
 }
 
-/* Two-column layout inside that matched container */
+/* Match masthead and our custom container */
+.masthead__inner-wrap,
+.rail-container {
+  max-width: var(--container-w);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------- Two-column grid ---------- */
 .rail-layout {
   display: grid;
   grid-template-columns: 320px 1fr;  /* left rail width */
