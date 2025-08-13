@@ -8,6 +8,8 @@ baseurl: "/portfolio"
 theme: minimal-mistakes-jekyll
 minimal_mistakes_skin: "air"
 search: true # built-in search
+sass:
+  sourcemap: never # disables sourcemaps
 
 # Languages
 languages: ["en","da","it"]
