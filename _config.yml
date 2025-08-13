@@ -48,7 +48,7 @@ defaults:
       path: ""
       type: "projects"
     values:
-      layout: single
+      layout: collection
       toc: true
       sidebar: true
       classes: wide
@@ -57,7 +57,7 @@ defaults:
       path: ""
       type: "notes"
     values:
-      layout: archive
+      layout: categories
       toc: true
       sidebar: true
       classes: wide
