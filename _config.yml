@@ -74,3 +74,9 @@ defaults:
 
 # Header/footer options
 breadcrumbs: true
+
+# Profile
+profile:
+  name: "Anna Foldberg"
+  bio: "Backend-leaning engineer. Learning Microservices, Kubernetes, and IT Security."
+  avatar: "/assets/images/profile-picture.jpg" # add this image next step
