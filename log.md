@@ -1,6 +1,7 @@
 ---
-layout: collection
+layout: single
 title: "Log"
-collection: log
-entries_layout: list
+sidebar: true
+collection_name: log
 ---
+{% include collection-stream.html %}
