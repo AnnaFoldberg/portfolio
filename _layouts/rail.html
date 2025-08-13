@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<div class="rail-page">
+  {% if page.breadcrumbs != false %}
+    {% include breadcrumbs.html %}
+  {% endif %}
+
+  <h1 class="page__title">{{ page.title }}</h1>
+
+  <div class="rail-container">
+    <div class="rail-layout">
+      {% include left-rail.html %}
+      <main class="rail-main">
+        {% include collection-stream.html %}
+      </main>
+    </div>
+  </div>
+</div>
