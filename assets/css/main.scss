@@ -4,87 +4,15 @@
 @charset "utf-8";
 @import "minimal-mistakes";
 
-.filter-sidebar { margin-top:.5rem; }
-.filter-title { margin:.25rem 0; font-size:1rem; }
-.filter-list { list-style:none; padding-left:0; margin:0 0 .5rem 0; }
-.filter-list li { margin:.25rem 0; }
+/* ---------- Stream base ---------- */
+#stream .stream-card { margin-bottom: 2rem; }
+.stream-title { margin: .25rem 0 .5rem; font-size: 1.25rem; font-weight: 700; line-height: 1.25; }
+.stream-divider { border: 0; border-top: 1px solid rgba(0,0,0,.12); margin: 1.25rem 0; }
+.stream-body img { max-width: 100%; height: auto; }
 
-.stream-card { margin-bottom:3rem; }
-.stream-title { margin:.25rem 0 .5rem; font-size:1.6rem; }
-.stream-divider { border:none; border-top:1px solid rgba(0,0,0,.08); margin:2rem 0; }
-.stream-body img { max-width:100%; height:auto; }
-
-/* Hide the built-in TOC block on stream pages; keep our filter sidebar */
-.compact-stream .toc { display: none !important; }
-
-/* ---------- Minimal compact stream layout ---------- */
-.compact-stream {
-  /* shrink the page title */
-  .page__title { 
-    font-size: 1.6rem; 
-    margin-bottom: 0.75rem; 
-    line-height: 1.25;
-  }
-
-  /* tighter text rhythm */
-  .page__content {
-    font-size: 1rem;         /* base text size */
-    line-height: 1.55;       /* comfortable but compact */
-  }
-
-  /* each entry */
-  .stream-card { 
-    margin: 1.5rem 0; 
-  }
-
-  /* smaller entry titles (no links) */
-  .stream-title {
-    font-size: 1.25rem;      /* ~20px */
-    font-weight: 700;
-    margin: 0 0 .35rem 0;
-    line-height: 1.25;
-  }
-
-  /* subtle meta */
-  .stream-meta {
-    font-size: 0.9rem;
-    opacity: 0.75;
-    margin-bottom: 0.6rem;
-    display: flex;
-    flex-wrap: wrap;
-    gap: .35rem .75rem;
-  }
-
-  /* simple dividers */
-  .stream-divider {
-    border: 0;
-    border-top: 1px solid rgba(0,0,0,.12);
-    margin: 1.25rem 0;
-  }
-
-  /* taxonomy chips - minimal */
-  .taxonomy-list { 
-    list-style: none; 
-    margin: 0; 
-    padding: 0; 
-    display: inline-flex; 
-    flex-wrap: wrap; 
-    gap: .3rem; 
-  }
-  .taxonomy-item {
-    padding: .05rem .4rem;
-    border-radius: 999px;
-    font-size: .78rem;
-    line-height: 1.2;
-    background: rgba(0,0,0,.06);
-    color: inherit;
-  }
-}
-
-/* Stream/meta styling */
 .stream-meta {
-  font-size: 0.9rem;
-  opacity: 0.85;
+  font-size: .9rem;
+  opacity: .85;
   margin-bottom: 1rem;
   display: flex;
   flex-wrap: wrap;
@@ -92,20 +20,9 @@
   align-items: center;
 }
 
-.taxonomy-label {
-  font-weight: 600;
-  opacity: .8;
-}
-
-.taxonomy-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: inline-flex;
-  flex-wrap: wrap;
-  gap: .35rem;
-}
-
+/* Taxonomy chips */
+.taxonomy-label { font-weight: 600; opacity: .8; }
+.taxonomy-list { list-style: none; margin: 0; padding: 0; display: inline-flex; flex-wrap: wrap; gap: .35rem; }
 .taxonomy-item {
   display: inline-block;
   padding: .15rem .5rem;
@@ -116,6 +33,43 @@
   color: inherit;
   cursor: default;
 }
-
-/* make taxonomy chips clickable to toggle filters */
 .taxonomy-item[data-filter] { cursor: pointer; }
+
+/* Hide the built-in TOC block on compact pages (we use our own rail) */
+.compact-stream .toc { display: none !important; }
+
+/* ---------- Compact page typography ---------- */
+.compact-stream {
+  .page__title { font-size: 1.6rem; margin-bottom: .75rem; line-height: 1.25; }
+  .page__content { font-size: 1rem; line-height: 1.55; }
+}
+
+/* ---------- Left rail layout ---------- */
+.rail-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; }
+.left-rail { position: sticky; top: 2rem; align-self: start; }
+
+@media (max-width: 900px) {
+  .rail-layout { grid-template-columns: 1fr; }
+  .left-rail { position: static; margin-bottom: 1rem; }
+}
+
+/* Left rail cards */
+.lr-card {
+  background: var(--mm-surface, #fff);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.lr-title { font-size: .9rem; font-weight: 700; letter-spacing: .02em; opacity: .8; margin-bottom: .5rem; }
+
+/* Profile block */
+.lr-profile { text-align: center; }
+.lr-avatar { width: 88px; height: 88px; border-radius: 999px; object-fit: cover; display: block; margin: 0 auto .5rem; }
+.lr-name { font-weight: 800; }
+.lr-bio { font-size: .9rem; opacity: .8; }
+
+/* Lists */
+.lr-list { list-style: none; margin: 0; padding: 0; }
+.lr-list li { margin: .25rem 0; }
+.lr-clear { width: 100%; margin-top: .25rem; }
