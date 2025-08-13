@@ -4,7 +4,9 @@
 @charset "utf-8";
 @import "minimal-mistakes";
 
-/* ---------- Stream base ---------- */
+/* =========================================================
+   Stream base
+   ========================================================= */
 #stream .stream-card { margin-bottom: 2rem; }
 .stream-title { margin: .25rem 0 .5rem; font-size: 1.25rem; font-weight: 700; line-height: 1.25; }
 .stream-divider { border: 0; border-top: 1px solid rgba(0,0,0,.12); margin: 1.25rem 0; }
@@ -35,16 +37,20 @@
 }
 .taxonomy-item[data-filter] { cursor: pointer; }
 
-/* Hide built-in TOC on compact pages (we use our own rail) */
+/* Hide the built-in TOC block on compact pages (we use our own rail) */
 .compact-stream .toc { display: none !important; }
 
-/* ---------- Compact page typography ---------- */
+/* =========================================================
+   Compact page typography
+   ========================================================= */
 .compact-stream {
   .page__title { font-size: 1.6rem; margin-bottom: .75rem; line-height: 1.25; }
   .page__content { font-size: 1rem; line-height: 1.55; }
 }
 
-/* Left rail cards */
+/* =========================================================
+   Left rail card styles
+   ========================================================= */
 .lr-card {
   background: var(--mm-surface, #fff);
   border: 1px solid rgba(0,0,0,.08);
@@ -61,10 +67,20 @@
 .lr-list li { margin: .25rem 0; }
 .lr-clear { width: 100%; margin-top: .25rem; }
 
-/* ---------- Wide container & wrappers ---------- */
-:root { --container-w: 1280px; } /* adjust 1200–1360 to taste */
+/* =========================================================
+   Container width & wrapper overrides
+   ========================================================= */
+/* Choose your working width (1200–1360px is typical). */
+:root { --container-w: 1280px; }
 
-/* 1) Remove theme’s narrow caps anywhere they show up */
+/* Make the masthead match this width */
+.masthead__inner-wrap {
+  max-width: var(--container-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Remove narrow caps and reserve no sidebar space */
 .initial-content,
 #main,
 .page,
@@ -78,8 +94,7 @@
   margin-right: auto !important;
 }
 
-/* 2) Constrain to same width as masthead and center */
-.masthead__inner-wrap,
+/* Constrain the main page container to the masthead width */
 .page,
 .page__inner-wrap,
 .rail-container {
@@ -88,28 +103,13 @@
   margin-right: auto !important;
 }
 
-/* ---------- Two-column grid ---------- */
-.rail-layout {
-  display: grid;
-  grid-template-columns: 320px 1fr;  /* left rail width */
-  gap: 2rem;
-}
-.left-rail { position: sticky; top: 2rem; align-self: start; }
-
-@media (max-width: 900px) {
-  .rail-layout { grid-template-columns: 1fr; }
-  .left-rail { position: static; margin-bottom: 1rem; }
-}
-
-/* Kill any reserved sidebar gutter if a 'has-sidebar' class sneaks in */
+/* If the theme ever adds a sidebar class, neutralize its gutter */
 body.layout--single.has-sidebar .sidebar,
 body.layout--single.has-sidebar .sidebar__right { display: none !important; }
-
 body.layout--single.has-sidebar .page {
   float: none !important;
   width: auto !important;
 }
-
 body.layout--single.has-sidebar .page__inner-wrap,
 body.layout--single.has-sidebar .page__content {
   margin-left: auto !important;
@@ -117,4 +117,32 @@ body.layout--single.has-sidebar .page__content {
   padding-left: 0 !important;
   padding-right: 0 !important;
   max-width: var(--container-w) !important;
+}
+
+/* =========================================================
+   Two-column grid + wide-screen pinning
+   ========================================================= */
+.rail-layout {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr) !important; /* left rail + content */
+  grid-auto-flow: row !important;
+  gap: 2rem;
+  align-items: start;
+}
+.rail-layout > * { min-width: 0; } /* keep long content from pushing columns */
+
+.left-rail {
+  position: sticky; top: 2rem; align-self: start;
+  grid-column: 1 !important;
+  float: none !important;        /* nuke any sidebar float */
+  margin-left: 0 !important;     /* nuke any sidebar gutter */
+}
+.rail-main {
+  grid-column: 2 !important;
+}
+
+/* Stack on small screens */
+@media (max-width: 900px) {
+  .rail-layout { grid-template-columns: 1fr !important; }
+  .left-rail { position: static; margin-bottom: 1rem; }
 }
