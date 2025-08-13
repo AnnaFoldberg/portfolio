@@ -4,7 +4,7 @@
 @charset "utf-8";
 @import "minimal-mistakes";
 
-/* ---------------- Stream base ---------------- */
+/* ---------- Stream base ---------- */
 #stream .stream-card { margin-bottom: 2rem; }
 .stream-title { margin: .25rem 0 .5rem; font-size: 1.25rem; font-weight: 700; line-height: 1.25; }
 .stream-divider { border: 0; border-top: 1px solid rgba(0,0,0,.12); margin: 1.25rem 0; }
@@ -35,10 +35,10 @@
 }
 .taxonomy-item[data-filter] { cursor: pointer; }
 
-/* Hide the built-in TOC block on compact pages (we use our own rail) */
+/* Hide built-in TOC on compact pages (we use our own rail) */
 .compact-stream .toc { display: none !important; }
 
-/* ---------------- Compact page typography ---------------- */
+/* ---------- Compact page typography ---------- */
 .compact-stream {
   .page__title { font-size: 1.6rem; margin-bottom: .75rem; line-height: 1.25; }
   .page__content { font-size: 1rem; line-height: 1.55; }
@@ -53,50 +53,42 @@
   margin-bottom: 1rem;
 }
 .lr-title { font-size: .9rem; font-weight: 700; letter-spacing: .02em; opacity: .8; margin-bottom: .5rem; }
-
-/* Profile block */
 .lr-profile { text-align: center; }
 .lr-avatar { width: 88px; height: 88px; border-radius: 999px; object-fit: cover; display: block; margin: 0 auto .5rem; }
 .lr-name { font-weight: 800; }
 .lr-bio { font-size: .9rem; opacity: .8; }
-
-/* Lists */
 .lr-list { list-style: none; margin: 0; padding: 0; }
 .lr-list li { margin: .25rem 0; }
 .lr-clear { width: 100%; margin-top: .25rem; }
 
-/* ---------------- Wide container & wrappers ---------------- */
-/* Match the masthead width; adjust to taste (1200–1360). */
-:root { --container-w: 1280px; }
+/* ---------- Wide container & wrappers ---------- */
+:root { --container-w: 1280px; } /* adjust 1200–1360 to taste */
 
-/* Ensure the masthead and page wrappers share the same width */
-.masthead__inner-wrap {
-  max-width: var(--container-w) !important;
+/* 1) Remove theme’s narrow caps anywhere they show up */
+.initial-content,
+#main,
+.page,
+.page__inner-wrap,
+.page__content {
+  max-width: none !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
-/* Belt-and-suspenders: override every wrapper the theme uses */
-.layout--single .initial-content,
-.layout--single #main,
-.layout--single .page,
-.layout--single .page__inner-wrap,
-.layout--single .page__content {
-  max-width: var(--container-w) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 0;
-  padding-right: 0;
-}
-
-/* Our own container lives inside the wrappers above */
+/* 2) Constrain to same width as masthead and center */
+.masthead__inner-wrap,
+.page,
+.page__inner-wrap,
 .rail-container {
-  max-width: var(--container-w);
-  margin-left: auto;
-  margin-right: auto;
+  max-width: var(--container-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
-/* ---------------- Two-column grid ---------------- */
+/* ---------- Two-column grid ---------- */
 .rail-layout {
   display: grid;
   grid-template-columns: 320px 1fr;  /* left rail width */
