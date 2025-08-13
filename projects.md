@@ -1,8 +1,10 @@
 ---
 layout: single
 title: "Projects"
-sidebar: true
 collection_name: projects
+sidebar: true
+toc: true
+author_profile: true
 classes: compact-stream
 ---
 {% include collection-stream.html %}
