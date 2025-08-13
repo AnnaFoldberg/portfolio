@@ -65,26 +65,31 @@
 .lr-list li { margin: .25rem 0; }
 .lr-clear { width: 100%; margin-top: .25rem; }
 
-/* ===== Shared container width (masthead + page) ===== */
-:root { --container-w: 1240px; }           /* try 1240–1280 if you want even wider */
+/* Use the same inner width as the masthead so edges align */
+:root { --container-w: 1200px; }  /* adjust: 1100 (default), 1200, 1240, 1280 */
 
-.masthead__inner-wrap {                    /* header container */
+.masthead__inner-wrap {
   max-width: var(--container-w);
   margin: 0 auto;
 }
 
-.no-page-padding .page__inner-wrap {       /* page container */
+/* Page container that matches the masthead exactly */
+.rail-container {
   max-width: var(--container-w);
   margin: 0 auto;
-  padding-left: 0;                         /* align left edge with masthead */
+  padding-left: 0;
   padding-right: 0;
 }
 
-/* Two-column rail layout (left rail + content) */
-.rail-layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; }  /* wider rail */
-.left-rail   { position: sticky; top: 2rem; align-self: start; }
+/* Two-column layout inside that matched container */
+.rail-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;  /* left rail width */
+  gap: 2rem;
+}
+.left-rail { position: sticky; top: 2rem; align-self: start; }
 
 @media (max-width: 900px) {
   .rail-layout { grid-template-columns: 1fr; }
-  .left-rail   { position: static; margin-bottom: 1rem; }
+  .left-rail { position: static; margin-bottom: 1rem; }
 }
