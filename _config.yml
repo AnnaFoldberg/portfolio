@@ -5,7 +5,7 @@ baseurl: "/portfolio"
 #show_downloads: false
 
 # Theme
-remote_theme: mmistakes/minimal-mistakes
+theme: minimal-mistakes-jekyll
 minimal_mistakes_skin: "air"
 search: true # built-in search
 
@@ -16,7 +16,6 @@ exclude_from_localization: ["assets","images","favicon.ico"] # keeps assets, ima
 
 # Plugins
 plugins:
-  - jekyll-remote-theme # enables remote_theme
   - jekyll-polyglot # needs GitHub Actions build
   - jekyll-include-cache
 
