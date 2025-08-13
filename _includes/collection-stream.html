@@ -6,7 +6,7 @@
   <article class="stream-card"
            data-cats="{{ doc.categories | join: ' ' }}"
            data-tags="{{ doc.tags | join: ' ' }}">
-    <h2 class="stream-title">{{ doc.title }}</h2>   {# no hyperlink #}
+    <h2 class="stream-title">{{ doc.title }}</h2> <!-- no hyperlink -->
     <div class="stream-meta">
       {%- if doc.categories and doc.categories != empty -%}
         <span>Categories: {{ doc.categories | join: " • " }}</span>
