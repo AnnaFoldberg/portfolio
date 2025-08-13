@@ -14,6 +14,9 @@
 .stream-divider { border:none; border-top:1px solid rgba(0,0,0,.08); margin:2rem 0; }
 .stream-body img { max-width:100%; height:auto; }
 
+/* Hide the built-in TOC block on stream pages; keep our filter sidebar */
+.compact-stream .toc { display: none !important; }
+
 /* ---------- Minimal compact stream layout ---------- */
 .compact-stream {
   /* shrink the page title */
