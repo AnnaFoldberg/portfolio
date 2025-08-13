@@ -44,23 +44,6 @@
   .page__content { font-size: 1rem; line-height: 1.55; }
 }
 
-/* ---------- Left rail layout ---------- */
-.rail-layout { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; }
-.left-rail { position: sticky; top: 2rem; align-self: start; }
-
-@media (max-width: 900px) {
-  .rail-layout { grid-template-columns: 1fr; }
-  .left-rail { position: static; margin-bottom: 1rem; }
-}
-
-/* Make the page wrapper match the masthead container */
-.no-page-padding .page__inner-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding-left: 0;
-  padding-right: 0;
-}
-
 /* Left rail cards */
 .lr-card {
   background: var(--mm-surface, #fff);
@@ -81,3 +64,27 @@
 .lr-list { list-style: none; margin: 0; padding: 0; }
 .lr-list li { margin: .25rem 0; }
 .lr-clear { width: 100%; margin-top: .25rem; }
+
+/* ===== Shared container width (masthead + page) ===== */
+:root { --container-w: 1240px; }           /* try 1240–1280 if you want even wider */
+
+.masthead__inner-wrap {                    /* header container */
+  max-width: var(--container-w);
+  margin: 0 auto;
+}
+
+.no-page-padding .page__inner-wrap {       /* page container */
+  max-width: var(--container-w);
+  margin: 0 auto;
+  padding-left: 0;                         /* align left edge with masthead */
+  padding-right: 0;
+}
+
+/* Two-column rail layout (left rail + content) */
+.rail-layout { display: grid; grid-template-columns: 320px 1fr; gap: 2rem; }  /* wider rail */
+.left-rail   { position: sticky; top: 2rem; align-self: start; }
+
+@media (max-width: 900px) {
+  .rail-layout { grid-template-columns: 1fr; }
+  .left-rail   { position: static; margin-bottom: 1rem; }
+}
