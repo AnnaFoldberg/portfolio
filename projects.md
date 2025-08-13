@@ -1,8 +1,8 @@
 ---
-layout: single
+layout: rail
 title: "Projects"
 collection_name: projects
-classes: "compact-stream wide"
+classes: compact-stream
 sidebar: false
 ---
 <div class="rail-container">
