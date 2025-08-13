@@ -100,3 +100,21 @@
   .rail-layout { grid-template-columns: 1fr; }
   .left-rail { position: static; margin-bottom: 1rem; }
 }
+
+/* Kill any reserved sidebar gutter if a 'has-sidebar' class sneaks in */
+body.layout--single.has-sidebar .sidebar,
+body.layout--single.has-sidebar .sidebar__right { display: none !important; }
+
+body.layout--single.has-sidebar .page {
+  float: none !important;
+  width: auto !important;
+}
+
+body.layout--single.has-sidebar .page__inner-wrap,
+body.layout--single.has-sidebar .page__content {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  max-width: var(--container-w) !important;
+}
