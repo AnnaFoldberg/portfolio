@@ -8,12 +8,23 @@
            data-tags="{{ doc.tags | join: ' ' }}">
     <h2 class="stream-title">{{ doc.title }}</h2> <!-- no hyperlink -->
     <div class="stream-meta">
-      {%- if doc.categories and doc.categories != empty -%}
-        <span>Categories: {{ doc.categories | join: " • " }}</span>
-      {%- endif -%}
-      {%- if doc.tags and doc.tags != empty -%}
-        <span style="margin-left:.5rem;">Tags: {{ doc.tags | join: ", " }}</span>
-      {%- endif -%}
+      {% if doc.categories and doc.categories != empty %}
+        <span class="taxonomy-label">Categories:</span>
+        <ul class="taxonomy-list">
+          {% for c in doc.categories %}
+            <li class="taxonomy-item" data-filter="cat">{{ c }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    
+      {% if doc.tags and doc.tags != empty %}
+        <span class="taxonomy-label">Tags:</span>
+        <ul class="taxonomy-list">
+          {% for t in doc.tags %}
+            <li class="taxonomy-item" data-filter="tag">{{ t }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
     </div>
     <div class="stream-body">
       {{ doc.content }}
