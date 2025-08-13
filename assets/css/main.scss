@@ -4,7 +4,7 @@
 @charset "utf-8";
 @import "minimal-mistakes";
 
-/* ---------- Stream base ---------- */
+/* ---------------- Stream base ---------------- */
 #stream .stream-card { margin-bottom: 2rem; }
 .stream-title { margin: .25rem 0 .5rem; font-size: 1.25rem; font-weight: 700; line-height: 1.25; }
 .stream-divider { border: 0; border-top: 1px solid rgba(0,0,0,.12); margin: 1.25rem 0; }
@@ -38,7 +38,7 @@
 /* Hide the built-in TOC block on compact pages (we use our own rail) */
 .compact-stream .toc { display: none !important; }
 
-/* ---------- Compact page typography ---------- */
+/* ---------------- Compact page typography ---------------- */
 .compact-stream {
   .page__title { font-size: 1.6rem; margin-bottom: .75rem; line-height: 1.25; }
   .page__content { font-size: 1rem; line-height: 1.55; }
@@ -65,28 +65,38 @@
 .lr-list li { margin: .25rem 0; }
 .lr-clear { width: 100%; margin-top: .25rem; }
 
-/* ---------- Wide container & wrappers ---------- */
-:root { --container-w: 1280px; } /* adjust 1200–1360 to taste */
+/* ---------------- Wide container & wrappers ---------------- */
+/* Match the masthead width; adjust to taste (1200–1360). */
+:root { --container-w: 1280px; }
 
-/* Make theme wrappers honor the container width */
+/* Ensure the masthead and page wrappers share the same width */
+.masthead__inner-wrap {
+  max-width: var(--container-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* Belt-and-suspenders: override every wrapper the theme uses */
+.layout--single .initial-content,
+.layout--single #main,
 .layout--single .page,
-.layout--single .page__inner-wrap {
-  max-width: var(--container-w);
-  margin-left: auto;
-  margin-right: auto;
+.layout--single .page__inner-wrap,
+.layout--single .page__content {
+  max-width: var(--container-w) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   padding-left: 0;
   padding-right: 0;
 }
 
-/* Match masthead and our custom container */
-.masthead__inner-wrap,
+/* Our own container lives inside the wrappers above */
 .rail-container {
   max-width: var(--container-w);
   margin-left: auto;
   margin-right: auto;
 }
 
-/* ---------- Two-column grid ---------- */
+/* ---------------- Two-column grid ---------------- */
 .rail-layout {
   display: grid;
   grid-template-columns: 320px 1fr;  /* left rail width */
