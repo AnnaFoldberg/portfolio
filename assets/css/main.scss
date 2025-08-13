@@ -45,7 +45,7 @@
 }
 
 /* ---------- Left rail layout ---------- */
-.rail-layout { display: grid; grid-template-columns: 260px 1fr; gap: 2rem; }
+.rail-layout { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; }
 .left-rail { position: sticky; top: 2rem; align-self: start; }
 
 @media (max-width: 900px) {
