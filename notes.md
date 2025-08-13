@@ -1,8 +1,10 @@
 ---
 layout: single
 title: "Notes"
-sidebar: true
 collection_name: notes
+sidebar: true
+toc: true
+author_profile: true
 classes: compact-stream
 ---
 {% include collection-stream.html %}
