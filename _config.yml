@@ -6,7 +6,7 @@ baseurl: "/portfolio"
 
 # Theme
 theme: minimal-mistakes-jekyll
-minimal_mistakes_skin: "air"
+minimal_mistakes_skin: "dirt"
 search: true # built-in search
 sass:
   sourcemap: never # disables sourcemaps
@@ -57,7 +57,7 @@ defaults:
       path: ""
       type: "notes"
     values:
-      layout: categories
+      layout: collection
       toc: true
       sidebar: true
       classes: wide
