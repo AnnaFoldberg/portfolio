@@ -3,3 +3,14 @@
 ---
 @charset "utf-8";
 @import "minimal-mistakes";
+
+.filter-sidebar { margin-top:.5rem; }
+.filter-title { margin:.25rem 0; font-size:1rem; }
+.filter-list { list-style:none; padding-left:0; margin:0 0 .5rem 0; }
+.filter-list li { margin:.25rem 0; }
+
+.stream-card { margin-bottom:3rem; }
+.stream-title { margin:.25rem 0 .5rem; font-size:1.6rem; }
+.stream-meta { font-size:.9rem; opacity:.7; margin-bottom:1rem; }
+.stream-divider { border:none; border-top:1px solid rgba(0,0,0,.08); margin:2rem 0; }
+.stream-body img { max-width:100%; height:auto; }
