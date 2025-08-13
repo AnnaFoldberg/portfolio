@@ -20,10 +20,8 @@ exclude_from_localization: ["assets","images","favicon.ico"] # keeps assets, ima
 plugins:
   - jekyll-polyglot # needs GitHub Actions build
   - jekyll-include-cache
-
-# NOTE: Consider the following plugins for later:
-#  - jekyll-archives # auto-generates archive pages by year/tag/category
-
+  - jekyll-archives # auto-generates archive pages by year/tag/category
+  
 # Permalinks
 permalink: /:categories/:title/
 
@@ -51,26 +49,26 @@ defaults:
       type: "projects"
     values:
       layout: single
-      toc: false
-      sidebar: false
+      toc: true
+      sidebar: true
       classes: wide
   # Notes
   - scope:
       path: ""
       type: "notes"
     values:
-      layout: single
+      layout: archive
       toc: true
-      sidebar: false
+      sidebar: true
       classes: wide
   # Log
   - scope:
       path: ""
       type: "log"
     values:
-      layout: single
+      layout: page
       toc: true
-      sidebar: false
+      sidebar: true
 
 # NOTE: Each page or post not in English must have a 'lang' key in its front matter
 
