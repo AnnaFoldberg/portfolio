@@ -65,84 +65,84 @@
 .lr-bio { font-size: .9rem; opacity: .8; }
 .lr-list { list-style: none; margin: 0; padding: 0; }
 .lr-list li { margin: .25rem 0; }
-.lr-clear { width: 100%; margin-top: .25rem; }
 
 /* =========================================================
-   Container width & wrapper overrides
+   Button: Clear filters (styled consistently at all widths)
    ========================================================= */
-/* Choose your working width (1200–1360px is typical). */
-:root { --container-w: 1280px; }
-
-/* Make the masthead match this width */
-.masthead__inner-wrap {
-  max-width: var(--container-w) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+:root {
+  --btn-text: var(--mm-text, #1a1a1a);
+  --btn-bg: var(--mm-surface, #fff);
+  --btn-border: rgba(0,0,0,.12);
+  --btn-bg-hover: rgba(0,0,0,.04);
+  --btn-bg-active: rgba(0,0,0,.08);
+  --btn-ring: 0 0 0 3px rgba(0,120,255,.25);
 }
 
-/* Remove narrow caps and reserve no sidebar space */
-.initial-content,
-#main,
-.page,
-.page__inner-wrap,
-.page__content {
-  max-width: none !important;
-  width: 100% !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
+.lr-clear {
+  display: block;
+  width: 100%;
+  padding: .6rem .9rem;
+  border-radius: 12px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font: inherit;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  transition: background .15s ease, box-shadow .15s ease, transform .02s ease;
+}
+.lr-clear:hover { background: var(--btn-bg-hover); }
+.lr-clear:active { background: var(--btn-bg-active); transform: translateY(.5px); }
+.lr-clear:focus-visible { outline: none; box-shadow: var(--btn-ring); }
+
+/* =========================================================
+   Rail layout container & wrappers
+   (used with layout: rail to avoid theme's page scaffold)
+   ========================================================= */
+
+/* Visual width: from brand “Portfolio” to search icon feel */
+:root {
+  --rail-max: 1400px;                    /* adjust to taste */
+  --rail-pad: clamp(16px, 2.5vw, 32px);  /* nice responsive gutters */
 }
 
-/* Constrain the main page container to the masthead width */
-.page,
-.page__inner-wrap,
+/* Our custom rail page (keeps crumbs/title aligned with content) */
+.rail-page { padding-inline: var(--rail-pad); }
+
+/* Main container spans wide but stays centered */
 .rail-container {
-  max-width: var(--container-w) !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-/* If the theme ever adds a sidebar class, neutralize its gutter */
-body.layout--single.has-sidebar .sidebar,
-body.layout--single.has-sidebar .sidebar__right { display: none !important; }
-body.layout--single.has-sidebar .page {
-  float: none !important;
-  width: auto !important;
-}
-body.layout--single.has-sidebar .page__inner-wrap,
-body.layout--single.has-sidebar .page__content {
-  margin-left: auto !important;
-  margin-right: auto !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  max-width: var(--container-w) !important;
+  margin-inline: auto;
+  max-width: var(--rail-max);
+  padding-inline: 0; /* outer padding is handled by .rail-page */
 }
 
 /* =========================================================
-   Two-column grid + wide-screen pinning
+   Two-column grid + pinning (prevents wide-screen drift)
    ========================================================= */
 .rail-layout {
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr) !important; /* left rail + content */
-  grid-auto-flow: row !important;
+  grid-template-columns: 320px minmax(0, 1fr); /* left rail + content */
   gap: 2rem;
   align-items: start;
 }
-.rail-layout > * { min-width: 0; } /* keep long content from pushing columns */
+.rail-layout > * { min-width: 0; } /* prevent long content from pushing columns */
 
 .left-rail {
-  position: sticky; top: 2rem; align-self: start;
-  grid-column: 1 !important;
-  float: none !important;        /* nuke any sidebar float */
-  margin-left: 0 !important;     /* nuke any sidebar gutter */
+  grid-column: 1;
+  position: sticky;
+  top: 2rem;
+  align-self: start;
 }
-.rail-main {
-  grid-column: 2 !important;
-}
+
+.rail-main { grid-column: 2; }
 
 /* Stack on small screens */
 @media (max-width: 900px) {
-  .rail-layout { grid-template-columns: 1fr !important; }
+  .rail-container { max-width: none; }
+  .rail-layout { grid-template-columns: 1fr; }
   .left-rail { position: static; margin-bottom: 1rem; }
 }
