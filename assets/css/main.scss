@@ -48,11 +48,12 @@
 .rail-layout { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; }
 .left-rail { position: sticky; top: 2rem; align-self: start; }
 
-/* align rail with site header logo */
-@media (min-width: 1100px) {
-  .no-page-padding .rail-layout {
-    padding-left: calc((100% - 1100px) / 2); /* aligns with header text */
-  }
+/* Make the page wrapper match the masthead container */
+.no-page-padding .page__inner-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 @media (max-width: 900px) {
