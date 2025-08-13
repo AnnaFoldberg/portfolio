@@ -5,7 +5,7 @@ collection_name: projects
 sidebar: true
 toc: true
 author_profile: true
-classes: compact-stream
+classes: compact-stream wide
 ---
 <div class="rail-layout">
   {% include left-rail.html %}
