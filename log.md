@@ -1,8 +1,10 @@
 ---
 layout: single
 title: "Log"
-sidebar: true
 collection_name: log
+sidebar: true
+toc: true
+author_profile: true
 classes: compact-stream
 ---
 {% include collection-stream.html %}
