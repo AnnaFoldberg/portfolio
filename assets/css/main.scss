@@ -46,10 +46,10 @@
   border-radius: 999px;
   font-size: .85rem;
   line-height: 1.2;
-  background: rgba(0,0,0,.06);           /* looks good across skins */
+  background: rgba(0,0,0,.06);
   color: inherit;
   cursor: default;
 }
 
-/* Optional: make taxonomy chips clickable to toggle filters */
+/* make taxonomy chips clickable to toggle filters */
 .taxonomy-item[data-filter] { cursor: pointer; }
