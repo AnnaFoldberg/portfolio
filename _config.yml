@@ -6,7 +6,7 @@ baseurl: "/portfolio"
 
 # Theme
 theme: minimal-mistakes-jekyll
-minimal_mistakes_skin: "dirt"
+minimal_mistakes_skin: "contrast"
 search: true # built-in search
 sass:
   sourcemap: never # disables sourcemaps
@@ -48,7 +48,6 @@ defaults:
       path: ""
       type: "projects"
     values:
-      layout: collection
       toc: true
       sidebar: true
       classes: wide
@@ -57,7 +56,6 @@ defaults:
       path: ""
       type: "notes"
     values:
-      layout: collection
       toc: true
       sidebar: true
       classes: wide
@@ -66,9 +64,9 @@ defaults:
       path: ""
       type: "log"
     values:
-      layout: page
       toc: true
       sidebar: true
+      classes: wide
 
 # NOTE: Each page or post not in English must have a 'lang' key in its front matter
 
