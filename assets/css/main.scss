@@ -158,3 +158,19 @@
 .lr-list input[type="checkbox"] {
   margin: 0; /* remove extra space */
 }
+
+/* Style theme's sidebar like left rail */
+.sidebar__left {
+  width: 320px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.sidebar__left .lr-card {
+  background: var(--mm-surface, #fff);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
