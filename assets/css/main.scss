@@ -146,3 +146,15 @@
   .rail-layout { grid-template-columns: 1fr; }
   .left-rail { position: static; margin-bottom: 1rem; }
 }
+
+/* Keep checkbox and label text on one line in left rail */
+.lr-list label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em; /* space between box and text */
+  white-space: nowrap; /* prevents label text from wrapping to the next line */
+}
+
+.lr-list input[type="checkbox"] {
+  margin: 0; /* remove extra space */
+}
