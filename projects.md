@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: two_col
 title: "Projects"
 collection_name: projects
 classes: "compact-stream wide"
