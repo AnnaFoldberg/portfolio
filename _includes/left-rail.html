@@ -1,6 +1,6 @@
 {%- comment -%}
 Left rail with profile card + filters.
-Expects the landing page to set:  page.collection_name  (projects | notes | log)
+Expects: page.collection_name (projects | notes | log)
 Respects language via site.active_lang (polyglot).
 {%- endcomment -%}
 
@@ -15,7 +15,7 @@ Respects language via site.active_lang (polyglot).
 {%- assign catset = catset | sort -%}
 {%- assign tagset = tagset | sort -%}
 
-<aside class="left-rail">
+<div class="left-rail">
   <div class="lr-card lr-profile">
     <img class="lr-avatar" src="{{ site.profile.avatar | relative_url }}" alt="{{ site.profile.name }}">
     <div class="lr-name">{{ site.profile.name }}</div>
@@ -41,4 +41,4 @@ Respects language via site.active_lang (polyglot).
   </div>
 
   <button id="clear-filters" type="button" class="lr-clear">Clear filters</button>
-</aside>
+</div>
