@@ -6,7 +6,7 @@ baseurl: ""
 
 # Theme
 theme: minimal-mistakes-jekyll
-minimal_mistakes_skin: "contrast"
+minimal_mistakes_skin: "default"
 search: true # built-in search
 sass:
   sourcemap: never # disables sourcemaps
