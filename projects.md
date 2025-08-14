@@ -6,3 +6,4 @@ classes: "compact-stream wide"
 sidebar:
   nav: "projects-rail"
 ---
+{% include collection-stream.html %}
