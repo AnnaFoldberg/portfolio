@@ -75,6 +75,10 @@ defaults:
 # Header/footer options
 breadcrumbs: true
 
+# Sidebar
+sidebar:
+  position: left
+
 # Profile
 profile:
   name: "Anna Foldberg"
