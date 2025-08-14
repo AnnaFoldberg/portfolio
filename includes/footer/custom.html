@@ -1,0 +1,18 @@
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const items = document.querySelectorAll(".taxonomy-item");
+
+  items.forEach(item => {
+    // Generate a consistent "random" color based on the tag/category name
+    const text = item.textContent.trim();
+    const hash = [...text].reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
+    
+    // HSL values for nice pastel-ish colors
+    const hue = Math.abs(hash) % 360;       // 0-359 hue
+    const sat = 60;                         // % saturation
+    const light = 45;                       // % lightness
+    
+    item.style.setProperty("--tag-bg", `hsl(${hue}, ${sat}%, ${light}%)`);
+  });
+});
+</script>
