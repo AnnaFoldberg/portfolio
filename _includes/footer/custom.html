@@ -1,18 +1,86 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  const items = document.querySelectorAll(".taxonomy-item");
+  // -------- helpers --------
+  function hashString(str) {
+    let h = 0; for (let i = 0; i < str.length; i++) { h = (h << 5) - h + str.charCodeAt(i); h |= 0; }
+    return Math.abs(h);
+  }
+  const hsl = (h, s, l) => `hsl(${h}, ${s}%, ${l}%)`;
 
-  items.forEach(item => {
-    // Generate a consistent "random" color based on the tag/category name
-    const text = item.textContent.trim();
-    const hash = [...text].reduce((acc, char) => char.charCodeAt(0) + ((acc << 5) - acc), 0);
-    
-    // HSL values for nice pastel-ish colors
-    const hue = Math.abs(hash) % 360;       // 0-359 hue
-    const sat = 60;                         // % saturation
-    const light = 45;                       // % lightness
-    
-    item.style.setProperty("--tag-bg", `hsl(${hue}, ${sat}%, ${light}%)`);
+  // Choose palette by type (category = pastel, tag = vibrant)
+  function colorFor(name, type) {
+    const base = hashString(name);
+    const hue = base % 360;
+    if (type === "category") {
+      return { bg: hsl(hue, 45, 82), fg: "#1a1a1a" }; // light pastel + dark text
+    } else {
+      return { bg: hsl(hue, 65, 45), fg: "#ffffff" }; // richer + white text
+    }
+  }
+
+  // Heuristic to detect "category" vs "tag" for chips
+  function inferTypeForChip(el) {
+    // 1) explicit dataset (if you ever add it)
+    if (el.dataset.taxonomy) return el.dataset.taxonomy;
+
+    // 2) ancestors commonly used by Minimal Mistakes
+    const anc = el.closest(
+      ".taxonomy__categories, .taxonomy-categories, .categories," +
+      " .taxonomy__tags, .taxonomy-tags, .tags, .page__taxonomy, .entry__meta, ul, ol, nav, div"
+    );
+    if (anc) {
+      const cls = (anc.className || "").toLowerCase();
+      if (cls.includes("categor")) return "category";
+      if (cls.includes("tag")) return "tag";
+      const id = (anc.id || "").toLowerCase();
+      if (id.includes("categor")) return "category";
+      if (id.includes("tag")) return "tag";
+      // Look for preceding headings that literally say "Categories" or "Tags"
+      const prev = anc.previousElementSibling;
+      if (prev && /h\d/i.test(prev.tagName)) {
+        const t = (prev.textContent || "").toLowerCase();
+        if (t.includes("categor")) return "category";
+        if (t.includes("tag")) return "tag";
+      }
+    }
+
+    // 3) anchor-based hints: rel="tag" or URL path
+    const a = el.querySelector("a");
+    if (a) {
+      if ((a.getAttribute("rel") || "").toLowerCase() === "tag") return "tag";
+      const href = (a.getAttribute("href") || "").toLowerCase();
+      if (href.includes("/tags/")) return "tag";
+      if (href.includes("/categories/")) return "category";
+    }
+
+    // Default: treat as tag (more vibrant)
+    return "tag";
+  }
+
+  // -------- apply to chips in content/stream --------
+  document.querySelectorAll(".taxonomy-item").forEach(el => {
+    const text = (el.textContent || "").trim();
+    const type = inferTypeForChip(el);
+    const { bg, fg } = colorFor(text, type);
+    el.style.setProperty("--chip-bg", bg);
+    el.style.setProperty("--chip-fg", fg);
+  });
+
+  // -------- left-rail filters (already clearly typed) --------
+  document.querySelectorAll(".cat-filter").forEach(input => {
+    const label = input.closest("label"); if (!label) return;
+    const text = label.textContent.trim();
+    const { bg, fg } = colorFor(text, "category");
+    label.style.setProperty("--chip-bg", bg);
+    label.style.setProperty("--chip-fg", fg);
+  });
+
+  document.querySelectorAll(".tag-filter").forEach(input => {
+    const label = input.closest("label"); if (!label) return;
+    const text = label.textContent.trim();
+    const { bg, fg } = colorFor(text, "tag");
+    label.style.setProperty("--chip-bg", bg);
+    label.style.setProperty("--chip-fg", fg);
   });
 });
 </script>
