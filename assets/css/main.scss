@@ -111,6 +111,23 @@
 .rail-page { padding-inline: var(--rail-pad); }
 .rail-container { margin-inline: auto; max-width: var(--rail-max); padding-inline: 0; }
 
+/* puts comfy space around the whole page area */
+.rail-page {
+  padding-inline: var(--rail-pad);   /* you already set this */
+  padding-block-start: 1.25rem;
+  padding-block-end: 2rem;
+}
+
+/* space under breadcrumbs so the grid doesn't start immediately */
+.breadcrumbs {
+  margin-bottom: 1rem;
+}
+
+/* optional: small top offset so grid doesn't sit tight against breadcrumbs */
+.layout-2col {
+  margin-top: .25rem;
+}
+
 /* =========================================================
    Two-column layout used by layout: two_col
    ========================================================= */
