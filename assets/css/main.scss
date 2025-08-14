@@ -41,9 +41,9 @@
 
 .taxonomy-item {
   display: inline-block;
-  padding: .15rem 0rem;
+  padding: .15rem .5rem;
   border-radius: 999px;
-  font-size: .85rem;
+  font-size: .55rem;
   line-height: 1.2;
   color: #fff; /* white text works best */
   background-color: var(--tag-bg, #888); /* fallback if JS not loaded */
