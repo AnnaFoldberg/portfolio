@@ -1,7 +1,9 @@
 ---
-# Only the main Sass file needs front matter
 ---
 @charset "utf-8";
+
+/* 1) Load Minimal Mistakes (skin first, then framework) */
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
 @import "minimal-mistakes";
 
 /* =========================================================
@@ -67,7 +69,7 @@
 .lr-list li { margin: .25rem 0; }
 
 /* =========================================================
-   Button: Clear filters (styled consistently at all widths)
+   Button: Clear filters
    ========================================================= */
 :root {
   --btn-text: var(--mm-text, #1a1a1a);
@@ -100,82 +102,18 @@
 .lr-clear:focus-visible { outline: none; box-shadow: var(--btn-ring); }
 
 /* =========================================================
-   Rail layout container & wrappers
-   (used with layout: rail to avoid theme's page scaffold)
+   (Optional) Your older rail layout helpers
    ========================================================= */
-
-/* Visual width: from brand “Portfolio” to search icon feel */
 :root {
-  --rail-max: 1400px;                    /* adjust to taste */
-  --rail-pad: clamp(16px, 2.5vw, 32px);  /* nice responsive gutters */
+  --rail-max: 1400px;
+  --rail-pad: clamp(16px, 2.5vw, 32px);
 }
-
-/* Our custom rail page (keeps crumbs/title aligned with content) */
 .rail-page { padding-inline: var(--rail-pad); }
-
-/* Main container spans wide but stays centered */
-.rail-container {
-  margin-inline: auto;
-  max-width: var(--rail-max);
-  padding-inline: 0; /* outer padding is handled by .rail-page */
-}
+.rail-container { margin-inline: auto; max-width: var(--rail-max); padding-inline: 0; }
 
 /* =========================================================
-   Two-column grid + pinning (prevents wide-screen drift)
+   Two-column layout used by layout: two_col
    ========================================================= */
-.rail-layout {
-  display: grid;
-  grid-template-columns: 320px minmax(0, 1fr); /* left rail + content */
-  gap: 2rem;
-  align-items: start;
-}
-.rail-layout > * { min-width: 0; } /* prevent long content from pushing columns */
-
-.left-rail {
-  grid-column: 1;
-  position: sticky;
-  top: 2rem;
-  align-self: start;
-}
-
-.rail-main { grid-column: 2; }
-
-/* Stack on small screens */
-@media (max-width: 900px) {
-  .rail-container { max-width: none; }
-  .rail-layout { grid-template-columns: 1fr; }
-  .left-rail { position: static; margin-bottom: 1rem; }
-}
-
-/* Keep checkbox and label text on one line in left rail */
-.lr-list label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em; /* space between box and text */
-  white-space: nowrap; /* prevents label text from wrapping to the next line */
-}
-
-.lr-list input[type="checkbox"] {
-  margin: 0; /* remove extra space */
-}
-
-/* Style theme's sidebar like left rail */
-.sidebar__left {
-  width: 320px;
-  background: none;
-  border: none;
-  padding: 0;
-}
-
-.sidebar__left .lr-card {
-  background: var(--mm-surface, #fff);
-  border: 1px solid rgba(0,0,0,.08);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* Two-column page frame */
 .layout-2col {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -183,10 +121,21 @@
   align-items: start;
 }
 
-/* Make the sidebar behave like a sidebar */
+/* Place the two children explicitly into columns */
+.layout-2col > .left-rail { grid-column: 1; }
+.layout-2col > .page-main { grid-column: 2; }
+
+/* Sidebar behavior */
 .left-rail {
-  position: sticky;   /* optional, keeps it visible while scrolling */
-  top: 5rem;          /* adjust to your header height */
+  position: sticky;  /* keep visible while scrolling */
+  top: 5rem;         /* adjust for your header height */
+  align-self: start;
+}
+
+/* Mobile: stack */
+@media (max-width: 900px) {
+  .layout-2col { grid-template-columns: 1fr; }
+  .left-rail { position: static; margin-bottom: 1rem; }
 }
 
 /* Keep checkbox + text on one line */
@@ -201,13 +150,17 @@
   flex: 0 0 auto;
 }
 
-/* Mobile: stack nicely */
-@media (max-width: 900px) {
-  .layout-2col {
-    grid-template-columns: 1fr;
-  }
-  .left-rail {
-    position: static;
-    order: 2;         /* optional: show content first, sidebar second */
-  }
+/* (Optional) style theme's built-in left sidebar if you ever enable it */
+.sidebar__left {
+  width: 320px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+.sidebar__left .lr-card {
+  background: var(--mm-surface, #fff);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
 }
