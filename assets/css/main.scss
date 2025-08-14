@@ -24,7 +24,6 @@
   align-items: center;
 }
 
-/* Taxonomy chips */
 .taxonomy-label { 
   font-weight: 600; 
   opacity: .8; 
@@ -37,21 +36,6 @@
   display: inline-flex; 
   flex-wrap: wrap; 
   gap: .35rem; 
-}
-
-.taxonomy-item {
-  display: inline-block;
-  padding: .15rem .5rem;
-  border-radius: 999px;
-  font-size: .55rem;
-  line-height: 1.2;
-  color: #fff; /* white text works best */
-  background-color: var(--tag-bg, #888); /* fallback if JS not loaded */
-  cursor: default;
-}
-
-.taxonomy-item[data-filter] { 
-  cursor: pointer; 
 }
 
 /* Hide the built-in TOC block on compact pages (we use our own rail) */
@@ -128,7 +112,7 @@
 
 /* puts comfy space around the whole page area */
 .rail-page {
-  padding-inline: var(--rail-pad);   /* you already set this */
+  padding-inline: var(--rail-pad); 
   padding-block-start: 1.25rem;
   padding-block-end: 2rem;
 }
@@ -152,19 +136,15 @@
   gap: 2rem;
   align-items: start;
 }
-
-/* Place the two children explicitly into columns */
 .layout-2col > .left-rail { grid-column: 1; }
 .layout-2col > .page-main { grid-column: 2; }
 
-/* Sidebar behavior */
 .left-rail {
-  position: sticky;  /* keep visible while scrolling */
-  top: 5rem;         /* adjust for your header height */
+  position: sticky;  
+  top: 5rem;         
   align-self: start;
 }
 
-/* Mobile: stack */
 @media (max-width: 900px) {
   .layout-2col { grid-template-columns: 1fr; }
   .left-rail { position: static; margin-bottom: 1rem; }
@@ -195,4 +175,34 @@
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 1rem;
+}
+
+/* =========================================================
+   Colored chips (categories pastel, tags vibrant)
+   ========================================================= */
+.taxonomy-item {
+  --chip-bg: #888;     
+  --chip-fg: #fff;
+  background-color: var(--chip-bg);
+  color: var(--chip-fg);
+  display: inline-block;
+  padding: .15rem .5rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  line-height: 1.2;
+  cursor: default;
+}
+.taxonomy-item[data-filter] { cursor: pointer; }
+
+/* color left-rail labels like chips */
+.lr-list label {
+  --chip-bg: transparent;
+  --chip-fg: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .2rem .5rem;
+  border-radius: 999px;
+  background-color: var(--chip-bg);
+  color: var(--chip-fg);
 }
