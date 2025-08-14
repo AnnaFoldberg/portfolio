@@ -2,12 +2,17 @@
 layout: default
 ---
 
-<div class="layout-2col">
-  {% comment %} Left sidebar {% endcomment %}
-  {% include left-rail.html %}
+<div class="rail-page">
+  <div class="rail-container">
+    {%- if site.breadcrumbs and page.breadcrumbs != false and page.url != "/" -%}
+      {% include breadcrumbs.html %}
+    {%- endif -%}
 
-  {% comment %} Main page content {% endcomment %}
-  <main class="page-main">
-    {{ content }}
-  </main>
+    <div class="layout-2col">
+      {% include left-rail.html %}
+      <main class="page-main">
+        {{ content }}
+      </main>
+    </div>
+  </div>
 </div>
