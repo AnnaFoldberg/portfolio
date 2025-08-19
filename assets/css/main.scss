@@ -316,3 +316,111 @@
   cursor: default;
 }
 .taxonomy-item[data-filter] { cursor: pointer; }
+
+/* =========================================================
+   Strong override so content-page pills match left-rail pastels
+   (placed at END of main.scss)
+   ========================================================= */
+
+/* 1) Neutralize MM pill backgrounds/labels everywhere */
+.page__taxonomy a,
+.page__taxonomy .taxonomy__item,
+.archive__item a[rel="tag"],
+.archive__item a[href*="/categories/"],
+.entry .taxonomy__item a,
+.entry .page__taxonomy a {
+  background-image: none !important;
+  box-shadow: none !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: var(--chip-border, #E5E7EB) !important;
+  background: var(--chip-bg, #F7FAFC) !important;
+  color: var(--chip-fg, #374151) !important;
+  display: inline-block;
+  padding: .22rem .6rem;
+  border-radius: 999px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  margin: 0 .25rem .25rem 0;
+}
+
+/* Optional: consistent hover/focus */
+.page__taxonomy a:hover,
+.archive__item a[rel="tag"]:hover,
+.archive__item a[href*="/categories/"]:hover {
+  filter: brightness(0.98);
+}
+.page__taxonomy a:focus-visible,
+.archive__item a[rel="tag"]:focus-visible,
+.archive__item a[href*="/categories/"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0,120,255,.25);
+}
+
+/* 2) Pastel palette mapping (same as left rail)
+   Add/adjust slugs as you need
+*/
+.page__taxonomy a[href*="/categories/kubernetes"],
+.archive__item a[href*="/categories/kubernetes"],
+.chip--kubernetes {
+  --chip-bg: hsl(350 80% 95%);
+  --chip-border: hsl(350 60% 85%);
+  --chip-fg: hsl(350 35% 28%);
+}
+
+.page__taxonomy a[href*="/categories/microservices"],
+.archive__item a[href*="/categories/microservices"],
+.chip--microservices {
+  --chip-bg: hsl(315 85% 95%);
+  --chip-border: hsl(315 60% 85%);
+  --chip-fg: hsl(315 35% 28%);
+}
+
+.page__taxonomy a[href*="/categories/it-security"],
+.archive__item a[href*="/categories/it-security"],
+.chip--it-security {
+  --chip-bg: hsl(215 70% 95%);
+  --chip-border: hsl(215 55% 85%);
+  --chip-fg: hsl(215 35% 28%);
+}
+
+.page__taxonomy a[href*="/categories/trackunit"],
+.archive__item a[href*="/categories/trackunit"],
+.chip--trackunit {
+  --chip-bg: hsl(275 70% 95%);
+  --chip-border: hsl(275 55% 85%);
+  --chip-fg: hsl(275 35% 28%);
+}
+
+.page__taxonomy a[href*="/tags/dotnet"],
+.archive__item a[href*="/tags/dotnet"],
+.chip--dotnet {
+  --chip-bg: hsl(185 65% 92%);
+  --chip-border: hsl(185 55% 82%);
+  --chip-fg: hsl(185 40% 25%);
+}
+
+.page__taxonomy a[href*="/tags/helm"],
+.archive__item a[href*="/tags/helm"],
+.chip--helm {
+  --chip-bg: hsl(195 70% 94%);
+  --chip-border: hsl(195 55% 84%);
+  --chip-fg: hsl(195 40% 25%);
+}
+
+.page__taxonomy a[href*="/tags/mini"],
+.archive__item a[href*="/tags/mini"],
+.chip--mini {
+  --chip-bg: hsl(40 90% 92%);
+  --chip-border: hsl(40 70% 82%);
+  --chip-fg: hsl(40 45% 26%);
+}
+
+.page__taxonomy a[href*="/tags/placeholder"],
+.archive__item a[href*="/tags/placeholder"],
+.chip--placeholder {
+  --chip-bg: hsl(215 70% 95%);
+  --chip-border: hsl(215 55% 85%);
+  --chip-fg: hsl(215 35% 28%);
+}
