@@ -178,31 +178,141 @@
 }
 
 /* =========================================================
-   Colored chips (categories pastel, tags vibrant)
+   Unified pastel chip system (left rail + content pages)
    ========================================================= */
-.taxonomy-item {
-  --chip-bg: #888;     
-  --chip-fg: #fff;
-  background-color: var(--chip-bg);
-  color: var(--chip-fg);
-  display: inline-block;
-  padding: .15rem .5rem;
-  border-radius: 999px;
-  font-size: .85rem;
-  line-height: 1.2;
-  cursor: default;
-}
-.taxonomy-item[data-filter] { cursor: pointer; }
 
-/* color left-rail labels like chips */
+/* Base chip style used everywhere */
+.chip,
+.page__taxonomy a,                      /* content pages (MM taxonomy links) */
+.archive__item a[rel="tag"],            /* archive cards */
+.archive__item a[href*="/categories/"], /* archive category links */
+.page__taxonomy .taxonomy__item {       /* fallback for some MM skins */
+  --chip-bg: #F7FAFC;
+  --chip-border: #E5E7EB;
+  --chip-fg: #374151;
+
+  display: inline-block;
+  padding: .22rem .6rem;
+  border-radius: 999px;
+  border: 1px solid var(--chip-border);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+/* small gaps between chips where MM uses inline elements */
+.page__taxonomy a,
+.page__taxonomy .taxonomy__item,
+.archive__item a[rel="tag"],
+.archive__item a[href*="/categories/"] {
+  margin: 0 .25rem .25rem 0;
+}
+
+/* Make left-rail labels look identical to chips */
 .lr-list label {
-  --chip-bg: transparent;
-  --chip-fg: inherit;
+  --chip-bg: var(--chip-bg, #F7FAFC);
+  --chip-border: var(--chip-border, #E5E7EB);
+  --chip-fg: var(--chip-fg, #374151);
   display: inline-flex;
   align-items: center;
   gap: .4rem;
-  padding: .2rem .5rem;
+  padding: .22rem .6rem;
   border-radius: 999px;
-  background-color: var(--chip-bg);
+  border: 1px solid var(--chip-border);
+  background: var(--chip-bg);
   color: var(--chip-fg);
 }
+
+/* Remove MM’s built-in vibrant backgrounds so our pastels win */
+.page__taxonomy a,
+.archive__item a[rel="tag"],
+.archive__item a[href*="/categories/"] {
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* ------- Palette mapping (categories + tags) ------- */
+/* categories */
+.page__taxonomy a[href*="/categories/kubernetes"],
+.archive__item a[href*="/categories/kubernetes"],
+.chip--kubernetes {
+  --chip-bg: hsl(350 80% 95%);
+  --chip-border: hsl(350 60% 85%);
+  --chip-fg: hsl(350 35% 28%);
+}
+
+.page__taxonomy a[href*="/categories/microservices"],
+.archive__item a[href*="/categories/microservices"],
+.chip--microservices {
+  --chip-bg: hsl(315 85% 95%);
+  --chip-border: hsl(315 60% 85%);
+  --chip-fg: hsl(315 35% 28%);
+}
+
+.page__taxonomy a[href*="/categories/it-security"],
+.archive__item a[href*="/categories/it-security"],
+.chip--it-security {
+  --chip-bg: hsl(215 70% 95%);
+  --chip-border: hsl(215 55% 85%);
+  --chip-fg: hsl(215 35% 28%);
+}
+
+.page__taxonomy a[href*="/categories/trackunit"],
+.archive__item a[href*="/categories/trackunit"],
+.chip--trackunit {
+  --chip-bg: hsl(275 70% 95%);
+  --chip-border: hsl(275 55% 85%);
+  --chip-fg: hsl(275 35% 28%);
+}
+
+/* tags */
+.page__taxonomy a[href*="/tags/dotnet"],
+.archive__item a[href*="/tags/dotnet"],
+.chip--dotnet {
+  --chip-bg: hsl(185 65% 92%);
+  --chip-border: hsl(185 55% 82%);
+  --chip-fg: hsl(185 40% 25%);
+}
+
+.page__taxonomy a[href*="/tags/helm"],
+.archive__item a[href*="/tags/helm"],
+.chip--helm {
+  --chip-bg: hsl(195 70% 94%);
+  --chip-border: hsl(195 55% 84%);
+  --chip-fg: hsl(195 40% 25%);
+}
+
+.page__taxonomy a[href*="/tags/mini"],
+.archive__item a[href*="/tags/mini"],
+.chip--mini {
+  --chip-bg: hsl(40 90% 92%);
+  --chip-border: hsl(40 70% 82%);
+  --chip-fg: hsl(40 45% 26%);
+}
+
+.page__taxonomy a[href*="/tags/placeholder"],
+.archive__item a[href*="/tags/placeholder"],
+.chip--placeholder {
+  --chip-bg: hsl(215 70% 95%);
+  --chip-border: hsl(215 55% 85%);
+  --chip-fg: hsl(215 35% 28%);
+}
+
+/* =========================================================
+   (Legacy) .taxonomy-item support (if you still use it anywhere)
+   ========================================================= */
+.taxonomy-item {
+  background: var(--chip-bg, #F7FAFC);
+  color: var(--chip-fg, #374151);
+  border: 1px solid var(--chip-border, #E5E7EB);
+  display: inline-block;
+  padding: .22rem .6rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  line-height: 1;
+  cursor: default;
+}
+.taxonomy-item[data-filter] { cursor: pointer; }
