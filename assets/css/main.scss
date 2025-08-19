@@ -24,18 +24,15 @@
   align-items: center;
 }
 
-.taxonomy-label { 
-  font-weight: 600; 
-  opacity: .8; 
-}
+.taxonomy-label { font-weight: 600; opacity: .8; }
 
-.taxonomy-list { 
-  list-style: none; 
-  margin: 0; 
-  padding: 0; 
-  display: inline-flex; 
-  flex-wrap: wrap; 
-  gap: .35rem; 
+.taxonomy-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: .35rem;
 }
 
 /* Hide the built-in TOC block on compact pages (we use our own rail) */
@@ -50,7 +47,7 @@
 }
 
 /* =========================================================
-   Left rail card styles
+   Left rail card styles (no chip coloring here)
    ========================================================= */
 .lr-card {
   background: var(--mm-surface, #fff);
@@ -66,6 +63,10 @@
 .lr-bio { font-size: .9rem; opacity: .8; }
 .lr-list { list-style: none; margin: 0; padding: 0; }
 .lr-list li { margin: .25rem 0; }
+
+/* Keep checkbox + text on one line in left rail (visual only) */
+.lr-list label { display: inline-flex; align-items: center; gap: 0.4rem; line-height: 1.2; }
+.lr-list input[type="checkbox"] { margin: 0; flex: 0 0 auto; }
 
 /* =========================================================
    Button: Clear filters
@@ -101,7 +102,7 @@
 .lr-clear:focus-visible { outline: none; box-shadow: var(--btn-ring); }
 
 /* =========================================================
-   (Optional) Your older rail layout helpers
+   Page layout (two-column)
    ========================================================= */
 :root {
   --rail-max: 1400px;
@@ -110,26 +111,15 @@
 .rail-page { padding-inline: var(--rail-pad); }
 .rail-container { margin-inline: auto; max-width: var(--rail-max); padding-inline: 0; }
 
-/* puts comfy space around the whole page area */
 .rail-page {
-  padding-inline: var(--rail-pad); 
+  padding-inline: var(--rail-pad);
   padding-block-start: 1.25rem;
   padding-block-end: 2rem;
 }
 
-/* space under breadcrumbs so the grid doesn't start immediately */
-.breadcrumbs {
-  margin-bottom: 1rem;
-}
+.breadcrumbs { margin-bottom: 1rem; }
+.layout-2col { margin-top: .25rem; }
 
-/* optional: small top offset so grid doesn't sit tight against breadcrumbs */
-.layout-2col {
-  margin-top: .25rem;
-}
-
-/* =========================================================
-   Two-column layout used by layout: two_col
-   ========================================================= */
 .layout-2col {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
@@ -139,36 +129,15 @@
 .layout-2col > .left-rail { grid-column: 1; }
 .layout-2col > .page-main { grid-column: 2; }
 
-.left-rail {
-  position: sticky;  
-  top: 5rem;         
-  align-self: start;
-}
+.left-rail { position: sticky; top: 5rem; align-self: start; }
 
 @media (max-width: 900px) {
   .layout-2col { grid-template-columns: 1fr; }
   .left-rail { position: static; margin-bottom: 1rem; }
 }
 
-/* Keep checkbox + text on one line */
-.lr-list label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  line-height: 1.2;
-}
-.lr-list input[type="checkbox"] {
-  margin: 0;
-  flex: 0 0 auto;
-}
-
-/* (Optional) style theme's built-in left sidebar if you ever enable it */
-.sidebar__left {
-  width: 320px;
-  background: none;
-  border: none;
-  padding: 0;
-}
+/* (Optional) theme's built-in left sidebar look */
+.sidebar__left { width: 320px; background: none; border: none; padding: 0; }
 .sidebar__left .lr-card {
   background: var(--mm-surface, #fff);
   border: 1px solid rgba(0,0,0,.08);
@@ -176,137 +145,3 @@
   padding: 1rem;
   margin-bottom: 1rem;
 }
-
-/* =========================================================
-   UNIFIED CHIP SYSTEM
-   - Left rail labels look like chips
-   - Stream (right-side) chips use same scheme
-   - Optional: MM taxonomy pills follow same scheme
-   ========================================================= */
-
-/* LEFT RAIL chips */
-.lr-list label {
-  --chip-bg: #F7FAFC;
-  --chip-border: #E5E7EB;
-  --chip-fg: #374151;
-  display: inline-flex;
-  align-items: center;
-  gap: .4rem;
-  padding: .22rem .6rem;
-  border-radius: 999px;
-  border: 1px solid var(--chip-border);
-  background: var(--chip-bg);
-  color: var(--chip-fg);
-}
-
-/* STREAM CHIPS (the ones in collection-stream.html) */
-.stream-meta .taxonomy-item {
-  display: inline-block;
-  padding: .22rem .6rem;
-  border-radius: 999px;
-  font-size: .85rem;
-  font-weight: 600;
-  line-height: 1;
-  margin: 0 .25rem .25rem 0;
-  text-decoration: none;
-  vertical-align: middle;
-  border: 1px solid transparent;
-  box-shadow: none;
-}
-
-/* Categories → pastel */
-.stream-meta .taxonomy-item[data-filter="cat"] {
-  --chip-bg: #F7FAFC;
-  --chip-border: #E5E7EB;
-  --chip-fg: #374151;
-
-  background-color: var(--chip-bg) !important;
-  border-color: var(--chip-border) !important;
-  color: var(--chip-fg) !important;
-}
-
-/* Tags → vibrant */
-.stream-meta .taxonomy-item[data-filter="tag"] {
-  --chip-bg: #2563EB;      /* default vibrant */
-  --chip-border: #1D4ED8;
-  --chip-fg: #FFFFFF;
-
-  background-color: var(--chip-bg) !important;
-  border-color: var(--chip-border) !important;
-  color: var(--chip-fg) !important;
-}
-
-/* Optional per-slug palettes (match left-rail hues) */
-/* Categories (pastel) */
-.stream-meta .taxonomy-item[data-filter="cat"].cat--kubernetes { 
-  --chip-bg: hsl(350 80% 95%); --chip-border: hsl(350 60% 85%); --chip-fg: hsl(350 35% 28%);
-}
-.stream-meta .taxonomy-item[data-filter="cat"].cat--microservices {
-  --chip-bg: hsl(315 85% 95%); --chip-border: hsl(315 60% 85%); --chip-fg: hsl(315 35% 28%);
-}
-.stream-meta .taxonomy-item[data-filter="cat"].cat--it-security {
-  --chip-bg: hsl(215 70% 95%); --chip-border: hsl(215 55% 85%); --chip-fg: hsl(215 35% 28%);
-}
-.stream-meta .taxonomy-item[data-filter="cat"].cat--trackunit {
-  --chip-bg: hsl(275 70% 95%); --chip-border: hsl(275 55% 85%); --chip-fg: hsl(275 35% 28%);
-}
-
-/* Tags (vibrant) */
-.stream-meta .taxonomy-item[data-filter="tag"].tag--dotnet      { --chip-bg:#0EA5E9; --chip-border:#0369A1; --chip-fg:#fff; }
-.stream-meta .taxonomy-item[data-filter="tag"].tag--helm        { --chip-bg:#06B6D4; --chip-border:#0E7490; --chip-fg:#fff; }
-.stream-meta .taxonomy-item[data-filter="tag"].tag--mini        { --chip-bg:#F59E0B; --chip-border:#B45309; --chip-fg:#111; }
-.stream-meta .taxonomy-item[data-filter="tag"].tag--placeholder { --chip-bg:#3B82F6; --chip-border:#1D4ED8; --chip-fg:#fff; }
-
-/* Hover/focus (optional) */
-.stream-meta .taxonomy-item:hover { filter: brightness(.98); }
-.stream-meta .taxonomy-item:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(0,120,255,.25); }
-
-/* =========================================================
-   (Optional) Make MM's native taxonomy pills match too
-   ========================================================= */
-.page__taxonomy a,
-.page__taxonomy .taxonomy__item,
-.archive__item a[rel="tag"],
-.archive__item a[href*="/categories/"] {
-  /* Base chip look */
-  --chip-bg: #F7FAFC;
-  --chip-border: #E5E7EB;
-  --chip-fg: #374151;
-
-  background-image: none !important;
-  box-shadow: none !important;
-  display: inline-block;
-  padding: .22rem .6rem;
-  border-radius: 999px;
-  border: 1px solid var(--chip-border);
-  background: var(--chip-bg);
-  color: var(--chip-fg);
-  font-weight: 600;
-  line-height: 1;
-  text-decoration: none;
-  margin: 0 .25rem .25rem 0;
-}
-
-/* Per-slug mapping for MM pills — categories pastel */
-.page__taxonomy a[href*="/categories/kubernetes"],
-.archive__item a[href*="/categories/kubernetes"] {
-  --chip-bg: hsl(350 80% 95%); --chip-border: hsl(350 60% 85%); --chip-fg: hsl(350 35% 28%);
-}
-.page__taxonomy a[href*="/categories/microservices"],
-.archive__item a[href*="/categories/microservices"] {
-  --chip-bg: hsl(315 85% 95%); --chip-border: hsl(315 60% 85%); --chip-fg: hsl(315 35% 28%);
-}
-.page__taxonomy a[href*="/categories/it-security"],
-.archive__item a[href*="/categories/it-security"] {
-  --chip-bg: hsl(215 70% 95%); --chip-border: hsl(215 55% 85%); --chip-fg: hsl(215 35% 28%);
-}
-.page__taxonomy a[href*="/categories/trackunit"],
-.archive__item a[href*="/categories/trackunit"] {
-  --chip-bg: hsl(275 70% 95%); --chip-border: hsl(275 55% 85%); --chip-fg: hsl(275 35% 28%);
-}
-
-/* Per-slug mapping for MM pills — tags vibrant */
-.page__taxonomy a[href*="/tags/dotnet"],      .archive__item a[href*="/tags/dotnet"]      { --chip-bg:#0EA5E9; --chip-border:#0369A1; --chip-fg:#fff; }
-.page__taxonomy a[href*="/tags/helm"],        .archive__item a[href*="/tags/helm"]        { --chip-bg:#06B6D4; --chip-border:#0E7490; --chip-fg:#fff; }
-.page__taxonomy a[href*="/tags/mini"],        .archive__item a[href*="/tags/mini"]        { --chip-bg:#F59E0B; --chip-border:#B45309; --chip-fg:#111; }
-.page__taxonomy a[href*="/tags/placeholder"], .archive__item a[href*="/tags/placeholder"] { --chip-bg:#3B82F6; --chip-border:#1D4ED8; --chip-fg:#fff; }
