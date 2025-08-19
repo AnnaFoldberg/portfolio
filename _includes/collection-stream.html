@@ -7,33 +7,38 @@
            data-cats="{{ doc.categories | join: ' ' }}"
            data-tags="{{ doc.tags | join: ' ' }}">
     <h2 class="stream-title">{{ doc.title }}</h2> <!-- no hyperlink -->
-    {%- comment -%} collection-stream.html (only the taxonomy bits change) {%- endcomment -%}
+
     <div class="stream-meta">
-      {% if doc.categories and doc.categories != empty %}
+      {%- assign has_cats = doc.categories and doc.categories != empty -%}
+      {%- assign has_tags = doc.tags and doc.tags != empty -%}
+
+      {%- if has_cats -%}
         <span class="taxonomy-label">Categories</span>
         <ul class="taxonomy-list">
-          {% for c in doc.categories %}
+          {%- for c in doc.categories -%}
             <li class="taxonomy-item" data-filter="cat" data-key="{{ c | slugify }}">{{ c }}</li>
-          {% endfor %}
+          {%- endfor -%}
         </ul>
-      {% endif %}
-    
-      {% if doc.categories and doc.tags and doc.tags != empty %}
+      {%- endif -%}
+
+      {%- if has_cats and has_tags -%}
         <span class="taxonomy-sep" aria-hidden="true"></span>
-      {% endif %}
-    
-      {% if doc.tags and doc.tags != empty %}
+      {%- endif -%}
+
+      {%- if has_tags -%}
         <span class="taxonomy-label">Tags</span>
         <ul class="taxonomy-list">
-          {% for t in doc.tags %}
+          {%- for t in doc.tags -%}
             <li class="taxonomy-item" data-filter="tag" data-key="{{ t | slugify }}">{{ t }}</li>
-          {% endfor %}
+          {%- endfor -%}
         </ul>
-      {% endif %}
+      {%- endif -%}
     </div>
+
     <div class="stream-body">
       {{ doc.content }}
     </div>
+
     <hr class="stream-divider"/>
   </article>
   {%- endfor -%}
