@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: two_col
 title: "Welcome"
 ---
-This site tracks my work and learning in **Microservices**, **Kubernetes**, and **IT Security**.
+{% include collection-stream.html %}
