@@ -47,7 +47,7 @@
 }
 
 /* =========================================================
-   Left rail card styles (no chip coloring here)
+   Left rail card styles
    ========================================================= */
 .lr-card {
   background: var(--mm-surface, #fff);
@@ -64,7 +64,7 @@
 .lr-list { list-style: none; margin: 0; padding: 0; }
 .lr-list li { margin: .25rem 0; }
 
-/* Keep checkbox + text on one line in left rail (visual only) */
+/* Keep checkbox + text on one line in left rail */
 .lr-list label { display: inline-flex; align-items: center; gap: 0.4rem; line-height: 1.2; }
 .lr-list input[type="checkbox"] { margin: 0; flex: 0 0 auto; }
 
@@ -136,7 +136,7 @@
   .left-rail { position: static; margin-bottom: 1rem; }
 }
 
-/* (Optional) theme's built-in left sidebar look */
+/* Optional: theme's built-in left sidebar look */
 .sidebar__left { width: 320px; background: none; border: none; padding: 0; }
 .sidebar__left .lr-card {
   background: var(--mm-surface, #fff);
@@ -146,9 +146,9 @@
   margin-bottom: 1rem;
 }
 
-/* =========================
+/* =========================================================
    Left rail filter chips
-   ========================= */
+   ========================================================= */
 .filter-chip {
   /* fallbacks in case JS hasn't run yet */
   --chip-h: 210;
@@ -162,8 +162,8 @@
   gap: .5rem;
   padding: .35rem .6rem;
   border-radius: 999px;
-  border: 1px solid hsl(var(--chip-h) var(--chip-s)% var(--chip-border-l)%);
-  background: hsl(var(--chip-h) var(--chip-s)% var(--chip-l)%);
+  border: 1px solid hsl(var(--chip-h), var(--chip-s)%, var(--chip-border-l)%);
+  background: hsl(var(--chip-h), var(--chip-s)%, var(--chip-l)%);
   color: var(--chip-fg);
   cursor: pointer;
   font-weight: 600;
@@ -176,7 +176,7 @@
   -webkit-appearance: none;
   width: 16px; height: 16px;
   border-radius: 999px;
-  border: 2px solid hsl(var(--chip-h) var(--chip-s)% calc(var(--chip-border-l) - 5)%);
+  border: 2px solid hsl(var(--chip-h), var(--chip-s)%, calc(var(--chip-border-l) - 5)%);
   background: #fff;
   margin: 0;
   position: relative;
@@ -185,16 +185,15 @@
 .filter-chip[data-checked="true"] input[type="checkbox"],
 .filter-chip input[type="checkbox"]:checked {
   /* accent = higher saturation, lower lightness of the same hue */
-  background: hsl(var(--chip-h) calc(var(--chip-s) + 30%) calc(var(--chip-l) - 30%));
-  border-color: hsl(var(--chip-h) calc(var(--chip-s) + 30%) calc(var(--chip-l) - 35%));
+  background: hsl(var(--chip-h), calc(var(--chip-s) + 30)%, calc(var(--chip-l) - 30)%);
+  border-color: hsl(var(--chip-h), calc(var(--chip-s) + 30)%, calc(var(--chip-l) - 35)%);
   box-shadow: 0 0 0 2px #fff inset;
 }
 
-/* =========================
+/* =========================================================
    Stream/content chips
-   ========================= */
+   ========================================================= */
 .taxonomy-item {
-  /* same variable fallbacks */
   --chip-h: 210;
   --chip-s: 12;
   --chip-l: 96;
@@ -208,8 +207,8 @@
   font-weight: 600;
   line-height: 1;
   margin: 0 .25rem .25rem 0;
-  border: 1px solid hsl(var(--chip-h) var(--chip-s)% var(--chip-border-l)%);
-  background: hsl(var(--chip-h) var(--chip-s)% var(--chip-l)%);
+  border: 1px solid hsl(var(--chip-h), var(--chip-s)%, var(--chip-border-l)%);
+  background: hsl(var(--chip-h), var(--chip-s)%, var(--chip-l)%);
   color: var(--chip-fg);
 }
 
