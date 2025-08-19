@@ -7,9 +7,10 @@
            data-cats="{{ doc.categories | join: ' ' }}"
            data-tags="{{ doc.tags | join: ' ' }}">
     <h2 class="stream-title">{{ doc.title }}</h2> <!-- no hyperlink -->
+    {%- comment -%} collection-stream.html (only the taxonomy bits change) {%- endcomment -%}
     <div class="stream-meta">
       {% if doc.categories and doc.categories != empty %}
-        <span class="taxonomy-label">Categories:</span>
+        <span class="taxonomy-label">Categories</span>:
         <ul class="taxonomy-list">
           {% for c in doc.categories %}
             <li class="taxonomy-item cat--{{ c | slugify }}" data-filter="cat">{{ c }}</li>
@@ -17,8 +18,12 @@
         </ul>
       {% endif %}
     
+      {% if doc.categories and doc.tags and doc.tags != empty %}
+        <span class="taxonomy-sep" aria-hidden="true">|</span>
+      {% endif %}
+    
       {% if doc.tags and doc.tags != empty %}
-        <span class="taxonomy-label">Tags:</span>
+        <span class="taxonomy-label">Tags</span>:
         <ul class="taxonomy-list">
           {% for t in doc.tags %}
             <li class="taxonomy-item tag--{{ t | slugify }}" data-filter="tag">{{ t }}</li>
