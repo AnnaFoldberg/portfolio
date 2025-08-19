@@ -212,6 +212,22 @@
   color: var(--chip-fg);
 }
 
+/* Make taxonomy anchors look like chips too */
+.taxonomy-item {
+  text-decoration: none !important;
+}
+.taxonomy-item a,
+a.taxonomy-item {
+  text-decoration: none !important;
+  color: inherit;
+}
+
+/* Optional: hover feedback for chips */
+.taxonomy-item:hover,
+.filter-chip:hover {
+  filter: brightness(0.98);
+}
+
 /* Smaller headings + clearer separator */
 .stream-meta { align-items: center; gap: .5rem .75rem; }
 .taxonomy-label { font-size: .85rem; letter-spacing: .01em; opacity: .75; font-weight: 700; }
