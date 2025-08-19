@@ -18,21 +18,31 @@ Respects language via site.active_lang (polyglot).
 <div class="left-rail">
   <div class="lr-card">
     <div class="lr-title">Categories</div>
+    {%- comment -%} left-rail.html (only the label lines change) {%- endcomment -%}
     <ul class="lr-list">
       {%- for c in catset -%}
-      <li><label><input type="checkbox" class="cat-filter" value="{{ c }}"> {{ c }}</label></li>
+      <li>
+        <label class="filter-chip cat--{{ c | slugify }}">
+          <input type="checkbox" class="cat-filter" value="{{ c }}"> {{ c }}
+        </label>
+      </li>
       {%- endfor -%}
     </ul>
   </div>
     
   <div class="lr-card">
     <div class="lr-title">Tags</div>
-    <ul class="lr-list">
-      {%- for t in tagset -%}
-      <li><label><input type="checkbox" class="tag-filter" value="{{ t }}"> {{ t }}</label></li>
-      {%- endfor -%}
-    </ul>
+      <ul class="lr-list">
+        {%- for t in tagset -%}
+        <li>
+          <label class="filter-chip tag--{{ t | slugify }}">
+            <input type="checkbox" class="tag-filter" value="{{ t }}"> {{ t }}
+          </label>
+        </li>
+        {%- endfor -%}
+      </ul>
   </div>
+  
   <button id="clear-filters" type="button" class="lr-clear">Clear filters</button>
   
 </div>
