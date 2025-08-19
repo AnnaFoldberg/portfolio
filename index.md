@@ -1,5 +1,5 @@
 ---
-layout: two_col
+layout: single
 title: "Welcome"
 ---
 {% include collection-stream.html %}
