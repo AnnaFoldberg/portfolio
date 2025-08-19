@@ -232,3 +232,7 @@ a.taxonomy-item {
 .stream-meta { align-items: center; gap: .5rem .75rem; }
 .taxonomy-label { font-size: .85rem; letter-spacing: .01em; opacity: .75; font-weight: 700; }
 .taxonomy-sep { opacity: .35; margin-inline: .25rem; }
+
+.taxonomy-list { display: inline-flex; flex-wrap: wrap; gap: .35rem; }
+.taxonomy-item { display: inline-block; text-decoration: none !important; color: var(--chip-fg, inherit); }
+a.taxonomy-item { text-decoration: none !important; color: inherit; }
