@@ -1,11 +1,10 @@
 (function () {
-  /* =========================================================
-     FILTERING: show/hide cards when checkboxes are toggled
-     ========================================================= */
+  /* =========================
+     FILTERING (unchanged)
+     ========================= */
   function vals(sel) {
     return Array.from(document.querySelectorAll(sel + ':checked')).map(i => i.value);
   }
-
   function applyFilters() {
     const cats = vals('.cat-filter');
     const tags = vals('.tag-filter');
@@ -17,11 +16,9 @@
       card.style.display = (catOK && tagOK) ? '' : 'none';
     });
   }
-
   document.addEventListener('change', e => {
     if (e.target.matches('.cat-filter, .tag-filter')) applyFilters();
   });
-
   document.addEventListener('click', e => {
     if (e.target && e.target.id === 'clear-filters') {
       document.querySelectorAll('.cat-filter:checked, .tag-filter:checked').forEach(i => i.checked = false);
@@ -29,46 +26,62 @@
     }
   });
 
-  /* =========================================================
-     COLORIZER: dynamic pastel/vibrant pills based on text
-     ========================================================= */
+  /* =========================
+     COLORIZER (unified)
+     ========================= */
   function djb2(str) {
     let h = 5381;
     for (let i = 0; i < str.length; i++) h = ((h << 5) + h) + str.charCodeAt(i);
     return h >>> 0;
   }
 
-  function setChipVars(el, type) {
-    const key = (el.getAttribute('data-key') || el.textContent || '').trim().toLowerCase();
-    const hash = djb2(key);
-    const hue = hash % 360;
+  function setChipVars(el, type, keyRaw) {
+    const key = (keyRaw || el.getAttribute('data-key') || el.textContent || "").trim().toLowerCase();
+    if (!key) return;
+    const hue = djb2(key) % 360;
 
+    // Category = pastel; Tag = vibrant
+    let s, l, borderL, fg;
     if (type === 'cat') {
-      // Categories = pastel
-      const s = 28;
-      const l = 95;
-      const borderL = Math.max(80, l - 12);
-      el.style.setProperty('--chip-h', hue);
-      el.style.setProperty('--chip-s', s);
-      el.style.setProperty('--chip-l', l);
-      el.style.setProperty('--chip-border-l', borderL);
-      el.style.setProperty('--chip-fg', '#28323f'); // dark text for pastels
+      s = 28; l = 95; borderL = Math.max(80, l - 12); fg = '#28323f';
     } else {
-      // Tags = vibrant
-      const s = 75;
-      const l = 55;
-      const borderL = Math.max(35, l - 15);
-      el.style.setProperty('--chip-h', hue);
-      el.style.setProperty('--chip-s', s);
-      el.style.setProperty('--chip-l', l);
-      el.style.setProperty('--chip-border-l', borderL);
-      const isLight = l > 60;
-      el.style.setProperty('--chip-fg', isLight ? '#111' : '#fff');
+      s = 75; l = 55; borderL = Math.max(35, l - 15); fg = l > 60 ? '#111' : '#fff';
     }
+
+    el.style.setProperty('--chip-h', hue);
+    el.style.setProperty('--chip-s', s);
+    el.style.setProperty('--chip-l', l);
+    el.style.setProperty('--chip-border-l', borderL);
+    el.style.setProperty('--chip-fg', fg);
   }
 
-  function colorize() {
-    // Left rail labels
+  // Upgrade plain anchors rendered by Minimal Mistakes / jekyll-archives
+  function upgradeLegacyTaxonomyAnchors() {
+    const sel = [
+      '.page__taxonomy a[rel="tag"]',
+      '.taxonomy__tags a', '.taxonomy-tags a', '.tags a',
+      '.taxonomy__categories a', '.taxonomy-categories a', '.categories a'
+    ].join(', ');
+
+    document.querySelectorAll(sel).forEach(a => {
+      // Skip if already upgraded
+      if (a.classList.contains('taxonomy-item')) return;
+
+      const text = (a.textContent || '').trim();
+      const href = (a.getAttribute('href') || '').toLowerCase();
+      const type =
+        (a.getAttribute('rel') || '').toLowerCase() === 'tag' || href.includes('/tags/') ? 'tag'
+        : href.includes('/categories/') ? 'cat'
+        : 'tag';
+
+      a.classList.add('taxonomy-item');
+      a.setAttribute('data-filter', type);
+      a.setAttribute('data-key', text.toLowerCase().replace(/\s+/g, '-'));
+    });
+  }
+
+  function colorizeAll() {
+    // Left rail chips (labels)
     document.querySelectorAll('.filter-chip').forEach(el => {
       const type = el.getAttribute('data-filter') || 'cat';
       setChipVars(el, type);
@@ -80,18 +93,16 @@
       }
     });
 
-    // Stream chips
+    // Stream chips (our list items)
     document.querySelectorAll('.taxonomy-item').forEach(el => {
       const type = el.getAttribute('data-filter') || 'cat';
       setChipVars(el, type);
     });
   }
 
-  /* =========================================================
-     INIT: run filters + colorizer on load
-     ========================================================= */
   document.addEventListener('DOMContentLoaded', () => {
     applyFilters();
-    colorize();
+    upgradeLegacyTaxonomyAnchors();
+    colorizeAll();
   });
 })();
