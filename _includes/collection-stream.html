@@ -13,7 +13,7 @@
         <span class="taxonomy-label">Categories</span>:
         <ul class="taxonomy-list">
           {% for c in doc.categories %}
-            <li class="taxonomy-item cat--{{ c | slugify }}" data-filter="cat">{{ c }}</li>
+            <li class="taxonomy-item" data-filter="cat" data-key="{{ c | slugify }}">{{ c }}</li>
           {% endfor %}
         </ul>
       {% endif %}
@@ -26,7 +26,7 @@
         <span class="taxonomy-label">Tags</span>:
         <ul class="taxonomy-list">
           {% for t in doc.tags %}
-            <li class="taxonomy-item tag--{{ t | slugify }}" data-filter="tag">{{ t }}</li>
+            <li class="taxonomy-item" data-filter="tag" data-key="{{ t | slugify }}">{{ t }}</li>
           {% endfor %}
         </ul>
       {% endif %}
