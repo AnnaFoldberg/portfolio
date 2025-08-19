@@ -1,6 +1,6 @@
 ---
 layout: single
-title: "Welcome"
+title: "Portfolio"
 sidebar: false
 ---
 {% include collection-stream.html %}
