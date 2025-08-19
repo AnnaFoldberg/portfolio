@@ -424,3 +424,63 @@
   --chip-border: hsl(215 55% 85%);
   --chip-fg: hsl(215 35% 28%);
 }
+
+/* ===== Stream taxonomy chips: make categories pastel, tags vibrant ===== */
+
+/* Shared chip base for stream list items */
+.taxonomy-item {
+  display: inline-block;
+  padding: .22rem .6rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  line-height: 1;
+  font-weight: 600;
+  margin: 0 .25rem .25rem 0;
+  text-decoration: none;
+  vertical-align: middle;
+
+  /* reset any old defaults */
+  background: var(--chip-bg, transparent);
+  color: var(--chip-fg, inherit);
+  border: 1px solid var(--chip-border, transparent);
+}
+
+/* Pastel defaults for CATEGORIES */
+.taxonomy-item[data-filter="cat"] {
+  --chip-bg: #F7FAFC;   /* light */
+  --chip-border: #E5E7EB;
+  --chip-fg: #374151;   /* dark text */
+}
+
+/* Vibrant defaults for TAGS */
+.taxonomy-item[data-filter="tag"] {
+  /* pick your brand vibrant; example neutral-ish blue */
+  --chip-bg: #2563EB;   /* blue-600 */
+  --chip-border: #1E40AF;
+  --chip-fg: #FFFFFF;
+}
+
+/* Hover/focus (optional) */
+.taxonomy-item:hover { filter: brightness(.98); }
+.taxonomy-item:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(0,120,255,.25); }
+
+/* --- Optional per-slug palettes (add as needed) ----------------------- */
+/* If you want specific category colors (pastel) by name: */
+.taxonomy-item[data-filter="cat"].cat--kubernetes { 
+  --chip-bg: hsl(350 80% 95%); --chip-border: hsl(350 60% 85%); --chip-fg: hsl(350 35% 28%);
+}
+.taxonomy-item[data-filter="cat"].cat--microservices {
+  --chip-bg: hsl(315 85% 95%); --chip-border: hsl(315 60% 85%); --chip-fg: hsl(315 35% 28%);
+}
+.taxonomy-item[data-filter="cat"].cat--it-security {
+  --chip-bg: hsl(215 70% 95%); --chip-border: hsl(215 55% 85%); --chip-fg: hsl(215 35% 28%);
+}
+.taxonomy-item[data-filter="cat"].cat--trackunit {
+  --chip-bg: hsl(275 70% 95%); --chip-border: hsl(275 55% 85%); --chip-fg: hsl(275 35% 28%);
+}
+
+/* If you want specific tag colors (vibrant) by name: */
+.taxonomy-item[data-filter="tag"].tag--dotnet   { --chip-bg: #0EA5E9; --chip-border: #0369A1; --chip-fg: #fff; }
+.taxonomy-item[data-filter="tag"].tag--helm     { --chip-bg: #06B6D4; --chip-border: #0E7490; --chip-fg: #fff; }
+.taxonomy-item[data-filter="tag"].tag--mini     { --chip-bg: #F59E0B; --chip-border: #B45309; --chip-fg: #111; } /* warm vibrant */
+.taxonomy-item[data-filter="tag"].tag--placeholder { --chip-bg: #3B82F6; --chip-border: #1D4ED8; --chip-fg: #fff; }
