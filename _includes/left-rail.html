@@ -1,5 +1,5 @@
 {%- comment -%}
-Left rail with filters.
+Left rail with profile card + dynamic filters.
 Expects: page.collection_name (projects | notes | log)
 Respects language via site.active_lang (polyglot).
 {%- endcomment -%}
@@ -9,16 +9,29 @@ Respects language via site.active_lang (polyglot).
 {%- assign catset = "" | split: "" -%}
 {%- assign tagset = "" | split: "" -%}
 {%- for d in items -%}
-  {%- for c in d.categories -%}{%- unless catset contains c -%}{%- assign catset = catset | push: c -%}{%- endunless -%}{%- endfor -%}
-  {%- for t in d.tags       -%}{%- unless tagset contains t -%}{%- assign tagset = tagset | push: t -%}{%- endunless -%}{%- endfor -%}
+  {%- if d.categories -%}
+    {%- for c in d.categories -%}
+      {%- unless catset contains c -%}{%- assign catset = catset | push: c -%}{%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+  {%- if d.tags -%}
+    {%- for t in d.tags -%}
+      {%- unless tagset contains t -%}{%- assign tagset = tagset | push: t -%}{%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
 {%- endfor -%}
 {%- assign catset = catset | sort -%}
 {%- assign tagset = tagset | sort -%}
 
 <div class="left-rail">
+  <div class="lr-card lr-profile">
+    <img class="lr-avatar" src="{{ site.profile.avatar | relative_url }}" alt="{{ site.profile.name }}">
+    <div class="lr-name">{{ site.profile.name }}</div>
+    <div class="lr-bio">{{ site.profile.bio }}</div>
+  </div>
+
   <div class="lr-card">
     <div class="lr-title">Categories</div>
-    {%- comment -%} left-rail.html (only the label lines change) {%- endcomment -%}
     <ul class="lr-list">
       {%- for c in catset -%}
       <li>
@@ -30,21 +43,20 @@ Respects language via site.active_lang (polyglot).
       {%- endfor -%}
     </ul>
   </div>
-    
+
   <div class="lr-card">
     <div class="lr-title">Tags</div>
-      <ul class="lr-list">
-        {%- for t in tagset -%}
-        <li>
-          <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
-            <input type="checkbox" class="tag-filter" value="{{ t }}">
-            {{ t }}
-          </label>
-        </li>
-        {%- endfor -%}
-      </ul>
+    <ul class="lr-list">
+      {%- for t in tagset -%}
+      <li>
+        <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
+          <input type="checkbox" class="tag-filter" value="{{ t }}">
+          {{ t }}
+        </label>
+      </li>
+      {%- endfor -%}
+    </ul>
   </div>
-  
+
   <button id="clear-filters" type="button" class="lr-clear">Clear filters</button>
-  
 </div>
