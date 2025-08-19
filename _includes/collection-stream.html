@@ -10,7 +10,7 @@
     {%- comment -%} collection-stream.html (only the taxonomy bits change) {%- endcomment -%}
     <div class="stream-meta">
       {% if doc.categories and doc.categories != empty %}
-        <span class="taxonomy-label">Categories</span>:
+        <span class="taxonomy-label">Categories</span>
         <ul class="taxonomy-list">
           {% for c in doc.categories %}
             <li class="taxonomy-item" data-filter="cat" data-key="{{ c | slugify }}">{{ c }}</li>
@@ -23,7 +23,7 @@
       {% endif %}
     
       {% if doc.tags and doc.tags != empty %}
-        <span class="taxonomy-label">Tags</span>:
+        <span class="taxonomy-label">Tags</span>
         <ul class="taxonomy-list">
           {% for t in doc.tags %}
             <li class="taxonomy-item" data-filter="tag" data-key="{{ t | slugify }}">{{ t }}</li>
