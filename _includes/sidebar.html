@@ -2,4 +2,6 @@
 Override MM's sidebar content with our custom rail.
 The layout supplies the <aside class="sidebar__left|right"> wrapper for us.
 {%- endcomment -%}
-{% include left-rail.html %}
+{% unless page.sidebar == false %}
+  {% include left-rail.html %}
+{% endunless %}
