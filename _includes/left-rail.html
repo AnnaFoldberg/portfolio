@@ -22,7 +22,7 @@ Respects language via site.active_lang (polyglot).
     <ul class="lr-list">
       {%- for c in catset -%}
       <li>
-        <label class="filter-chip cat--{{ c | slugify }}">
+        <label class="filter-chip" data-filter="cat" data-key="{{ c | slugify }}">
           <input type="checkbox" class="cat-filter" value="{{ c }}"> {{ c }}
         </label>
       </li>
@@ -35,7 +35,7 @@ Respects language via site.active_lang (polyglot).
       <ul class="lr-list">
         {%- for t in tagset -%}
         <li>
-          <label class="filter-chip tag--{{ t | slugify }}">
+          <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
             <input type="checkbox" class="tag-filter" value="{{ t }}"> {{ t }}
           </label>
         </li>
