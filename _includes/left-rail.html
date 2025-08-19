@@ -1,5 +1,5 @@
 {%- comment -%}
-Left rail with profile card + filters.
+Left rail with filters.
 Expects: page.collection_name (projects | notes | log)
 Respects language via site.active_lang (polyglot).
 {%- endcomment -%}
@@ -16,12 +16,6 @@ Respects language via site.active_lang (polyglot).
 {%- assign tagset = tagset | sort -%}
 
 <div class="left-rail">
-  <div class="lr-card lr-profile">
-    <img class="lr-avatar" src="{{ site.profile.avatar | relative_url }}" alt="{{ site.profile.name }}">
-    <div class="lr-name">{{ site.profile.name }}</div>
-    <div class="lr-bio">{{ site.profile.bio }}</div>
-  </div>
-
   <div class="lr-card">
     <div class="lr-title">Categories</div>
     <ul class="lr-list">
@@ -29,9 +23,6 @@ Respects language via site.active_lang (polyglot).
       <li><label><input type="checkbox" class="cat-filter" value="{{ c }}"> {{ c }}</label></li>
       {%- endfor -%}
     </ul>
-  </div>
-
-  <div class="lr-card">
     <div class="lr-title">Tags</div>
     <ul class="lr-list">
       {%- for t in tagset -%}
@@ -39,6 +30,6 @@ Respects language via site.active_lang (polyglot).
       {%- endfor -%}
     </ul>
   </div>
-
+  
   <button id="clear-filters" type="button" class="lr-clear">Clear filters</button>
 </div>
