@@ -24,12 +24,12 @@
               >{{ link.title }}</a>
             </li>
           {%- endfor -%}
-        </ul>
 
-        <!-- Language switcher injected into masthead -->
-        <div class="lang-switcher--masthead">
-          {% include lang-switcher.html %}
-        </div>
+          <!-- NEW: Language switcher as a menu item -->
+          <li class="masthead__menu-item lang-switcher--masthead">
+            {% include lang-switcher.html %}
+          </li>
+        </ul>
 
         {% if site.search == true %}
           <button class="search__toggle" type="button">
