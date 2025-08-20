@@ -1,5 +1,5 @@
 {%- assign default_lang = site.default_lang | downcase -%}
-{%- assign languages    = site.languages | map: "downcase" -%}
+{%- assign languages    = site.languages -%} {# keep as-is; do NOT map #}
 
 {%- assign parts = page.url | split: "/" -%}
 {%- assign first = parts[1] | downcase -%}
@@ -28,11 +28,19 @@
 
 <div class="lang-switcher" style="margin:0;">
   {%- for lang in languages -%}
-    {%- if lang == default_lang -%}
+    {%- assign lang_lc = lang | downcase -%}
+
+    {%- if lang_lc == default_lang -%}
       {%- assign href = baseurl | append: normalized_path -%}
     {%- else -%}
-      {%- assign href = baseurl | append: "/" | append: lang | append: normalized_path -%}
+      {%- assign href = baseurl | append: "/" | append: lang_lc | append: normalized_path -%}
     {%- endif -%}
-    <a href="{{ href }}"{% if lang == current_lang %} class="is-active"{% endif %}>{{ lang | upcase }}</a>{% unless forloop.last %}<span aria-hidden="true" style="opacity:.35;margin:0 .25rem;">|</span>{% endunless %}
+
+    <a href="{{ href }}"{% if lang_lc == current_lang %} class="is-active"{% endif %}>
+      {{ lang_lc | upcase }}
+    </a>
+    {%- unless forloop.last -%}
+      <span aria-hidden="true" style="opacity:.35;margin:0 .25rem;">|</span>
+    {%- endunless -%}
   {%- endfor -%}
 </div>
