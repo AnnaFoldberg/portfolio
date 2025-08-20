@@ -224,3 +224,40 @@ a.taxonomy-item { color: inherit; text-decoration: none !important; }
   --chip-border: #c74438;
   --chip-fg: #fff;
 }
+
+/* ======================================
+   Fixed colors for the 4 categories
+   (applies to left-rail + content stream)
+   ====================================== */
+
+/* trackunit – your exact color */
+.filter-chip[data-filter="cat"][data-key="trackunit"],
+.taxonomy-item[data-filter="cat"][data-key="trackunit"] {
+  --chip-bg: #E65244;   /* vivid coral */
+  --chip-border: #C74438;
+  --chip-fg: #fff;
+}
+
+/* kubernetes – softer blue at similar intensity */
+.filter-chip[data-filter="cat"][data-key="kubernetes"],
+.taxonomy-item[data-filter="cat"][data-key="kubernetes"] {
+  --chip-bg: #6EA8E5;   /* ~ hsl(210, 70%, 67%) */
+  --chip-border: #4F8CD2;
+  --chip-fg: #fff;
+}
+
+/* microservices – pinkish red, same punch */
+.filter-chip[data-filter="cat"][data-key="microservices"],
+.taxonomy-item[data-filter="cat"][data-key="microservices"] {
+  --chip-bg: #E56A8A;   /* ~ hsl(345, 70%, 66%) */
+  --chip-border: #C95775;
+  --chip-fg: #fff;
+}
+
+/* it-security – yellowish; use dark text for contrast */
+.filter-chip[data-filter="cat"][data-key="it-security"],
+.taxonomy-item[data-filter="cat"][data-key="it-security"] {
+  --chip-bg: #E9C15B;   /* ~ hsl(45, 75%, 64%) */
+  --chip-border: #D5A94A;
+  --chip-fg: #1a1a1a;
+}
