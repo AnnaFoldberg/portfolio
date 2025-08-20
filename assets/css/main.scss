@@ -325,9 +325,13 @@ body, h1, h2, h3, h4, h5, h6 {
 
 .lang-switcher a,
 .lang-switcher span {
-  margin: 0 0.25rem; /* even spacing */
+  margin: 0 0rem; /* even spacing */
 }
 
 .lang-switcher {
   font-size: 0.85rem; /* make it smaller overall */
+}
+
+.site-footer {
+  display: none !important;
 }
