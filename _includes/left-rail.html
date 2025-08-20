@@ -1,5 +1,5 @@
 {%- comment -%}
-Left rail (STEP B1): render tags as a simple list (no checkboxes).
+Left rail (STEP B2): Tags rendered as checkbox chips (same as categories).
 {%- endcomment -%}
 
 {%- assign items = site[page.collection_name] | where: "lang", site.active_lang -%}
@@ -44,11 +44,15 @@ Left rail (STEP B1): render tags as a simple list (no checkboxes).
 
   <div class="lr-card">
     <div class="lr-title">Tags</div>
-
     {%- if tagset and tagset != empty -%}
       <ul class="lr-list">
         {%- for t in tagset -%}
-        <li>{{ t }}</li>
+        <li>
+          <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
+            <input type="checkbox" class="tag-filter" value="{{ t }}">
+            {{ t }}
+          </label>
+        </li>
         {%- endfor -%}
       </ul>
     {%- else -%}
