@@ -279,3 +279,9 @@ body, h1, h2, h3, h4, h5, h6 {
 .taxonomy-item {
   font-family: "Google Sans Code", monospace;
 }
+
+/* Force masthead to use Nunito */
+.masthead,
+.masthead * {
+  font-family: "Nunito", sans-serif !important;
+}
