@@ -154,6 +154,8 @@
   gap: .5rem;
   padding: .35rem .6rem;
   border-radius: 999px;
+
+  /* base visuals using variables (no spaces before %) */
   border: 1px solid hsl(var(--chip-h), var(--chip-s)%, var(--chip-border-l)%);
   background: hsl(var(--chip-h), var(--chip-s)%, var(--chip-l)%);
   color: var(--chip-fg);
@@ -198,20 +200,12 @@
 /* Ensure archive/tag anchors also look like chips */
 a.taxonomy-item { color: inherit; text-decoration: none !important; }
 
-/* Ensure chip variables drive visuals, with safe fallbacks */
+/* =========================================================
+   Ensure chip variables drive visuals, with safe fallbacks
+   ========================================================= */
 .left-rail .filter-chip,
 .taxonomy-item {
-  background-color: hsl(
-    var(--chip-h, 210),
-    var(--chip-s, 12)%,
-    var(--chip-l, 96)%
-  ) !important;
-
-  border-color: hsl(
-    var(--chip-h, 210),
-    var(--chip-s, 12)%,
-    var(--chip-border-l, 86)%
-  ) !important;
-
+  background-color: hsl(var(--chip-h,210), var(--chip-s,12)%, var(--chip-l,96)%) !important;
+  border-color:     hsl(var(--chip-h,210), var(--chip-s,12)%, var(--chip-border-l,86)%) !important;
   color: var(--chip-fg, #111) !important;
 }
