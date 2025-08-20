@@ -1,14 +1,12 @@
 {%- assign default_lang = site.default_lang | downcase -%}
-{%- assign languages    = site.languages -%} {# keep as-is; do NOT map #}
+{%- assign languages    = site.languages -%}
 
 {%- assign parts = page.url | split: "/" -%}
 {%- assign first = parts[1] | downcase -%}
 
 {%- if languages contains first and first != default_lang -%}
-  {%- assign current_lang = first -%}
   {%- assign path_without_lang = parts | slice: 2, parts.size | join: "/" -%}
 {%- else -%}
-  {%- assign current_lang = default_lang -%}
   {%- assign path_without_lang = parts | slice: 1, parts.size | join: "/" -%}
 {%- endif -%}
 
@@ -28,19 +26,12 @@
 
 <div class="lang-switcher" style="margin:0;">
   {%- for lang in languages -%}
-    {%- assign lang_lc = lang | downcase -%}
-
-    {%- if lang_lc == default_lang -%}
+    {%- assign lc = lang | downcase -%}
+    {%- if lc == default_lang -%}
       {%- assign href = baseurl | append: normalized_path -%}
     {%- else -%}
-      {%- assign href = baseurl | append: "/" | append: lang_lc | append: normalized_path -%}
+      {%- assign href = baseurl | append: "/" | append: lc | append: normalized_path -%}
     {%- endif -%}
-
-    <a href="{{ href }}"{% if lang_lc == current_lang %} class="is-active"{% endif %}>
-      {{ lang_lc | upcase }}
-    </a>
-    {%- unless forloop.last -%}
-      <span aria-hidden="true" style="opacity:.35;margin:0 .25rem;">|</span>
-    {%- endunless -%}
+    <a href="{{ href }}">{{ lc | upcase }}</a>{% unless forloop.last %}<span aria-hidden="true" style="opacity:.35;margin:0 .25rem;">|</span>{% endunless %}
   {%- endfor -%}
 </div>
