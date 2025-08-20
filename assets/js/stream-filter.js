@@ -1,5 +1,4 @@
 (function () {
-  // --- hash -> hue ---
   function djb2(str) {
     let h = 5381;
     for (let i = 0; i < str.length; i++) h = ((h << 5) + h) + str.charCodeAt(i);
@@ -14,21 +13,19 @@
     // categories = pastel, tags = vibrant
     let s, l, borderL, fg;
     if (type === 'cat') {
-      s = 28; l = 95; borderL = Math.max(80, l - 12); fg = '#28323f';
+      s = 45; l = 82; borderL = Math.max(60, l - 12); fg = '#1a1a1a';
     } else {
       s = 75; l = 55; borderL = Math.max(35, l - 15); fg = l > 60 ? '#111' : '#fff';
     }
 
-    el.style.setProperty('--chip-h', hue);
-    el.style.setProperty('--chip-s', s);
-    el.style.setProperty('--chip-l', l);
-    el.style.setProperty('--chip-border-l', borderL);
+    // Push *ready-to-use* HSL strings (no % arithmetic left for CSS)
+    el.style.setProperty('--chip-bg', `hsl(${hue} ${s}% ${l}%)`);
+    el.style.setProperty('--chip-border', `hsl(${hue} ${s}% ${borderL}%)`);
     el.style.setProperty('--chip-fg', fg);
-    el.setAttribute('data-colored', 'yes'); // <-- debug marker
+    el.setAttribute('data-colored', 'yes');
   }
 
   function colorizeAll() {
-    // Left rail chips (categories + tags)
     document.querySelectorAll('.filter-chip').forEach(el => {
       const type = el.getAttribute('data-filter') || 'cat';
       setChipVars(el, type);
@@ -40,7 +37,6 @@
       }
     });
 
-    // Stream/content chips
     document.querySelectorAll('.taxonomy-item').forEach(el => {
       const type = el.getAttribute('data-filter') || 'cat';
       setChipVars(el, type);
