@@ -1,10 +1,8 @@
 {%- assign default_lang = site.default_lang | downcase -%}
-{%- assign languages    = site.languages | map:'downcase' -%}
+{%- assign languages    = site.languages -%}
 {%- assign baseurl      = site.baseurl | default: "" -%}
 
-{%- comment %}
-Determine current language and strip any language prefix from the URL to get the path.
-{%- endcomment -%}
+{%- comment %} Figure out current language and the path without a lang prefix {%- endcomment -%}
 {%- assign parts = page.url | split: "/" -%}
 {%- assign first = parts[1] | downcase -%}
 {%- assign current_lang = default_lang -%}
@@ -16,9 +14,7 @@ Determine current language and strip any language prefix from the URL to get the
   {%- assign path_without_lang = parts | slice: 1, parts.size | join: "/" -%}
 {%- endif -%}
 
-{%- comment %}
-Normalize the path and preserve a trailing slash if the current page has one.
-{%- endcomment -%}
+{%- comment %} Normalize and preserve trailing slash {%- endcomment -%}
 {%- if path_without_lang == "" -%}
   {%- assign normalized_path = "/" -%}
 {%- else -%}
