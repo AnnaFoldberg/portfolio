@@ -22,12 +22,6 @@ Left rail (STEP B2.1): Tags rendered as plain chips (no inputs) to isolate styli
 {%- assign tagset = tagset | sort -%}
 
 <div class="left-rail">
-  <div class="lr-card lr-profile">
-    <img class="lr-avatar" src="{{ site.profile.avatar | relative_url }}" alt="{{ site.profile.name }}">
-    <div class="lr-name">{{ site.profile.name }}</div>
-    <div class="lr-bio">{{ site.profile.bio }}</div>
-  </div>
-
   <div class="lr-card">
     <div class="lr-title">Categories</div>
     <ul class="lr-list">
