@@ -285,3 +285,26 @@ body, h1, h2, h3, h4, h5, h6 {
 .masthead * {
   font-family: "Nunito", sans-serif !important;
 }
+
+/* Masthead language switcher placement + look */
+.lang-switcher--masthead {
+  margin-left: auto;               /* push it to the far right in the greedy nav */
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.lang-switcher--masthead .lang-switcher {
+  margin: 0;                       /* override inline margin from your include */
+  font-size: 0.95rem;
+}
+
+.lang-switcher--masthead a {
+  text-decoration: none;
+  opacity: .9;
+}
+
+.lang-switcher--masthead a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
