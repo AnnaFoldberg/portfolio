@@ -140,31 +140,46 @@
 /* =========================================================
    Unified pill chips (left rail + stream + archives)
    ========================================================= */
+/* =========================================================
+   Unified pill chips (left rail + stream + archives)
+   ========================================================= */
 .filter-chip,
 .taxonomy-item {
+  /* safe fallbacks so pills show even without JS */
+  --chip-bg: hsl(210 12% 96%);
+  --chip-border: transparent; /* no border */
+  --chip-fg: #374151;
+
   display: inline-flex;
   align-items: center;
   gap: .5rem;
   padding: .35rem .6rem;
   border-radius: 999px;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
   text-decoration: none !important;
   line-height: 1;
   font-weight: 600;
-
-  /* safe fallbacks if JS hasn’t set variables yet */
-  --chip-bg: hsl(210 12% 96%);
-  --chip-border: hsl(210 12% 86%);
-  --chip-fg: #374151;
-
-  border: 1px solid var(--chip-border);
-  background: var(--chip-bg);
-  color: var(--chip-fg);
+  border: none; /* remove border */
 }
 
 .taxonomy-item {
   display: inline-block; /* tags in stream are <li> */
   padding: .22rem .6rem;
   margin: 0 .25rem .25rem 0;
+}
+
+/* Ensure variables win over theme rules */
+.left-rail .filter-chip,
+.taxonomy-item {
+  background-color: var(--chip-bg) !important;
+  border: none !important; /* kill border */
+  color: var(--chip-fg) !important;
+}
+
+/* Force categories to always be white text */
+.filter-chip[data-filter="cat"] {
+  --chip-fg: #fff;
 }
 
 /* Checkbox dot inside left-rail chips */
