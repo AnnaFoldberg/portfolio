@@ -269,23 +269,13 @@ a.taxonomy-item { color: inherit; text-decoration: none !important; }
   color: var(--chip-fg) !important;
 }
 
-/* Categories + Tags only */
+/* Global font for everything */
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: "Nunito", sans-serif;
+}
+
+/* Override for categories and tags */
 .filter-chip,
 .taxonomy-item {
-  font-family: "Google Sans Code", monospace !important;
-  font-weight: 600; /* or 400 if you prefer */
-}
-
-/* Everything else (body + headings) */
-body,
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Inter", sans-serif; /* example alternative font */
-}
-
-/* Optional: tweak weights */
-body {
-  font-weight: 400;
-}
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-family: "Google Sans Code", monospace;
 }
