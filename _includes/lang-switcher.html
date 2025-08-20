@@ -1,50 +1,87 @@
 {%- comment -%}
 Robust language switcher for jekyll-polyglot.
 
-- Keeps the current page path when switching language.
-- Default language (site.default_lang) has no prefix (no /en).
-- Non-default languages get /<lang>/ prefix.
-- Correctly highlights the active language (page.lang preferred).
+Goals:
+- Default language (site.default_lang) has NO prefix (no /en).
+- Non-default languages use /<lang>/.
+- Keep current page path when switching languages IF that target page exists;
+  otherwise, fall back to the language’s homepage.
+- Correctly bold the active language.
 
 Assumes:
   site.languages: ["en","da","it"]
   site.default_lang: "en"
 {%- endcomment -%}
 
-{%- assign active_lang = page.lang | default: site.active_lang -%}
-{%- assign parts = page.url | split: '/' -%}
-{%- assign first = parts[1] -%}
+{%- assign default_lang = site.default_lang | downcase -%}
+{%- assign active_lang  = page.lang | default: site.active_lang | downcase -%}
 
-{%- comment -%}
-If first segment IS a language (and not the default), strip it.
-Examples:
-  /da/projects/foo/  -> path_without_lang = projects/foo/
-  /projects/foo/     -> path_without_lang = projects/foo/
-{%- endcomment -%}
-{%- if site.languages contains first and first != site.default_lang -%}
-  {%- assign path_without_lang = parts | slice: 2, parts.size | join: '/' -%}
+{%- assign url = page.url -%}
+{%- assign has_trailing = url | slice: -1, 1 -%}
+{%- assign trail = '' -%}
+{%- if has_trailing == '/' -%}{%- assign trail = '/' -%}{%- endif -%}
+
+{%- assign parts = url | split:'/' -%}
+{%- assign first = parts[1] | downcase -%}
+
+{%- if site.languages contains first and first != default_lang -%}
+  {%- assign path_without_lang = parts | slice: 2, parts.size | join:'/' -%}
 {%- else -%}
-  {%- assign path_without_lang = parts | slice: 1, parts.size | join: '/' -%}
+  {%- assign path_without_lang = parts | slice: 1, parts.size | join:'/' -%}
 {%- endif -%}
 
-{%- comment -%}
-Normalize leading slash for the path part we’ll append after the (optional) lang prefix.
-{%- endcomment -%}
 {%- if path_without_lang != '' and path_without_lang != '/' -%}
   {%- assign normalized_path = '/' | append: path_without_lang -%}
 {%- else -%}
   {%- assign normalized_path = '/' -%}
 {%- endif -%}
 
+{%- comment -%}
+Collect all docs (pages + every collection) so we can check if a target URL exists.
+{%- endcomment -%}
+{%- assign _all_docs = site.pages -%}
+{%- for c in site.collections -%}
+  {%- assign _all_docs = _all_docs | concat: c.docs -%}
+{%- endfor -%}
+
+{%- assign baseurl = site.baseurl | default: '' -%}
+
 <div class="lang-switcher" style="margin:0;">
   {%- for lang in site.languages -%}
-    {%- if lang == site.default_lang -%}
-      {%- assign href = normalized_path | relative_url -%}
+    {%- assign lang_lc = lang | downcase -%}
+
+    {%- if lang_lc == default_lang -%}
+      {%- assign candidate_path = normalized_path -%}
     {%- else -%}
-      {%- assign href = '/' | append: lang | append: normalized_path | relative_url -%}
+      {%- assign candidate_path = '/' | append: lang_lc | append: normalized_path -%}
     {%- endif -%}
 
-    {%- if lang == active_lang -%}
+    {%- comment -%} ensure trailing slash consistency {%- endcomment -%}
+    {%- if trail == '/' and candidate_path != '/' -%}
+      {%- unless candidate_path endswith '/' -%}
+        {%- assign candidate_path = candidate_path | append:'/' -%}
+      {%- endunless -%}
+    {%- endif -%}
+
+    {%- assign exists = false -%}
+    {%- for d in _all_docs -%}
+      {%- if d.url == candidate_path -%}
+        {%- assign exists = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if exists == false -%}
+      {%- if lang_lc == default_lang -%}
+        {%- assign candidate_path = '/' -%}
+      {%- else -%}
+        {%- assign candidate_path = '/' | append: lang_lc | append: '/' -%}
+      {%- endif -%}
+    {%- endif -%}
+
+    {%- assign href = baseurl | append: candidate_path -%}
+
+    {%- if lang_lc == active_lang -%}
       <span style="font-weight:600;">{{ lang | upcase }}</span>
     {%- else -%}
       <a href="{{ href }}">{{ lang | upcase }}</a>
