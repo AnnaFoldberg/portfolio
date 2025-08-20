@@ -280,47 +280,45 @@ body, h1, h2, h3, h4, h5, h6 {
   font-family: "Google Sans Code", monospace;
 }
 
-/* Use Nunito in the masthead */
+/* Nunito everywhere in the masthead */
 .masthead, .masthead * { font-family: "Nunito", sans-serif !important; }
 
-/* Right-side utilities container */
-.masthead .masthead-utils {
-  margin-left: auto;
+/* Keep the greedy-nav layout happy */
+.greedy-nav { align-items: center; }
+
+/* Language switcher compact, placed beside title */
+.lang-switcher--masthead {
+  margin-left: .75rem;           /* space from “Portfolio” */
   display: inline-flex;
   align-items: center;
-  gap: .75rem;
 }
-
-/* Compact language switcher */
 .lang-switcher--masthead .lang-switcher {
-  margin: 0;               /* override inline margin in include */
-  font-size: 0.85rem;      /* smaller */
+  margin: 0 !important;          /* override inline margin in include */
+  font-size: .85rem;
   line-height: 1;
   display: inline-flex;
-  align-items: center;
   gap: .35rem;
-  white-space: nowrap;     /* keep on one line */
+  white-space: nowrap;
 }
-
 .lang-switcher--masthead .lang-switcher a {
   text-decoration: none;
   opacity: .85;
 }
 .lang-switcher--masthead .lang-switcher a:hover { opacity: 1; text-decoration: underline; }
 
-/* Make separators tighter if you keep the pipes in the include */
-.lang-switcher--masthead .lang-switcher { letter-spacing: 0; }
-
-/* Tidy the search toggle to match */
+/* Search icon — ensure size/contrast and remove font dependencies */
 .masthead .search__toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 32px; height: 32px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  padding: 0;
+  padding: 0; border: 0; background: transparent;
+  color: #6b7280;                /* neutral gray; inherits on hover */
 }
-.masthead .search__toggle svg path { fill: currentColor; opacity: 0.85; }
-.masthead .search__toggle:hover svg path { opacity: 1; }
+.masthead .search__toggle:hover { color: #374151; }
+.masthead .search__toggle svg {
+  width: 20px; height: 20px; display: block;
+}
+.masthead .search__toggle svg path {
+  fill: currentColor;            /* uses button color */
+}
