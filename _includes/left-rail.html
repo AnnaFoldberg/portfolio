@@ -1,5 +1,5 @@
 {%- comment -%}
-Left rail (STEP B2): Tags rendered as checkbox chips (same as categories).
+Left rail (STEP B2.1): Tags rendered as plain chips (no inputs) to isolate styling issues.
 {%- endcomment -%}
 
 {%- assign items = site[page.collection_name] | where: "lang", site.active_lang -%}
@@ -44,14 +44,13 @@ Left rail (STEP B2): Tags rendered as checkbox chips (same as categories).
 
   <div class="lr-card">
     <div class="lr-title">Tags</div>
+
     {%- if tagset and tagset != empty -%}
       <ul class="lr-list">
         {%- for t in tagset -%}
         <li>
-          <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
-            <input type="checkbox" class="tag-filter" value="{{ t }}">
-            {{ t }}
-          </label>
+          <!-- CHIP ONLY (no input yet) -->
+          <span class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">{{ t }}</span>
         </li>
         {%- endfor -%}
       </ul>
