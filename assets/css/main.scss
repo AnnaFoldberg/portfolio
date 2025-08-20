@@ -197,3 +197,11 @@
 
 /* Ensure archive/tag anchors also look like chips */
 a.taxonomy-item { color: inherit; text-decoration: none !important; }
+
+/* Ensure chip variables actually drive the visuals (override theme shorthands) */
+.left-rail .filter-chip,
+.taxonomy-item {
+  background-color: hsl(var(--chip-h), var(--chip-s)%, var(--chip-l)%) !important;
+  border-color: hsl(var(--chip-h), var(--chip-s)%, var(--chip-border-l)%) !important;
+  color: var(--chip-fg) !important;
+}
