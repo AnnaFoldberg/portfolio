@@ -22,11 +22,19 @@ function djb2(str) {
 function setTagVars(el) {
   const key = (el.getAttribute("data-key") || el.textContent || "").trim().toLowerCase();
   if (!key) return;
+
   const hue = djb2(key) % 360;
-  const s = 40, l = 90, borderL = Math.max(70, l - 10);
+  const s = 40, l = 90;
+  const borderL = Math.max(70, l - 10);
+
+  // Background = pastel
   el.style.setProperty("--chip-bg", `hsl(${hue} ${s}% ${l}%)`);
   el.style.setProperty("--chip-border", `hsl(${hue} ${s}% ${borderL}%)`);
-  el.style.setProperty("--chip-fg", "#fff");
+
+  // Text color = slightly darker than border
+  const textL = Math.max(20, borderL - 20); // darken border lightness
+  el.style.setProperty("--chip-fg", `hsl(${hue} ${s}% ${textL}%)`);
+
   el.dataset.colored = "yes";
 }
 
