@@ -322,3 +322,12 @@ body, h1, h2, h3, h4, h5, h6 {
 .masthead .search__toggle svg path {
   fill: currentColor;            /* uses button color */
 }
+
+.lang-switcher a,
+.lang-switcher span {
+  margin: 0 0.25rem; /* even spacing */
+}
+
+.lang-switcher {
+  font-size: 0.85rem; /* make it smaller overall */
+}
