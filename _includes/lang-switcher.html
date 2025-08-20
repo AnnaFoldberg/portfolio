@@ -2,29 +2,35 @@
 {%- assign languages    = site.languages -%}
 {%- assign baseurl      = site.baseurl | default: "" -%}
 
-{%- comment %} Split the current URL {%- endcomment -%}
+{%- comment %} 1) Determine current language (prefer page.lang, else infer from URL) {%- endcomment -%}
+{%- assign current_lang = page.lang | downcase | default: default_lang -%}
+
+{%- if current_lang == default_lang -%}
+  {%- assign parts = page.url | split: "/" -%}
+  {%- assign first = parts[1] | downcase -%}
+  {%- for L in languages -%}
+    {%- assign lc = L | downcase -%}
+    {%- if first == lc and lc != default_lang -%}
+      {%- assign current_lang = lc -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{%- comment %} 2) Compute the path WITHOUT any lang prefix (even if someone linked /en/…) {%- endcomment -%}
 {%- assign parts = page.url | split: "/" -%}
 {%- assign first = parts[1] | downcase -%}
-
-{%- comment %} Detect if the URL is prefixed with a non-default language (case-insensitive) {%- endcomment -%}
-{%- assign has_prefix = false -%}
-{%- assign current_lang = default_lang -%}
+{%- assign has_any_prefix = false -%}
 {%- for L in languages -%}
   {%- assign lc = L | downcase -%}
-  {%- if first == lc and lc != default_lang -%}
-    {%- assign has_prefix = true -%}
-    {%- assign current_lang = lc -%}
-  {%- endif -%}
+  {%- if first == lc -%}{%- assign has_any_prefix = true -%}{%- endif -%}
 {%- endfor -%}
 
-{%- comment %} Strip lang from path when present; otherwise keep as-is {%- endcomment -%}
-{%- if has_prefix -%}
+{%- if has_any_prefix -%}
   {%- assign path_without_lang = parts | slice: 2, parts.size | join: "/" -%}
 {%- else -%}
   {%- assign path_without_lang = parts | slice: 1, parts.size | join: "/" -%}
 {%- endif -%}
 
-{%- comment %} Normalize and preserve trailing slash to mirror current page {%- endcomment -%}
 {%- if path_without_lang == "" -%}
   {%- assign normalized_path = "/" -%}
 {%- else -%}
