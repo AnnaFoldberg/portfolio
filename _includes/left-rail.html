@@ -1,5 +1,7 @@
 {%- comment -%}
-Left rail (STEP B2.1): Tags rendered as plain chips (no inputs) to isolate styling issues.
+Left rail: profile + filter chips (categories + tags)
+Expects: page.collection_name (projects | notes | log)
+Respects language via site.active_lang (polyglot).
 {%- endcomment -%}
 
 {%- assign items = site[page.collection_name] | where: "lang", site.active_lang -%}
@@ -38,19 +40,16 @@ Left rail (STEP B2.1): Tags rendered as plain chips (no inputs) to isolate styli
 
   <div class="lr-card">
     <div class="lr-title">Tags</div>
-
-    {%- if tagset and tagset != empty -%}
-      <ul class="lr-list">
-        {%- for t in tagset -%}
-        <li>
-          <!-- CHIP ONLY (no input yet) -->
-          <span class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">{{ t }}</span>
-        </li>
-        {%- endfor -%}
-      </ul>
-    {%- else -%}
-      <div class="lr-debug" style="font-size:.85rem;opacity:.7;margin:.3rem 0;">(no tags found)</div>
-    {%- endif -%}
+    <ul class="lr-list">
+      {%- for t in tagset -%}
+      <li>
+        <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
+          <input type="checkbox" class="tag-filter" value="{{ t }}">
+          {{ t }}
+        </label>
+      </li>
+      {%- endfor -%}
+    </ul>
   </div>
 
   <button id="clear-filters" type="button" class="lr-clear">Clear filters</button>
