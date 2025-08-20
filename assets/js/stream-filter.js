@@ -26,7 +26,7 @@ function setTagVars(el) {
   const s = 40, l = 90, borderL = Math.max(70, l - 10);
   el.style.setProperty("--chip-bg", `hsl(${hue} ${s}% ${l}%)`);
   el.style.setProperty("--chip-border", `hsl(${hue} ${s}% ${borderL}%)`);
-  el.style.setProperty("--chip-fg", "#1a1a1a");
+  el.style.setProperty("--chip-fg", "#fff");
   el.dataset.colored = "yes";
 }
 
