@@ -10,34 +10,29 @@
 
     <div class="stream-meta">
       {%- assign has_cats = doc.categories | size | gt: 0 -%}
-      {%- assign has_tags = doc.tags | size | gt: 0 -%}
+      {%- assign has_tags = doc.tags       | size | gt: 0 -%}
 
       {%- if has_cats -%}
-        <span class="taxonomy-label">Categories</span>
+        <span class="taxonomy-label">Categories:</span>
         <ul class="taxonomy-list">
           {%- for c in doc.categories -%}
-            <li>{{ c }}</li>
+            <li class="taxonomy-item" data-filter="cat" data-key="{{ c | slugify }}">{{ c }}</li>
           {%- endfor -%}
         </ul>
       {%- endif -%}
 
       {%- if has_cats and has_tags -%}
-        <span class="taxonomy-sep" aria-hidden="true"></span>
+        <span class="taxonomy-sep" aria-hidden="true">|</span>
       {%- endif -%}
 
-      {%- comment -%} DEBUG: show tags as plain text to verify they’re present {%- endcomment -%}
-      <span class="taxonomy-label">Tags</span>
       {%- if has_tags -%}
-        <span class="taxonomy-inline">{{ doc.tags | join: ' · ' }}</span>
-      {%- else -%}
-        <span class="taxonomy-inline">(none)</span>
+        <span class="taxonomy-label">Tags:</span>
+        <ul class="taxonomy-list">
+          {%- for t in doc.tags -%}
+            <li class="taxonomy-item" data-filter="tag" data-key="{{ t | slugify }}">{{ t }}</li>
+          {%- endfor -%}
+        </ul>
       {%- endif -%}
-
-      {%- comment -%}
-        DEBUG raw arrays (check in View Source):
-        cats={{ doc.categories | jsonify }}
-        tags={{ doc.tags | jsonify }}
-      {%- endcomment -%}
     </div>
 
     <div class="stream-body">
