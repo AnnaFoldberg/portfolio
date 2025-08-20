@@ -140,14 +140,11 @@
 /* =========================================================
    Unified pill chips (left rail + stream + archives)
    ========================================================= */
-/* =========================================================
-   Unified pill chips (left rail + stream + archives)
-   ========================================================= */
 .filter-chip,
 .taxonomy-item {
   /* safe fallbacks so pills show even without JS */
   --chip-bg: hsl(210 12% 96%);
-  --chip-border: transparent; /* no border */
+  --chip-border: hsl(210 12% 70%);
   --chip-fg: #374151;
 
   display: inline-flex;
@@ -160,7 +157,7 @@
   text-decoration: none !important;
   line-height: 1;
   font-weight: 600;
-  border: none; /* remove border */
+  border: 2px solid var(--chip-border); /* wider border */
 }
 
 .taxonomy-item {
@@ -173,13 +170,13 @@
 .left-rail .filter-chip,
 .taxonomy-item {
   background-color: var(--chip-bg) !important;
-  border: none !important; /* kill border */
+  border: 2px solid var(--chip-border) !important;
   color: var(--chip-fg) !important;
 }
 
 /* Force categories to always be white text */
-.filter-chip[data-filter="cat"] {
-  --chip-fg: #fff;
+.left-rail .filter-chip[data-filter="cat"] {
+  --chip-fg: #fff !important;
 }
 
 /* Checkbox dot inside left-rail chips */
@@ -211,13 +208,3 @@
 
 /* Ensure archive/tag anchors also look like chips */
 a.taxonomy-item { color: inherit; text-decoration: none !important; }
-
-/* =========================================================
-   Strong override: force chips to use CSS vars
-   ========================================================= */
-.left-rail .filter-chip,
-.taxonomy-item {
-  background-color: var(--chip-bg) !important;
-  border-color: var(--chip-border) !important;
-  color: var(--chip-fg) !important;
-}
