@@ -142,7 +142,7 @@
    ========================================================= */
 .filter-chip,
 .taxonomy-item {
-  /* safe fallbacks so pills show even without JS */
+  /* fallbacks if JS hasn’t run yet */
   --chip-bg: hsl(210 12% 96%);
   --chip-border: hsl(210 12% 70%);
   --chip-fg: #374151;
@@ -152,12 +152,14 @@
   gap: .5rem;
   padding: .35rem .6rem;
   border-radius: 999px;
-  background: var(--chip-bg);
-  color: var(--chip-fg);
   text-decoration: none !important;
   line-height: 1;
   font-weight: 600;
-  border: 2px solid var(--chip-border); /* wider border */
+
+  /* use the ready-made vars from JS */
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  border: 2px solid var(--chip-border); /* wider border everywhere */
 }
 
 .taxonomy-item {
@@ -166,17 +168,12 @@
   margin: 0 .25rem .25rem 0;
 }
 
-/* Ensure variables win over theme rules */
+/* Make sure these win over theme defaults */
 .left-rail .filter-chip,
 .taxonomy-item {
   background-color: var(--chip-bg) !important;
   border: 2px solid var(--chip-border) !important;
   color: var(--chip-fg) !important;
-}
-
-/* Force categories to always be white text */
-.left-rail .filter-chip[data-filter="cat"] {
-  --chip-fg: #fff !important;
 }
 
 /* Checkbox dot inside left-rail chips */
@@ -198,7 +195,7 @@
   box-shadow: 0 0 0 2px #fff inset;
 }
 
-/* Minor UX touches */
+/* Small hover touch */
 .taxonomy-item:hover,
 .filter-chip:hover { filter: brightness(0.98); }
 
