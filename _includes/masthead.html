@@ -34,16 +34,6 @@
           {%- endfor -%}
         </ul>
 
-        <!-- Search toggle stays on far right -->
-        {% if site.search == true %}
-          <button class="search__toggle" type="button" aria-label="Toggle search">
-            <!-- slightly larger, higher-contrast inline SVG -->
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M15.5 14h-.79l-.28-.27a6.5 6.5 0 1 0-1.41 1.41l.27.28v.79l5 5 1.5-1.5-5-5Zm-6 0A4.5 4.5 0 1 1 14 9.5 4.505 4.505 0 0 1 9.5 14Z"/>
-            </svg>
-          </button>
-        {% endif %}
-
         <!-- Mobile overflow toggle (theme default) -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}</span>
