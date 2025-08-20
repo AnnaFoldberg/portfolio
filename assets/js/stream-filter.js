@@ -26,7 +26,7 @@ function setTagVars(el) {
   const hue = djb2(key) % 360;
   const s = 40, l = 90;
   const borderL = Math.max(70, l - 10);
-  const textL = Math.max(20, borderL - 30); // darker than border
+  const textL = Math.max(20, borderL - 15); // just a bit darker than border
 
   el.style.setProperty("--chip-bg", `hsl(${hue} ${s}% ${l}%)`);
   el.style.setProperty("--chip-border", `hsl(${hue} ${s}% ${borderL}%)`);
