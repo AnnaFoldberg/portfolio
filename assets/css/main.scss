@@ -193,3 +193,34 @@
 
 /* Ensure archive/tag anchors also look like chips */
 a.taxonomy-item { color: inherit; text-decoration: none !important; }
+
+/* =========================================================
+   Category-specific colors
+   ========================================================= */
+.filter-chip[data-filter="cat"][data-key="kubernetes"],
+.taxonomy-item[data-filter="cat"][data-key="kubernetes"] {
+  --chip-bg: hsl(210, 60%, 70%);
+  --chip-border: hsl(210, 60%, 55%);
+  --chip-fg: #fff;
+}
+
+.filter-chip[data-filter="cat"][data-key="microservices"],
+.taxonomy-item[data-filter="cat"][data-key="microservices"] {
+  --chip-bg: hsl(350, 65%, 72%);
+  --chip-border: hsl(350, 65%, 60%);
+  --chip-fg: #fff;
+}
+
+.filter-chip[data-filter="cat"][data-key="it-security"],
+.taxonomy-item[data-filter="cat"][data-key="it-security"] {
+  --chip-bg: hsl(45, 75%, 70%);
+  --chip-border: hsl(45, 75%, 55%);
+  --chip-fg: #111; /* better contrast on yellow */
+}
+
+.filter-chip[data-filter="cat"][data-key="trackunit"],
+.taxonomy-item[data-filter="cat"][data-key="trackunit"] {
+  --chip-bg: #E65244;
+  --chip-border: #c74438;
+  --chip-fg: #fff;
+}
