@@ -1,25 +1,17 @@
 {%- comment -%}
-Robust language switcher for jekyll-polyglot.
-
-Goals:
-- Default language (site.default_lang) has NO prefix (no /en).
-- Non-default languages use /<lang>/.
-- Keep current page path when switching languages IF that target page exists;
-  otherwise, fall back to the language’s homepage.
-- Correctly bold the active language.
-
-Assumes:
-  site.languages: ["en","da","it"]
-  site.default_lang: "en"
+Language switcher for jekyll-polyglot
+- Default language has no prefix
+- Other languages use /<lang>/
+- Keep same path if it exists in target language, otherwise fall back to that language's home
+- Correctly highlight active language
 {%- endcomment -%}
 
 {%- assign default_lang = site.default_lang | downcase -%}
 {%- assign active_lang  = page.lang | default: site.active_lang | downcase -%}
 
 {%- assign url = page.url -%}
-{%- assign has_trailing = url | slice: -1, 1 -%}
 {%- assign trail = '' -%}
-{%- if has_trailing == '/' -%}{%- assign trail = '/' -%}{%- endif -%}
+{%- if url | slice: -1, 1 == '/' -%}{%- assign trail = '/' -%}{%- endif -%}
 
 {%- assign parts = url | split:'/' -%}
 {%- assign first = parts[1] | downcase -%}
@@ -36,9 +28,7 @@ Assumes:
   {%- assign normalized_path = '/' -%}
 {%- endif -%}
 
-{%- comment -%}
-Collect all docs (pages + every collection) so we can check if a target URL exists.
-{%- endcomment -%}
+{%- comment -%} Collect all docs (pages + collections) {%- endcomment -%}
 {%- assign _all_docs = site.pages -%}
 {%- for c in site.collections -%}
   {%- assign _all_docs = _all_docs | concat: c.docs -%}
@@ -56,11 +46,12 @@ Collect all docs (pages + every collection) so we can check if a target URL exis
       {%- assign candidate_path = '/' | append: lang_lc | append: normalized_path -%}
     {%- endif -%}
 
-    {%- comment -%} ensure trailing slash consistency {%- endcomment -%}
+    {%- comment -%} ensure trailing slash consistency (replace endswith check) {%- endcomment -%}
     {%- if trail == '/' and candidate_path != '/' -%}
-      {%- unless candidate_path endswith '/' -%}
+      {%- assign last_char = candidate_path | slice: -1, 1 -%}
+      {%- if last_char != '/' -%}
         {%- assign candidate_path = candidate_path | append:'/' -%}
-      {%- endunless -%}
+      {%- endif -%}
     {%- endif -%}
 
     {%- assign exists = false -%}
