@@ -39,3 +39,27 @@ function setChipVars(el, type) {
   el.style.setProperty("--chip-fg", fg);
   el.dataset.colored = "yes";
 }
+
+// --- Filtering logic ---
+document.addEventListener("change", e => {
+  if (!e.target.matches(".filter-chip input[type='checkbox']")) return;
+
+  const checkedCats = [...document.querySelectorAll(
+    '.filter-chip[data-filter="cat"] input:checked'
+  )].map(cb => cb.value);
+
+  const checkedTags = [...document.querySelectorAll(
+    '.filter-chip[data-filter="tag"] input:checked'
+  )].map(cb => cb.value);
+
+  // For each stream card, check if it matches
+  document.querySelectorAll("#stream .stream-card").forEach(card => {
+    const cardCats = (card.dataset.cats || "").split(",");
+    const cardTags = (card.dataset.tags || "").split(",");
+
+    const catMatch = checkedCats.length === 0 || checkedCats.some(c => cardCats.includes(c));
+    const tagMatch = checkedTags.length === 0 || checkedTags.some(t => cardTags.includes(t));
+
+    card.style.display = (catMatch && tagMatch) ? "" : "none";
+  });
+});
