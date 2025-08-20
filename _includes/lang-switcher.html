@@ -1,61 +1,38 @@
-{%- comment -%}
-Language switcher (path-based, robust)
-
-- Detect current language solely from the URL path.
-- Default language (site.default_lang) has NO prefix.
-- Non-default languages use /<lang>/.
-- Keep the current page path when switching languages.
-{%- endcomment -%}
-
 {%- assign default_lang = site.default_lang | downcase -%}
 {%- assign languages    = site.languages | map: "downcase" -%}
 
-{%- assign url_parts = page.url | split: "/" -%}
-{%- assign first_seg = url_parts[1] | downcase -%}
+{%- assign parts = page.url | split: "/" -%}
+{%- assign first = parts[1] | downcase -%}
 
-/* Determine current language from path */
-{%- if languages contains first_seg and first_seg != default_lang -%}
-  {%- assign current_lang = first_seg -%}
-  {%- assign path_without_lang = url_parts | slice: 2, url_parts.size | join: "/" -%}
+{%- if languages contains first and first != default_lang -%}
+  {%- assign current_lang = first -%}
+  {%- assign path_without_lang = parts | slice: 2, parts.size | join: "/" -%}
 {%- else -%}
   {%- assign current_lang = default_lang -%}
-  {%- assign path_without_lang = url_parts | slice: 1, url_parts.size | join: "/" -%}
+  {%- assign path_without_lang = parts | slice: 1, parts.size | join: "/" -%}
 {%- endif -%}
 
-/* Normalize path part (leading slash, allow empty = "/") */
 {%- if path_without_lang != "" and path_without_lang != "/" -%}
   {%- assign normalized_path = "/" | append: path_without_lang -%}
 {%- else -%}
   {%- assign normalized_path = "/" -%}
 {%- endif -%}
 
-/* Optional: preserve trailing slash style of current page */
-{%- assign has_trailing = page.url | slice: -1, 1 -%}
-{%- if has_trailing == "/" and normalized_path != "/" -%}
-  {%- unless normalized_path | slice: -1, 1 == "/" -%}
-    {%- assign normalized_path = normalized_path | append: "/" -%}
-  {%- endunless -%}
+{%- assign trail = "" -%}
+{%- if page.url | slice: -1, 1 == "/" -%}{%- assign trail = "/" -%}{%- endif -%}
+{%- if trail == "/" and normalized_path != "/" and normalized_path | slice: -1, 1 != "/" -%}
+  {%- assign normalized_path = normalized_path | append: "/" -%}
 {%- endif -%}
 
 {%- assign baseurl = site.baseurl | default: "" -%}
 
 <div class="lang-switcher" style="margin:0;">
   {%- for lang in languages -%}
-    {%- assign href = "" -%}
     {%- if lang == default_lang -%}
       {%- assign href = baseurl | append: normalized_path -%}
     {%- else -%}
       {%- assign href = baseurl | append: "/" | append: lang | append: normalized_path -%}
     {%- endif -%}
-
-    {%- if lang == current_lang -%}
-      <a href="{{ href }}" class="is-active">{{ lang | upcase }}</a>
-    {%- else -%}
-      <a href="{{ href }}">{{ lang | upcase }}</a>
-    {%- endif -%}
-
-    {%- unless forloop.last -%}
-      <span aria-hidden="true" style="opacity:.35;margin:0 .25rem;">|</span>
-    {%- endunless -%}
+    <a href="{{ href }}"{% if lang == current_lang %} class="is-active"{% endif %}>{{ lang | upcase }}</a>{% unless forloop.last %}<span aria-hidden="true" style="opacity:.35;margin:0 .25rem;">|</span>{% endunless %}
   {%- endfor -%}
 </div>
