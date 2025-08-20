@@ -232,32 +232,32 @@ a.taxonomy-item { color: inherit; text-decoration: none !important; }
 /* kubernetes – soft blue */
 .filter-chip[data-filter="cat"][data-key="kubernetes"],
 .taxonomy-item[data-filter="cat"][data-key="kubernetes"] {
-  --chip-bg: #6EA8E5;    /* ~ hsl(210, 70%, 67%) */
-  --chip-border: #4F8CD2;
+  --chip-bg: #7AA7E0;    /* ~ hsl(210, 70%, 67%) */
+  --chip-border: #5E91D9;
   --chip-fg: #fff;
 }
 
 /* microservices – green (not too neon) */
 .filter-chip[data-filter="cat"][data-key="microservices"],
 .taxonomy-item[data-filter="cat"][data-key="microservices"] {
-  --chip-bg: #58B37A;    /* pleasant green */
-  --chip-border: #3F9A63;
+  --chip-bg: #74BC8C;    /* pleasant green */
+  --chip-border: #639A75;
   --chip-fg: #fff;
 }
 
 /* it-security – yellowish with WHITE text */
 .filter-chip[data-filter="cat"][data-key="it-security"],
 .taxonomy-item[data-filter="cat"][data-key="it-security"] {
-  --chip-bg: #D4A73C;    /* slightly deeper so white is readable */
-  --chip-border: #B7892C;
+  --chip-bg: #EAC968;    /* slightly deeper so white is readable */
+  --chip-border: #D4B358;
   --chip-fg: #fff;
 }
 
 /* trackunit – exact brand color */
 .filter-chip[data-filter="cat"][data-key="trackunit"],
 .taxonomy-item[data-filter="cat"][data-key="trackunit"] {
-  --chip-bg: #E65244;
-  --chip-border: #C74438;
+  --chip-bg: #DB7467;
+  --chip-border: #C1665A;
   --chip-fg: #fff;
 }
 
