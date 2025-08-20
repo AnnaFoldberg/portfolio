@@ -1,5 +1,5 @@
 {%- comment -%}
-Left rail with profile card + dynamic filters.
+Left rail (DEBUG version): shows raw tag/category sets to verify data flow.
 Expects: page.collection_name (projects | notes | log)
 Respects language via site.active_lang (polyglot).
 {%- endcomment -%}
@@ -23,33 +23,66 @@ Respects language via site.active_lang (polyglot).
 {%- assign catset = catset | sort -%}
 {%- assign tagset = tagset | sort -%}
 
+{%- comment -%}
+DEBUG: dump what we computed so we can see it in View Source.
+items_count={{ items | size }}
+catset={{ catset | jsonify }}
+tagset={{ tagset | jsonify }}
+collection_name={{ page.collection_name | default: '(none)' }}
+active_lang={{ site.active_lang | default: '(none)' }}
+{%- endcomment -%}
+
 <div class="left-rail">
+  <div class="lr-card lr-profile">
+    <img class="lr-avatar" src="{{ site.profile.avatar | relative_url }}" alt="{{ site.profile.name }}">
+    <div class="lr-name">{{ site.profile.name }}</div>
+    <div class="lr-bio">{{ site.profile.bio }}</div>
+  </div>
+
   <div class="lr-card">
     <div class="lr-title">Categories</div>
-    <ul class="lr-list">
-      {%- for c in catset -%}
-      <li>
-        <label class="filter-chip" data-filter="cat" data-key="{{ c | slugify }}">
-          <input type="checkbox" class="cat-filter" value="{{ c }}">
-          {{ c }}
-        </label>
-      </li>
-      {%- endfor -%}
-    </ul>
+
+    {%- if catset and catset != empty -%}
+      <!-- DEBUG categories inline -->
+      <div class="lr-debug" style="font-size:.85rem;opacity:.7;margin:.3rem 0;">
+        {{ catset | join: " · " }}
+      </div>
+      <ul class="lr-list">
+        {%- for c in catset -%}
+          <li>
+            <label class="filter-chip" data-filter="cat" data-key="{{ c | slugify }}">
+              <input type="checkbox" class="cat-filter" value="{{ c }}">
+              {{ c }}
+            </label>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="lr-debug" style="font-size:.85rem;opacity:.7;margin:.3rem 0;">(no categories found)</div>
+    {%- endif -%}
   </div>
 
   <div class="lr-card">
     <div class="lr-title">Tags</div>
-    <ul class="lr-list">
-      {%- for t in tagset -%}
-      <li>
-        <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
-          <input type="checkbox" class="tag-filter" value="{{ t }}">
-          {{ t }}
-        </label>
-      </li>
-      {%- endfor -%}
-    </ul>
+
+    {%- if tagset and tagset != empty -%}
+      <!-- DEBUG tags inline -->
+      <div class="lr-debug" style="font-size:.85rem;opacity:.7;margin:.3rem 0;">
+        {{ tagset | join: " · " }}
+      </div>
+      <ul class="lr-list">
+        {%- for t in tagset -%}
+          <li>
+            <label class="filter-chip" data-filter="tag" data-key="{{ t | slugify }}">
+              <input type="checkbox" class="tag-filter" value="{{ t }}">
+              {{ t }}
+            </label>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- else -%}
+      <div class="lr-debug" style="font-size:.85rem;opacity:.7;margin:.3rem 0;">(no tags found)</div>
+    {%- endif -%}
   </div>
 
   <button id="clear-filters" type="button" class="lr-clear">Clear filters</button>
