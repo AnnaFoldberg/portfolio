@@ -198,10 +198,20 @@
 /* Ensure archive/tag anchors also look like chips */
 a.taxonomy-item { color: inherit; text-decoration: none !important; }
 
-/* Ensure chip variables actually drive the visuals (override theme shorthands) */
+/* Ensure chip variables drive visuals, with safe fallbacks */
 .left-rail .filter-chip,
 .taxonomy-item {
-  background-color: hsl(var(--chip-h), var(--chip-s)%, var(--chip-l)%) !important;
-  border-color: hsl(var(--chip-h), var(--chip-s)%, var(--chip-border-l)%) !important;
-  color: var(--chip-fg) !important;
+  background-color: hsl(
+    var(--chip-h, 210),
+    var(--chip-s, 12)%,
+    var(--chip-l, 96)%
+  ) !important;
+
+  border-color: hsl(
+    var(--chip-h, 210),
+    var(--chip-s, 12)%,
+    var(--chip-border-l, 86)%
+  ) !important;
+
+  color: var(--chip-fg, #111) !important;
 }
