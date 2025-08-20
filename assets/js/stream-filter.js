@@ -7,7 +7,7 @@ function djb2(str) {
   return h >>> 0;
 }
 
-// slugify to match Jekyll's slugify (enough for our keys)
+// slugify to match Jekyll-ish keys
 function slugify(s) {
   return (s || "")
     .toString()
@@ -26,12 +26,19 @@ function setChipVars(el, type) {
   const hue = djb2(key) % 360;
 
   let s, l, borderL, fg;
+
   if (type === "cat") {
-    s = 45; l = 82; borderL = Math.max(60, l - 12);
-    fg = "#fff"; // categories: white text
+    // CATEGORIES = INTENSE (vibrant, white text)
+    s = 75;
+    l = 55;
+    borderL = Math.max(35, l - 15);
+    fg = "#fff";
   } else {
-    s = 75; l = 55; borderL = Math.max(35, l - 15);
-    fg = l > 60 ? "#111" : "#fff";
+    // TAGS = PASTEL (lighter bg, dark text)
+    s = 40;
+    l = 90;
+    borderL = Math.max(70, l - 10);
+    fg = "#1a1a1a";
   }
 
   el.style.setProperty("--chip-bg", `hsl(${hue} ${s}% ${l}%)`);
