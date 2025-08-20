@@ -127,22 +127,12 @@
   .left-rail { position: static; margin-bottom: 1rem; }
 }
 
-/* Optional: theme's built-in left sidebar look */
-.sidebar__left { width: 320px; background: none; border: none; padding: 0; }
-.sidebar__left .lr-card {
-  background: var(--mm-surface, #fff);
-  border: 1px solid rgba(0,0,0,.08);
-  border-radius: 12px;
-  padding: 1rem;
-  margin-bottom: 1rem;
-}
-
 /* =========================================================
    Unified pill chips (left rail + stream + archives)
    ========================================================= */
 .filter-chip,
 .taxonomy-item {
-  /* fallbacks if JS hasn’t run yet */
+  /* fallback vars (before JS runs) */
   --chip-bg: hsl(210 12% 96%);
   --chip-border: hsl(210 12% 70%);
   --chip-fg: #374151;
@@ -156,10 +146,9 @@
   line-height: 1;
   font-weight: 600;
 
-  /* use the ready-made vars from JS */
   background: var(--chip-bg);
   color: var(--chip-fg);
-  border: 2px solid var(--chip-border); /* wider border everywhere */
+  border: 2px solid var(--chip-border);
 }
 
 .taxonomy-item {
@@ -168,7 +157,6 @@
   margin: 0 .25rem .25rem 0;
 }
 
-/* Make sure these win over theme defaults */
 .left-rail .filter-chip,
 .taxonomy-item {
   background-color: var(--chip-bg) !important;
@@ -195,7 +183,7 @@
   box-shadow: 0 0 0 2px #fff inset;
 }
 
-/* Small hover touch */
+/* Minor UX touches */
 .taxonomy-item:hover,
 .filter-chip:hover { filter: brightness(0.98); }
 
