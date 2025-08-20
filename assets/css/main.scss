@@ -335,3 +335,5 @@ body, h1, h2, h3, h4, h5, h6 {
 .site-footer {
   display: none !important;
 }
+
+.lang-switcher a.is-active { font-weight: 600; pointer-events: auto; }
