@@ -330,19 +330,6 @@ body, h1, h2, h3, h4, h5, h6 {
 
 .lang-switcher {
   font-size: 0.75rem; /* make it smaller overall */
-   list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex; /* keep them in a row */
-  gap: .25em;    /* small spacing around the | */
-}
-
-.lang-switcher .lang-item::after {
-  content: "|";
-  margin: 0 .25em;
-}
-.lang-switcher .lang-item:last-child::after {
-  content: "";
 }
 
 .site-footer {
