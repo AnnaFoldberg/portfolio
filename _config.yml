@@ -7,7 +7,7 @@ baseurl: ""
 # Theme
 theme: minimal-mistakes-jekyll
 minimal_mistakes_skin: "default"
-search: true # built-in search
+search: false # built-in search
 sass:
   sourcemap: never # disables sourcemaps
 atom_feed:
@@ -15,7 +15,7 @@ atom_feed:
 
 # Languages
 languages: ["en","da","it"]
-default_lang: "en"
+# default_lang: "en"
 exclude_from_localization: ["assets","images","favicon.ico"] # keeps assets, images, and favicons global instead of language-scoped
 
 # Plugins
