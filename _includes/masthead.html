@@ -39,12 +39,10 @@
         {%- comment -%} Read nav labels from the active locale file {%- endcomment -%}
         {%- assign NAV = site.data.locales[active_lang].nav | default: site.data.locales[default_lang].nav -%}
         
-        {%- comment -%} Always iterate via keys, then look up labels reliably {%- endcomment -%}
-        {%- assign slugs = NAV | keys -%}
-        
         <ul class="visible-links">
-          {%- for slug in slugs -%}
-            {%- assign label = NAV[slug] -%}
+          {%- for pair in NAV -%}
+            {%- assign slug = pair[0] -%}   {# "projects" / "notes" / "log" #}
+            {%- assign label = pair[1] -%}  {# localized label from locales file #}
         
             {%- if active_lang == default_lang -%}
               {%- capture href -%}/{{ slug }}/{%- endcapture -%}
