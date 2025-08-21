@@ -1,11 +1,11 @@
 {% capture logo_path %}{{ site.logo }}{% endcapture %}
 
-{%- comment -%} Language + locale (match breadcrumb.html behavior) {%- endcomment -%}
+{%- comment -%} Language + locale (match breadcrumb/left-rail behavior) {%- endcomment -%}
 {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
-{%- assign active = site.active_lang | default: default_lang | downcase -%}
-{%- assign L = site.data.locales[active] | default: site.data.locales[default_lang] -%}
-{%- assign lang_home = '/' | append: active | append: '/' -%}
-{%- assign langs = site.languages -%}
+{%- assign active_lang = site.active_lang | default: default_lang | downcase -%}
+{%- assign Lroot = site.data.locales[active_lang] | default: site.data.locales[default_lang] -%}
+{%- assign Lnav = Lroot.nav -%}
+{%- assign lang_home = '/' | append: active_lang | append: '/' -%}
 
 <div class="masthead">
   <div class="masthead__inner-wrap">
@@ -13,13 +13,13 @@
       <nav id="site-nav" class="greedy-nav">
 
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ (active == default_lang ? '/' : lang_home) | relative_url }}">
+          <a class="site-logo" href="{{ (active_lang == default_lang ? '/' : lang_home) | relative_url }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
         <!-- Site title (left) -->
-        <a class="site-title" href="{{ (active == default_lang ? '/' : lang_home) | relative_url }}">
+        <a class="site-title" href="{{ (active_lang == default_lang ? '/' : lang_home) | relative_url }}">
           {{ site.masthead_title | default: site.title }}
           {% if site.subtitle %}<span class="site-subtitle">{{ site.subtitle }}</span>{% endif %}
         </a>
@@ -29,35 +29,28 @@
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
 
-        <!-- Main nav links -->
-        {%- comment -%} Detect language from URL (mirror breadcrumb behavior) {%- endcomment -%}
-        {%- assign langs = site.languages | default: "en,da,it" | downcase | split: "," -%}
-        {%- assign default_lang = site.default_lang | default:"en" | downcase -%}
-        {%- assign firstseg = page.url | split:"/" | slice: 1, 1 | first | downcase -%}
-        {%- assign active_lang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
-        
-        {%- comment -%} Read nav labels from the active locale file {%- endcomment -%}
-        {%- assign NAV = site.data.locales[active_lang].nav | default: site.data.locales[default_lang].nav -%}
-        
+        <!-- Main nav links (localized) -->
+        {%- assign nav_slugs = "projects,notes,log" | split: "," -%}
         <ul class="visible-links">
-          {%- for pair in NAV -%}
-            {%- assign slug = pair[0] -%}   {# "projects" / "notes" / "log" #}
-            {%- assign label = pair[1] -%}  {# localized label from locales file #}
-        
+          {%- for slug in nav_slugs -%}
+            {%- assign slug = slug | strip -%}
+            {%- assign label = Lnav[slug] | default: slug | replace:'-',' ' | capitalize -%}
+
             {%- if active_lang == default_lang -%}
               {%- capture href -%}/{{ slug }}/{%- endcapture -%}
             {%- else -%}
               {%- capture href -%}/{{ active_lang }}/{{ slug }}/{%- endcapture -%}
             {%- endif -%}
-        
+
             <li class="masthead__menu-item">
               <a href="{{ href | relative_url }}">{{ label }}</a>
             </li>
           {%- endfor -%}
         </ul>
+
         <!-- Mobile overflow toggle -->
         <button class="greedy-nav__toggle hidden" type="button">
-          <span class="visually-hidden">{{ site.data.ui-text[active].menu_label | default: "Toggle menu" }}</span>
+          <span class="visually-hidden">{{ site.data.ui-text[active_lang].menu_label | default: "Toggle menu" }}</span>
           <div class="navicon"></div>
         </button>
         <ul class="hidden-links hidden"></ul>
