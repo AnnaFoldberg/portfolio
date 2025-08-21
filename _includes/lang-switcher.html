@@ -1,103 +1,61 @@
-{%- comment -%} _includes/lang-switcher.html {%- endcomment -%}
-
-{%- assign baseurl      = site.baseurl | default: "" -%}
-{%- assign default_lang = site.default_lang | downcase | default: "en" -%}
-
-{%- comment %}
-Normalize languages: support either an array or a comma-separated string in _config.yml
-Example in _config.yml (recommended):
-  languages: [en, da, it]
+{%- comment -%}
+Lang Switcher (jekyll-polyglot)
+- Bolds current language
+- Links to same doc/collection page in other languages when possible
+- Falls back to language home (/xx/) if no counterpart exists
+- Prefers matching by front matter 'ref:'; falls back to 'slug'
+Assumes:
+  - Polyglot configured with: languages, default_lang
+  - Each page has: lang (set by polyglot), and optionally ref
+Optional:
+  - _data/locales/<lang>.yml with 'lang_name' for display labels
 {%- endcomment -%}
-{%- assign languages = site.languages -%}
-{%- if languages contains "," -%}
-  {%- assign languages = languages | split: "," -%}
-{%- endif -%}
 
-{%- comment %}
-1) Choose current_lang (priority):
-   a) include.current_lang (passed from layout) → downcase
-   b) page.lang → downcase
-   c) URL prefix matching one of the languages
-   d) default_lang
-{%- endcomment -%}
-{%- assign current_lang =
-      include.current_lang | downcase
-      | default: page.lang | downcase
-      | default: "" -%}
+{%- assign current_lang = site.active_lang | default: site.default_lang -%}
+{%- assign langs = site.languages -%}
 
-{%- if current_lang == "" -%}
-  {%- assign parts = page.url | split: "/" -%}
-  {%- assign first = parts[1] | downcase -%}
-  {%- for L in languages -%}
-    {%- assign lc = L | strip | downcase -%}
-    {%- if first == lc -%}
-      {%- assign current_lang = lc -%}
+{%- comment -%} Figure out collection (item or index) {%- endcomment -%}
+{%- assign coll = page.collection | default: page.collection_name -%}
+
+{%- comment -%} A helper to compute a target URL in a language {%- endcomment -%}
+{%- macro find_alt_url L -%}
+  {%- assign target_url = nil -%}
+
+  {%- if coll -%}
+    {%- assign items = site[coll] | where: "lang", L -%}
+
+    {%- assign candidate = nil -%}
+    {%- if page.ref -%}
+      {%- assign candidate = items | where: "ref", page.ref | first -%}
     {%- endif -%}
-  {%- endfor -%}
-{%- endif -%}
 
-{%- if current_lang == "" -%}
-  {%- assign current_lang = default_lang -%}
-{%- endif -%}
+    {%- if candidate == nil -%}
+      {%- assign pslug = page.slug | default: page.name | split: "." | first -%}
+      {%- assign candidate = items | where: "slug", pslug | first -%}
+    {%- endif -%}
 
-{%- comment %}
-2) Compute path WITHOUT any lang prefix so switching keeps you on the same page
-{%- endcomment -%}
-{%- assign parts = page.url | split: "/" -%}
-{%- assign first = parts[1] | downcase -%}
-{%- assign has_any_prefix = false -%}
-{%- for L in languages -%}
-  {%- assign lc = L | strip | downcase -%}
-  {%- if first == lc -%}{%- assign has_any_prefix = true -%}{%- endif -%}
-{%- endfor -%}
-
-{%- if has_any_prefix -%}
-  {%- assign path_without_lang = parts | slice: 2, parts.size | join: "/" -%}
-{%- else -%}
-  {%- assign path_without_lang = parts | slice: 1, parts.size | join: "/" -%}
-{%- endif -%}
-
-{%- if path_without_lang == "" -%}
-  {%- assign normalized_path = "/" -%}
-{%- else -%}
-  {%- assign normalized_path = "/" | append: path_without_lang -%}
-  {%- if page.url != "/" and page.url | slice: -1, 1 == "/" and normalized_path | slice: -1, 1 != "/" -%}
-    {%- assign normalized_path = normalized_path | append: "/" -%}
+    {%- if candidate -%}
+      {%- assign target_url = candidate.url -%}
+    {%- endif -%}
   {%- endif -%}
-{%- endif -%}
 
-<div class="lang-switcher" style="margin:0;">
-  {%- for L in languages -%}
-    {%- assign lc = L | strip | downcase -%}
-    {%- assign label = lc | upcase -%}
+  {%- if target_url == nil -%}
+    {%- assign target_url = '/' | append: L | append: '/' -%}
+  {%- endif -%}
 
-    {%- if lc == current_lang -%}
+  {{- target_url -}}
+{%- endmacro -%}
+
+<ul class="lang-switcher">
+{%- for L in langs -%}
+  {%- assign label = site.data.locales[L].lang_name | default: L | upcase -%}
+  {%- capture url_in_L -%}{% call find_alt_url L %}{% endcall %}{%- endcapture -%}
+  <li class="lang-item">
+    {%- if L == current_lang -%}
       <strong aria-current="true">{{ label }}</strong>
     {%- else -%}
-      {%- if lc == default_lang -%}
-        {%- assign href = baseurl | append: normalized_path -%}
-      {%- else -%}
-        {%- assign href = baseurl | append: "/" | append: lc | append: normalized_path -%}
-      {%- endif -%}
-      <a href="{{ href }}">{{ label }}</a>
+      <a href="{{ url_in_L | relative_url }}" hreflang="{{ L }}">{{ label }}</a>
     {%- endif -%}
-
-    {%- unless forloop.last -%}
-      <span aria-hidden="true" style="opacity:.35;margin:0 .25rem;">|</span>
-    {%- endunless -%}
-  {%- endfor -%}
-</div>
-
-{%- comment %}
-Optional debug: set `lang_switcher_debug: true` in _config.yml to print key values.
-{%- endcomment -%}
-{%- if site.lang_switcher_debug -%}
-  <pre style="font:12px/1.4 monospace; opacity:.65; margin-top:.5rem;">
-page.url:         {{ page.url }}
-page.lang:        {{ page.lang }}
-default_lang:     {{ default_lang }}
-current_lang:     {{ current_lang }}
-languages (raw):  {{ site.languages }}
-normalized_path:  {{ normalized_path }}
-  </pre>
-{%- endif -%}
+  </li>
+{%- endfor -%}
+</ul>
