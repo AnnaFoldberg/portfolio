@@ -1,8 +1,10 @@
 ---
 layout: two_col
-title: "Projects"
+title: "Progetti"
 collection_name: projects
 lang: it
+ref: projects
+permalink: /projects/
 ---
 {% include breadcrumb.html %}
 {% include collection-stream.html %}
