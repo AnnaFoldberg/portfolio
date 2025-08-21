@@ -5,46 +5,37 @@
       <nav id="site-nav" class="greedy-nav">
 
         {%- comment -%}
-        Determine language from URL to avoid any global mutation.
-        URL like: /it/projects/foo  -> lang = "it"
-        Fallbacks: page.lang -> site.default_lang -> "en"
+        Resolve language ONCE from URL; never rely on mutable globals.
+        Accept only en/da/it; otherwise hard-fallback to 'en'.
         {%- endcomment -%}
-        {%- assign _segs = page.url | split:'/' -%}
-        {%- assign _url_lang = _segs[1] -%}
-        {%- assign _url_lang_lc = _url_lang | downcase -%}
-        {%- assign hlang = _url_lang_lc -%}
-        {%- unless hlang == 'en' or hlang == 'da' or hlang == 'it' -%}
-          {%- assign hlang = page.lang | default: site.default_lang | default: 'en' -%}
-        {%- endunless -%}
+        {%- assign __mh_segments = page.url | split:'/' -%}
+        {%- assign __mh_candidate = __mh_segments[1] | downcase -%}
+        {%- if __mh_candidate == 'en' or __mh_candidate == 'da' or __mh_candidate == 'it' -%}
+          {%- assign __mh_lang = __mh_candidate -%}
+        {%- else -%}
+          {%- assign __mh_lang = 'en' -%}
+        {%- endif -%}
+
+        {%- comment -%} Language-specific root like "/it/" {%- endcomment -%}
+        {%- assign __mh_home = '/' | append: __mh_lang | append: '/' -%}
 
         {%- comment -%}
-        Language-aware home prefix, e.g. "/it/".
+        Pull localized nav items with hard fallbacks.
         {%- endcomment -%}
-        {%- assign lang_home = '/' | append: hlang | append: '/' -%}
+        {%- assign __mh_loc = site.data.locales[__mh_lang]
+          | default: site.data.locales.en -%}
+        {%- assign __mh_items = __mh_loc.main
+          | default: site.data.locales.en.main -%}
 
-        {%- comment -%}
-        Load localized strings from _data/locales/<lang>.yml with hard fallbacks.
-        {%- endcomment -%}
-        {%- assign loc = site.data.locales[hlang]
-            | default: site.data.locales[site.default_lang]
-            | default: site.data.locales.en -%}
-        {%- assign items = loc.main
-            | default: site.data.locales[site.default_lang].main
-            | default: site.data.locales.en.main -%}
-
-        {%- comment -%}
-        Site logo (link to lang root without using localized_url).
-        {%- endcomment -%}
+        {%- comment -%} Logo (links to language root) {%- endcomment -%}
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ lang_home | relative_url }}">
+          <a class="site-logo" href="{{ __mh_home | relative_url }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
-        {%- comment -%}
-        Site title (link to lang root).
-        {%- endcomment -%}
-        <a class="site-title" href="{{ lang_home | relative_url }}">
+        {%- comment -%} Site title (links to language root) {%- endcomment -%}
+        <a class="site-title" href="{{ __mh_home | relative_url }}">
           {{ site.masthead_title | default: site.title }}
           {% if site.subtitle %}
             <span class="site-subtitle">{{ site.subtitle }}</span>
@@ -52,42 +43,42 @@
         </a>
 
         {%- comment -%}
-        Language switcher — pass the resolved language explicitly.
-        (Whatever this include does cannot affect our already-resolved hlang.)
+        Render the NAV MENU *before* any includes, using only our local vars.
         {%- endcomment -%}
-        <div class="lang-switcher--masthead">
-          {% include lang-switcher.html current_lang=hlang %}
-        </div>
-
-        {%- if items -%}
-        <ul class="visible-links">
-          {%- for link in items -%}
-            {%- comment -%}
-            Build a language-specific URL without localized_url.
-            link.url is expected like "/projects/".
-            {%- endcomment -%}
-            {%- assign link_path = link.url | remove_first:'/' -%}
-            <li class="masthead__menu-item">
-              <a href="{{ lang_home | append: link_path | relative_url }}">{{ link.title }}</a>
-            </li>
-          {%- endfor -%}
-        </ul>
+        {%- if __mh_items -%}
+          <ul class="visible-links">
+            {%- for __mh_link in __mh_items -%}
+              {%- assign __mh_path = __mh_link.url | remove_first:'/' -%}
+              <li class="masthead__menu-item">
+                <a href="{{ __mh_home | append: __mh_path | relative_url }}">{{ __mh_link.title }}</a>
+              </li>
+            {%- endfor -%}
+          </ul>
         {%- endif -%}
 
         {%- comment -%}
-        Mobile overflow toggle label — look up in _data/ui-text/<lang>.yml,
-        then fall back sanely.
+        Mobile overflow toggle label (optional localization).
+        Uses the same resolved language; safe fallbacks to English.
         {%- endcomment -%}
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">
-            {{ site.data.ui-text[hlang].menu_label
-               | default: site.data.ui-text[site.default_lang].menu_label
+            {{ site.data.ui-text[__mh_lang].menu_label
+               | default: site.data.ui-text.en.menu_label
                | default: "Toggle menu" }}
           </span>
           <div class="navicon"></div>
         </button>
 
         <ul class="hidden-links hidden"></ul>
+
+        {%- comment -%}
+        Finally include the language switcher.
+        It can’t affect the already-rendered menu or overwrite our local vars.
+        {%- endcomment -%}
+        <div class="lang-switcher--masthead">
+          {% include lang-switcher.html current_lang=__mh_lang %}
+        </div>
+
       </nav>
     </div>
   </div>
