@@ -22,18 +22,28 @@
         </div>
 
         <!-- Main nav links (stay centered/right as usual) -->
+        {%- assign langs = site.languages -%}
+        {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
+        {%- assign seg = page.url | split:'/' | slice: 1, 1 | first | downcase -%}
+        {%- assign current_lang = (langs contains seg) ? seg : default_lang -%}
+        {%- assign T = site.data.locales[current_lang] -%}
+        
         <ul class="visible-links">
           {%- for link in site.data.navigation.main -%}
+            {%- assign slug = link.url | replace:'/','' -%}
+            {%- assign label = T.nav[slug] 
+                | default: T.breadcrumb.segment_labels[slug] 
+                | default: link.title -%}
+        
             <li class="masthead__menu-item">
-              <a
-                href="{{ link.url | relative_url }}"
-                {% if link.description %} title="{{ link.description }}"{% endif %}
-                {% if link.target %} target="{{ link.target }}"{% endif %}
-              >{{ link.title }}</a>
+              {%- if current_lang == default_lang -%}
+                <a href="{{ link.url | relative_url }}">{{ label }}</a>
+              {%- else -%}
+                <a href="/{{ current_lang }}{{ link.url }}">{{ label }}</a>
+              {%- endif -%}
             </li>
           {%- endfor -%}
         </ul>
-
         <!-- Mobile overflow toggle (theme default) -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}</span>
