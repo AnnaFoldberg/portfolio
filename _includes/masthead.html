@@ -1,10 +1,11 @@
 {% capture logo_path %}{{ site.logo }}{% endcapture %}
-{%- assign langs = site.languages -%}
+
+{%- comment -%}
+Language + locale (match breadcrumb.html behavior)
+{%- endcomment -%}
 {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
 {%- assign active = site.active_lang | default: default_lang | downcase -%}
-{%- assign T = site.data.locales[active] | default: site.data.locales[default_lang] -%}
-
-{%- comment -%} Build a language-aware home path like breadcrumb.html {%- endcomment -%}
+{%- assign L = site.data.locales[active] | default: site.data.locales[default_lang] -%}
 {%- assign lang_home = '/' | append: active | append: '/' -%}
 
 <div class="masthead">
@@ -29,30 +30,54 @@
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
 
-        <!-- Main nav links (center/right) -->
+        <!-- Main nav links -->
         <ul class="visible-links">
           {%- assign nav = site.data.navigation[active] | default: site.data.navigation[default_lang] -%}
           {%- for link in nav.main -%}
-            {%- comment -%} slug = first non-empty token of link.url {%- endcomment -%}
-            {%- assign parts = link.url | split:'/' -%}
-            {%- assign slug = '' -%}
-            {%- for p in parts -%}{%- if p != '' -%}{%- assign slug = p | downcase -%}{%- break -%}{%- endif -%}{%- endfor -%}
+            {%- assign url = link.url | default:'/' -%}
 
-            {%- comment -%} label from locales with fallbacks {%- endcomment -%}
-            {%- assign label = '' -%}
-            {%- if T and T.nav and T.nav[slug] -%}
-              {%- assign label = T.nav[slug] -%}
-            {%- elsif T and T.breadcrumb and T.breadcrumb.segment_labels and T.breadcrumb.segment_labels[slug] -%}
-              {%- assign label = T.breadcrumb.segment_labels[slug] -%}
-            {%- else -%}
+            {%- comment -%} External links: leave label and href untouched {%- endcomment -%}
+            {%- if url contains '://' -%}
               {%- assign label = link.title -%}
+              {%- if L.nav and L.nav[link.title | downcase] -%}
+                {%- assign label = L.nav[link.title | downcase] -%}
+              {%- endif -%}
+              <li class="masthead__menu-item"><a href="{{ url }}">{{ label }}</a></li>
+              {%- continue -%}
             {%- endif -%}
 
-            {%- comment -%} Build href with language prefix only when not default {%- endcomment -%}
+            {%- comment -%}
+            Compute slug in the same spirit as breadcrumb: work with segments,
+            but we don't derive language from URL — we already have site.active_lang.
+            {%- endcomment -%}
+            {%- assign parts = url | split:'/' -%}
+            {%- assign tokens = "" | split:"" -%}
+            {%- for p in parts -%}
+              {%- if p != '' and p != active -%} {# mirror breadcrumb: drop ONLY the active lang segment #}
+                {%- assign tokens = tokens | push: p -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- assign slug = tokens[0] | downcase -%}
+
+            {%- comment -%} Label from locales (nav:, then breadcrumb.segment_labels:, else link.title) {%- endcomment -%}
+            {%- assign label = link.title -%}
+            {%- if L.nav and L.nav[slug] -%}
+              {%- assign label = L.nav[slug] -%}
+            {%- elsif L.breadcrumb and L.breadcrumb.segment_labels and L.breadcrumb.segment_labels[slug] -%}
+              {%- assign label = L.breadcrumb.segment_labels[slug] -%}
+            {%- endif -%}
+
+            {%- comment -%}
+            Build a clean language-agnostic path from tokens and then prefix with active,
+            exactly like breadcrumb’s lang_home idea.
+            {%- endcomment -%}
+            {%- assign path = '/' | append: tokens | join:'/' -%}
+            {%- if url != '/' and url | slice:-1,1 == '/' -%}{%- assign path = path | append:'/' -%}{%- endif -%}
+
             {%- if active == default_lang -%}
-              {%- assign href = link.url -%}
+              {%- assign href = path -%}
             {%- else -%}
-              {%- capture href -%}/{{ active }}{{ link.url }}{%- endcapture -%}
+              {%- capture href -%}/{{ active }}{{ path }}{%- endcapture -%}
             {%- endif -%}
 
             <li class="masthead__menu-item">
@@ -61,7 +86,7 @@
           {%- endfor -%}
         </ul>
 
-        <!-- Mobile overflow toggle -->
+        <!-- Mobile overflow toggle (theme default) -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[active].menu_label | default: "Toggle menu" }}</span>
           <div class="navicon"></div>
