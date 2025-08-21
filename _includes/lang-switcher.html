@@ -1,26 +1,25 @@
 {%- comment -%}
-Lang Switcher (jekyll-polyglot)
+Lang Switcher (jekyll-polyglot, macro-free)
 - Bolds current language
 - Links to same doc/collection page in other languages when possible
 - Falls back to language home (/xx/) if no counterpart exists
 - Prefers matching by front matter 'ref:'; falls back to 'slug'
-Assumes:
-  - Polyglot configured with: languages, default_lang
-  - Each page has: lang (set by polyglot), and optionally ref
-Optional:
-  - _data/locales/<lang>.yml with 'lang_name' for display labels
 {%- endcomment -%}
 
 {%- assign current_lang = site.active_lang | default: site.default_lang -%}
 {%- assign langs = site.languages -%}
-
-{%- comment -%} Figure out collection (item or index) {%- endcomment -%}
 {%- assign coll = page.collection | default: page.collection_name -%}
 
-{%- comment -%} A helper to compute a target URL in a language {%- endcomment -%}
-{%- macro find_alt_url L -%}
-  {%- assign target_url = nil -%}
+<ul class="lang-switcher">
+{%- for L in langs -%}
+  {%- comment -%} Label: from _data/locales/<lang>.yml: lang_name, else code {%- endcomment -%}
+  {%- assign label = L | upcase -%}
+  {%- if site.data.locales and site.data.locales[L] and site.data.locales[L].lang_name -%}
+    {%- assign label = site.data.locales[L].lang_name -%}
+  {%- endif -%}
 
+  {%- comment -%} Compute target URL in language L {%- endcomment -%}
+  {%- assign target_url = nil -%}
   {%- if coll -%}
     {%- assign items = site[coll] | where: "lang", L -%}
 
@@ -43,18 +42,11 @@ Optional:
     {%- assign target_url = '/' | append: L | append: '/' -%}
   {%- endif -%}
 
-  {{- target_url -}}
-{%- endmacro -%}
-
-<ul class="lang-switcher">
-{%- for L in langs -%}
-  {%- assign label = site.data.locales[L].lang_name | default: L | upcase -%}
-  {%- capture url_in_L -%}{% call find_alt_url L %}{% endcall %}{%- endcapture -%}
   <li class="lang-item">
     {%- if L == current_lang -%}
       <strong aria-current="true">{{ label }}</strong>
     {%- else -%}
-      <a href="{{ url_in_L | relative_url }}" hreflang="{{ L }}">{{ label }}</a>
+      <a href="{{ target_url | relative_url }}" hreflang="{{ L }}">{{ label }}</a>
     {%- endif -%}
   </li>
 {%- endfor -%}
