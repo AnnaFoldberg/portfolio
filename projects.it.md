@@ -4,6 +4,6 @@ title: "Progetti"
 collection_name: projects
 lang: it
 ref: projects
-permalink: /projects/
+permalink: projects/
 ---
 {% include collection-stream.html %}
