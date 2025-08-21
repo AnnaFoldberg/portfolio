@@ -15,7 +15,7 @@ atom_feed:
 
 # Languages
 languages: ["en","da","it"]
-# default_lang: "en"
+default_lang: "en"
 exclude_from_localization: ["assets","images","favicon.ico"] # keeps assets, images, and favicons global instead of language-scoped
 
 # Plugins
