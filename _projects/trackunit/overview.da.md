@@ -3,6 +3,6 @@ title: "Trackunit — Overview"
 categories: [trackunit, microservices, kubernetes, it-security]
 tags: [placeholder]
 lang: da
+ref: project-trackunit-overview
 ---
 Trackunit project overview placeholder dansk.
-<p>page.lang = {{ page.lang }}</p>
