@@ -58,10 +58,8 @@
 
             {%- comment -%} Labels from locales: nav:, then breadcrumb.segment_labels:, else link.title {%- endcomment -%}
             {%- assign label = link.title -%}
-            {%- if L.nav and L.nav[slug] -%}
-              {%- assign label = L.nav[slug] -%}
-            {%- elsif L.breadcrumb and L.breadcrumb.segment_labels and L.breadcrumb.segment_labels[slug] -%}
-              {%- assign label = L.breadcrumb.segment_labels[slug] -%}
+            {%- if L and L[slug] -%}
+              {%- assign label = L[slug] -%}
             {%- endif -%}
 
             {%- comment -%} Rebuild clean path and prefix with active language (like breadcrumb’s lang_home) {%- endcomment -%}
