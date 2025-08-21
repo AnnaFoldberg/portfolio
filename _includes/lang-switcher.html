@@ -1,51 +1,41 @@
 {%- comment -%}
-Lang Switcher — final
-- EN always → https://annafoldberg.github.io/ (JS-enforced)
+Lang Switcher
+- EN always → https://annafoldberg.github.io/
 - DA → /da/
 - IT → /it/
-- Active language shown in <strong> based on URL prefix (no site.active_lang)
+- No active/bold state
 {%- endcomment -%}
-
-{%- assign path = page.url | to_s -%}
-{%- assign seg = path | split:'/' | slice: 1, 1 | first | downcase -%}
-{%- assign current_lang = 'en' -%}
-{%- if seg == 'da' -%}{%- assign current_lang = 'da' -%}{%- elsif seg == 'it' -%}{%- assign current_lang = 'it' -%}{%- endif -%}
 
 <ul class="lang-switcher">
   <li class="lang-item">
-    {%- if current_lang == 'en' -%}
-      <strong aria-current="true">EN</strong>
-    {%- else -%}
-      <a id="lang-en" href="https://annafoldberg.github.io/" rel="external noopener noreferrer">EN</a>
-    {%- endif -%}
+    <a id="lang-en" href="https://annafoldberg.github.io/" rel="external noopener noreferrer">EN</a>
   </li>
   <li class="lang-item">
-    {%- if current_lang == 'da' -%}
-      <strong aria-current="true">DA</strong>
-    {%- else -%}
-      <a id="lang-da" href="/da/" hreflang="da">DA</a>
-    {%- endif -%}
+    <a href="/da/" hreflang="da">DA</a>
   </li>
   <li class="lang-item">
-    {%- if current_lang == 'it' -%}
-      <strong aria-current="true">IT</strong>
-    {%- else -%}
-      <a id="lang-it" href="/it/" hreflang="it">IT</a>
-    {%- endif -%}
+    <a href="/it/" hreflang="it">IT</a>
   </li>
 </ul>
 
 <script>
-/* Guarantee EN always goes to the exact homepage URL */
+/* Force EN to the exact homepage URL even if a router/pjax tries to intercept */
 (function () {
   var en = document.getElementById('lang-en');
-  if (!en) return; // EN is current (rendered as <strong>)
+  if (!en) return;
   var url = 'https://annafoldberg.github.io/';
   en.setAttribute('href', url);
+
+  // Handle click robustly
   en.addEventListener('click', function (e) {
     try { e.preventDefault(); } catch(_) {}
+    // Use assign (keeps history); replace() if you prefer no back button step
     window.location.assign(url);
   }, { passive: false });
-  en.addEventListener('mousedown', function () { en.href = url; });
+
+  // Extra belt-and-suspenders for some interceptors
+  en.addEventListener('mousedown', function () {
+    en.href = url;
+  });
 })();
 </script>
