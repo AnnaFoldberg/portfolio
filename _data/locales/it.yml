@@ -1,12 +1,4 @@
 lang_name: IT
-
-main:
-  - title: "Progetti"
-    url: /projects/
-  - title: "Note"
-    url: /notes/
-  - title: "Log"
-    url: /log/
     
 left_rail:
   categories: "Categorie"
