@@ -2,12 +2,7 @@
 layout: default
 ---
 
-<div class="rail-page">
-{%- comment -%} Render breadcrumb only when explicitly enabled {%- endcomment -%}
-{% if page.show_breadcrumb %}
-  {% include breadcrumb.html %}
-{% endif %}
-  
+<div class="rail-page">  
   <div class="rail-container">
     <div class="rail-layout">
       {% include left-rail.html %}
