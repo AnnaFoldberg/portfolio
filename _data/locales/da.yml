@@ -1,9 +1,4 @@
 lang_name: DA
-
-nav:
-  projects: "Projekter"
-  notes: "Noter"
-  log: "Log"
   
 left_rail:
   categories: "Kategorier"
