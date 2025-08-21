@@ -5,18 +5,34 @@
       <nav id="site-nav" class="greedy-nav">
 
         {%- comment -%}
-        Site logo (links to the localized root)
+        Determine the page's language ONCE and keep it in a local var.
+        Do this BEFORE any includes/filters that might mutate site.active_lang.
+        {%- endcomment -%}
+        {%- assign hlang = site.active_lang | default: page.lang | default: site.default_lang | default: 'en' -%}
+
+        {%- comment -%}
+        Load localized strings from _data/locales/<lang>.yml with sensible fallbacks.
+        {%- endcomment -%}
+        {%- assign loc = site.data.locales[hlang]
+            | default: site.data.locales[site.default_lang]
+            | default: site.data.locales.en -%}
+        {%- assign items = loc.main
+            | default: site.data.locales[site.default_lang].main
+            | default: site.data.locales.en.main -%}
+
+        {%- comment -%}
+        Site logo (link explicitly localized to hlang).
         {%- endcomment -%}
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ '/' | localized_url }}">
+          <a class="site-logo" href="{{ '/' | localized_url: hlang }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
         {%- comment -%}
-        Site title (left)
+        Site title (left) — also localized with explicit hlang.
         {%- endcomment -%}
-        <a class="site-title" href="{{ '/' | localized_url }}">
+        <a class="site-title" href="{{ '/' | localized_url: hlang }}">
           {{ site.masthead_title | default: site.title }}
           {% if site.subtitle %}
             <span class="site-subtitle">{{ site.subtitle }}</span>
@@ -24,51 +40,29 @@
         </a>
 
         {%- comment -%}
-        Language switcher (pass the active language, not page.lang)
+        Language switcher. Pass the current lang as a param,
+        but don't rely on site.active_lang after this include.
         {%- endcomment -%}
         <div class="lang-switcher--masthead">
-          {% include lang-switcher.html current_lang=site.active_lang %}
+          {% include lang-switcher.html current_lang=hlang %}
         </div>
-
-        {%- comment -%}
-        Determine language for this render. Prefer Polyglot’s site.active_lang,
-        then fall back to page.lang, then site.default_lang, then 'en'.
-        {%- endcomment -%}
-        {%- assign hlang = site.active_lang | default: page.lang | default: site.default_lang | default: 'en' -%}
-
-        {%- comment -%}
-        Load localized strings from _data/locales/<lang>.yml.
-        Fallbacks: default_lang -> en.
-        {%- endcomment -%}
-        {%- assign loc = site.data.locales[hlang]
-            | default: site.data.locales[site.default_lang]
-            | default: site.data.locales.en -%}
-
-        {%- assign items = loc.main
-            | default: site.data.locales[site.default_lang].main
-            | default: site.data.locales.en.main -%}
 
         {%- if items -%}
         <ul class="visible-links">
           {%- for link in items -%}
             <li class="masthead__menu-item">
-              <a href="{{ link.url | localized_url }}">{{ link.title }}</a>
+              <a href="{{ link.url | localized_url: hlang }}">{{ link.title }}</a>
             </li>
           {%- endfor -%}
         </ul>
         {%- endif -%}
 
         {%- comment -%}
-        Mobile overflow toggle (localized label).
-        Uses site.active_lang to match the page language.
-        Expects a structure like:
-          _data/ui-text/<lang>.yml:
-            menu_label: "Toggle menu"
-        If absent, falls back to the English label.
+        Mobile overflow toggle (localized label using the captured hlang).
         {%- endcomment -%}
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">
-            {{ site.data.ui-text[site.active_lang].menu_label
+            {{ site.data.ui-text[hlang].menu_label
                | default: site.data.ui-text[site.default_lang].menu_label
                | default: "Toggle menu" }}
           </span>
