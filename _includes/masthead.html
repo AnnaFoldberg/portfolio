@@ -40,8 +40,8 @@
         
         <ul class="visible-links">
           {%- for pair in NAV -%}
-            {%- assign slug = pair[0] -%}   {# e.g., "projects" #}
-            {%- assign label = pair[1] -%}  {# e.g., "Progetti" / "Projekter" / "Projects" #}
+            {%- assign slug = pair[0] -%}
+            {%- assign label = pair[1] -%}
         
             {%- if active == default_lang -%}
               {%- capture href -%}/{{ slug }}/{%- endcapture -%}
