@@ -1,36 +1,53 @@
-{%- comment -%}
-  _includes/lang-switcher.html
-{%- endcomment -%}
+{%- comment -%} _includes/lang-switcher.html {%- endcomment -%}
 
-{%- assign default_lang = site.default_lang | downcase -%}
-{%- assign languages    = site.languages -%}
 {%- assign baseurl      = site.baseurl | default: "" -%}
+{%- assign default_lang = site.default_lang | downcase | default: "en" -%}
 
 {%- comment %}
-  1) Determine current language: prefer page.lang, else infer from first URL segment.
+Normalize languages: support either an array or a comma-separated string in _config.yml
+Example in _config.yml (recommended):
+  languages: [en, da, it]
 {%- endcomment -%}
-{%- if page.lang -%}
-  {%- assign current_lang = page.lang | downcase -%}
-{%- else -%}
-  {%- assign current_lang = default_lang -%}
+{%- assign languages = site.languages -%}
+{%- if languages contains "," -%}
+  {%- assign languages = languages | split: "," -%}
+{%- endif -%}
+
+{%- comment %}
+1) Choose current_lang (priority):
+   a) include.current_lang (passed from layout) → downcase
+   b) page.lang → downcase
+   c) URL prefix matching one of the languages
+   d) default_lang
+{%- endcomment -%}
+{%- assign current_lang =
+      include.current_lang | downcase
+      | default: page.lang | downcase
+      | default: "" -%}
+
+{%- if current_lang == "" -%}
   {%- assign parts = page.url | split: "/" -%}
   {%- assign first = parts[1] | downcase -%}
   {%- for L in languages -%}
-    {%- assign lc = L | downcase -%}
+    {%- assign lc = L | strip | downcase -%}
     {%- if first == lc -%}
       {%- assign current_lang = lc -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endif -%}
 
+{%- if current_lang == "" -%}
+  {%- assign current_lang = default_lang -%}
+{%- endif -%}
+
 {%- comment %}
-  2) Compute path WITHOUT any lang prefix (so switching keeps you on the same page).
+2) Compute path WITHOUT any lang prefix so switching keeps you on the same page
 {%- endcomment -%}
 {%- assign parts = page.url | split: "/" -%}
 {%- assign first = parts[1] | downcase -%}
 {%- assign has_any_prefix = false -%}
 {%- for L in languages -%}
-  {%- assign lc = L | downcase -%}
+  {%- assign lc = L | strip | downcase -%}
   {%- if first == lc -%}{%- assign has_any_prefix = true -%}{%- endif -%}
 {%- endfor -%}
 
@@ -44,7 +61,6 @@
   {%- assign normalized_path = "/" -%}
 {%- else -%}
   {%- assign normalized_path = "/" | append: path_without_lang -%}
-  {%- comment %} Preserve trailing slash if current page has one {%- endcomment -%}
   {%- if page.url != "/" and page.url | slice: -1, 1 == "/" and normalized_path | slice: -1, 1 != "/" -%}
     {%- assign normalized_path = normalized_path | append: "/" -%}
   {%- endif -%}
@@ -52,7 +68,7 @@
 
 <div class="lang-switcher" style="margin:0;">
   {%- for L in languages -%}
-    {%- assign lc = L | downcase -%}
+    {%- assign lc = L | strip | downcase -%}
     {%- assign label = lc | upcase -%}
 
     {%- if lc == current_lang -%}
@@ -71,3 +87,17 @@
     {%- endunless -%}
   {%- endfor -%}
 </div>
+
+{%- comment %}
+Optional debug: set `lang_switcher_debug: true` in _config.yml to print key values.
+{%- endcomment -%}
+{%- if site.lang_switcher_debug -%}
+  <pre style="font:12px/1.4 monospace; opacity:.65; margin-top:.5rem;">
+page.url:         {{ page.url }}
+page.lang:        {{ page.lang }}
+default_lang:     {{ default_lang }}
+current_lang:     {{ current_lang }}
+languages (raw):  {{ site.languages }}
+normalized_path:  {{ normalized_path }}
+  </pre>
+{%- endif -%}
