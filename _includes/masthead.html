@@ -36,7 +36,7 @@
         {%- assign firstseg = page.url | split:"/" | slice: 1, 1 | first | downcase -%}
         {%- assign active = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
         
-        {%- assign NAV = site.data.locales[active].nav | default: site.data.locales[default_lang].nav -%}
+        {%- assign NAV = site.data.locales.[active].nav | default: site.data.locales.[default_lang].nav -%}
         
         <ul class="visible-links">
           {%- for pair in NAV -%}
