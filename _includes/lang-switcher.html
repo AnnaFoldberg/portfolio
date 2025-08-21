@@ -1,50 +1,51 @@
 {%- comment -%}
-Lang Switcher — forced EN homepage + active bold
-- EN always → https://annafoldberg.github.io/
+Lang Switcher — final
+- EN always → https://annafoldberg.github.io/ (JS-enforced)
 - DA → /da/
 - IT → /it/
-- The current language link is wrapped in <strong>
+- Active language shown in <strong> based on URL prefix (no site.active_lang)
 {%- endcomment -%}
+
+{%- assign path = page.url | to_s -%}
+{%- assign seg = path | split:'/' | slice: 1, 1 | first | downcase -%}
+{%- assign current_lang = 'en' -%}
+{%- if seg == 'da' -%}{%- assign current_lang = 'da' -%}{%- elsif seg == 'it' -%}{%- assign current_lang = 'it' -%}{%- endif -%}
 
 <ul class="lang-switcher">
   <li class="lang-item">
-    <a id="lang-en" href="https://annafoldberg.github.io/" rel="external noopener noreferrer">EN</a>
+    {%- if current_lang == 'en' -%}
+      <strong aria-current="true">EN</strong>
+    {%- else -%}
+      <a id="lang-en" href="https://annafoldberg.github.io/" rel="external noopener noreferrer">EN</a>
+    {%- endif -%}
   </li>
   <li class="lang-item">
-    <a id="lang-da" href="/da/" hreflang="da">DA</a>
+    {%- if current_lang == 'da' -%}
+      <strong aria-current="true">DA</strong>
+    {%- else -%}
+      <a id="lang-da" href="/da/" hreflang="da">DA</a>
+    {%- endif -%}
   </li>
   <li class="lang-item">
-    <a id="lang-it" href="/it/" hreflang="it">IT</a>
+    {%- if current_lang == 'it' -%}
+      <strong aria-current="true">IT</strong>
+    {%- else -%}
+      <a id="lang-it" href="/it/" hreflang="it">IT</a>
+    {%- endif -%}
   </li>
 </ul>
 
 <script>
+/* Guarantee EN always goes to the exact homepage URL */
 (function () {
-  // Force EN always to homepage
   var en = document.getElementById('lang-en');
+  if (!en) return; // EN is current (rendered as <strong>)
   var url = 'https://annafoldberg.github.io/';
   en.setAttribute('href', url);
   en.addEventListener('click', function (e) {
-    e.preventDefault();
+    try { e.preventDefault(); } catch(_) {}
     window.location.assign(url);
-  });
-
-  // Bold the active language
-  var path = window.location.pathname.toLowerCase();
-
-  var active = 'en'; // default
-  if (path.startsWith('/da/')) active = 'da';
-  else if (path.startsWith('/it/')) active = 'it';
-  else if (path === '/da' || path === '/da/') active = 'da';
-  else if (path === '/it' || path === '/it/') active = 'it';
-
-  var activeEl = document.getElementById('lang-' + active);
-  if (activeEl) {
-    // Replace <a> with <strong>
-    var strong = document.createElement('strong');
-    strong.textContent = activeEl.textContent;
-    strong.setAttribute('aria-current', 'true');
-    activeEl.replaceWith(strong);
-  }
+  }, { passive: false });
+  en.addEventListener('mousedown', function () { en.href = url; });
 })();
 </script>
