@@ -1,8 +1,9 @@
 {%- comment -%}
-Lang Switcher – simple version
-- EN (default) always goes to homepage (https://annafoldberg.github.io/)
-- Other languages go to /<lang>/ (language home)
-- No bold / active state
+Lang Switcher – final, simple
+- EN -> https://annafoldberg.github.io/
+- DA -> /da/
+- IT -> /it/
+- No active/bold state; plain links only
 {%- endcomment -%}
 
 {%- assign langs = site.languages -%}
@@ -21,7 +22,16 @@ Lang Switcher – simple version
     <li class="lang-item">
       <a href="https://annafoldberg.github.io/" hreflang="{{ Lnorm }}">{{ label }}</a>
     </li>
+  {%- elsif Lnorm == 'da' -%}
+    <li class="lang-item">
+      <a href="/da/" hreflang="da">DA</a>
+    </li>
+  {%- elsif Lnorm == 'it' -%}
+    <li class="lang-item">
+      <a href="/it/" hreflang="it">IT</a>
+    </li>
   {%- else -%}
+    {#- Fallback for any other languages that might be listed -#}
     <li class="lang-item">
       <a href="/{{ Lnorm }}/" hreflang="{{ Lnorm }}">{{ label }}</a>
     </li>
