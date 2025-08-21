@@ -21,31 +21,27 @@
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
 
-        <!-- Main nav links (stay centered/right as usual) -->
         {%- assign langs = site.languages -%}
         {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
+        
+        {%- comment -%} figure out language from URL prefix (/da/, /it/) {%- endcomment -%}
         {%- assign firstseg = page.url | split:'/' | slice: 1, 1 | first | downcase -%}
-        {%- assign hlang = default_lang -%}
-        {%- if firstseg and langs contains firstseg -%}{%- assign hlang = firstseg -%}{%- endif -%}
-        {%- assign T = site.data.locales[hlang] -%}
+        {%- assign hlang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
+        
+        {%- comment -%} load language-specific nav data: navigation.<lang>.yml, fallback to en, then to plain navigation.yml {%- endcomment -%}
+        {%- assign navdata = site.data["navigation." | append: hlang]
+           | default: site.data["navigation." | append: default_lang]
+           | default: site.data.navigation -%}
         
         <ul class="visible-links">
-          {%- for link in site.data.navigation.main -%}
-            {%- comment -%} slug = first path token of link.url, used to look up translations {%- endcomment -%}
-            {%- assign parts = link.url | split:'/' -%}
-            {%- assign slug = '' -%}
-            {%- for p in parts -%}{%- if p != '' -%}{%- assign slug = p -%}{%- break -%}{%- endif -%}{%- endfor -%}
-        
-            {%- assign label = T.nav[slug]
-               | default: T.breadcrumb.segment_labels[slug]
-               | default: link.title -%}
-        
+          {%- for link in navdata.main -%}
+            {%- if hlang == default_lang -%}
+              {%- assign href = link.url -%}
+            {%- else -%}
+              {%- capture href -%}/{{ hlang }}{{ link.url }}{%- endcapture -%}
+            {%- endif -%}
             <li class="masthead__menu-item">
-              {%- if hlang == default_lang -%}
-                <a href="{{ link.url }}">{{ label }}</a>
-              {%- else -%}
-                <a href="/{{ hlang }}{{ link.url }}">{{ label }}</a>
-              {%- endif -%}
+              <a href="{{ href | replace: '//','/' }}">{{ link.title }}</a>
             </li>
           {%- endfor -%}
         </ul>
