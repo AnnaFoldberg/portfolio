@@ -1,65 +1,30 @@
 {%- comment -%}
-Lang Switcher – minimal & deterministic
-- No active/bold logic at all (only <a> links)
-- EN (default_lang) always links to base-path version of the current page (no /en/, /da/, /it/)
-- Other languages always link to /<lang>/<page-path>
+Lang Switcher – simple version
+- EN (default) always goes to homepage (https://annafoldberg.github.io/)
+- Other languages go to /<lang>/ (language home)
+- No bold / active state
 {%- endcomment -%}
 
 {%- assign langs = site.languages -%}
 {%- assign default_lang = site.default_lang | default: 'en' | downcase -%}
 
-{%- comment -%}
-Compute the "content path" of the current page (page.url with any leading language code removed).
-Examples:
-  /da/foo/bar/ -> /foo/bar/
-  /it/         -> /
-  /            -> /
-{%- endcomment -%}
-{%- assign url_str = page.url | to_s -%}
-{%- assign bits = url_str | split:'/' -%}
-{%- assign first_nonempty = '' -%}
-{%- for b in bits -%}
-  {%- if b != '' -%}{%- assign first_nonempty = b | downcase -%}{%- break -%}{%- endif -%}
-{%- endfor -%}
-
-{%- if first_nonempty != '' and langs contains first_nonempty -%}
-  {%- comment -%} Remove the first segment (= language code) {%- endcomment -%}
-  {%- assign content = '' -%}
-  {%- assign skip = true -%}
-  {%- for b in bits -%}
-    {%- if b == '' -%}{% continue %}{% endif -%}
-    {%- if skip -%}{%- assign skip = false -%}{% continue %}{% endif -%}
-    {%- capture content -%}{{ content }}/{{ b }}{%- endcapture -%}
-  {%- endfor -%}
-  {%- if content == '' -%}{%- assign content = '/' -%}{%- endif -%}
-{%- else -%}
-  {%- comment -%} No language prefix in URL → use page.url as content path {%- endcomment -%}
-  {%- assign content = url_str -%}
-{%- endif -%}
-
 <ul class="lang-switcher">
 {%- for L in langs -%}
   {%- assign Lnorm = L | downcase -%}
 
-  {%- comment -%} Optional human label; defaults to "EN", "DA", "IT", ... {%- endcomment -%}
   {%- assign label = L | upcase -%}
   {%- if site.data.locales and site.data.locales[Lnorm] and site.data.locales[Lnorm].lang_name -%}
     {%- assign label = site.data.locales[Lnorm].lang_name -%}
   {%- endif -%}
 
-  {%- comment -%}
-  Build target URL deterministically:
-    - Default language → base-path version of current page (no lang prefix)
-    - Other languages → /<lang>/<content>
-  {%- endcomment -%}
   {%- if Lnorm == default_lang -%}
-    {%- assign target_url = content -%}
+    <li class="lang-item">
+      <a href="https://annafoldberg.github.io/" hreflang="{{ Lnorm }}">{{ label }}</a>
+    </li>
   {%- else -%}
-    {%- capture target_url -%}/{{ Lnorm }}{{ content }}{%- endcapture -%}
+    <li class="lang-item">
+      <a href="/{{ Lnorm }}/" hreflang="{{ Lnorm }}">{{ label }}</a>
+    </li>
   {%- endif -%}
-
-  <li class="lang-item">
-    <a href="{{ target_url | replace: '///','/' | replace: '//','/' | relative_url }}" hreflang="{{ Lnorm }}">{{ label }}</a>
-  </li>
 {%- endfor -%}
 </ul>
