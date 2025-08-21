@@ -6,3 +6,4 @@ lang: da
 permalink: /da/projects/index.html
 ---
 {% include collection-stream.html %}
+<p>page.lang = {{ page.lang }}</p>
