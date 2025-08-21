@@ -34,19 +34,22 @@
         {%- assign langs = site.languages | default: "en,da,it" | downcase | split: "," -%}
         {%- assign default_lang = site.default_lang | default:"en" | downcase -%}
         {%- assign firstseg = page.url | split:"/" | slice: 1, 1 | first | downcase -%}
-        {%- assign active = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
+        {%- assign active_lang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
         
-        {%- assign NAV = site.data.locales[active].nav | default: site.data.locales[default_lang].nav -%}
+        {%- comment -%} Read nav labels from the active locale file {%- endcomment -%}
+        {%- assign NAV = site.data.locales[active_lang].nav | default: site.data.locales[default_lang].nav -%}
+        
+        {%- comment -%} Always iterate via keys, then look up labels reliably {%- endcomment -%}
+        {%- assign slugs = NAV | keys -%}
         
         <ul class="visible-links">
-          {%- for pair in NAV -%}
-            {%- assign slug = pair[0] -%}
-            {%- assign label = pair[1] -%}
+          {%- for slug in slugs -%}
+            {%- assign label = NAV[slug] -%}
         
-            {%- if active == default_lang -%}
+            {%- if active_lang == default_lang -%}
               {%- capture href -%}/{{ slug }}/{%- endcapture -%}
             {%- else -%}
-              {%- capture href -%}/{{ active }}/{{ slug }}/{%- endcapture -%}
+              {%- capture href -%}/{{ active_lang }}/{{ slug }}/{%- endcapture -%}
             {%- endif -%}
         
             <li class="masthead__menu-item">
