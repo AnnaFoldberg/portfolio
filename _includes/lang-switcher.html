@@ -1,41 +1,82 @@
 {%- comment -%}
-Lang Switcher
-- EN always → https://annafoldberg.github.io/
+Lang Switcher — click-to-bold (persists via localStorage)
+- EN → https://annafoldberg.github.io/ (JS-enforced, as before)
 - DA → /da/
 - IT → /it/
-- No active/bold state
+- Whichever was last clicked is bold across pages until another is clicked
 {%- endcomment -%}
 
 <ul class="lang-switcher">
   <li class="lang-item">
-    <a id="lang-en" href="https://annafoldberg.github.io/" rel="external noopener noreferrer">EN</a>
+    <a id="lang-en" data-lang="en" href="https://annafoldberg.github.io/" rel="external noopener noreferrer">EN</a>
   </li>
   <li class="lang-item">
-    <a href="/da/" hreflang="da">DA</a>
+    <a id="lang-da" data-lang="da" href="/da/" hreflang="da">DA</a>
   </li>
   <li class="lang-item">
-    <a href="/it/" hreflang="it">IT</a>
+    <a id="lang-it" data-lang="it" href="/it/" hreflang="it">IT</a>
   </li>
 </ul>
 
+<style>
+/* Bold the active language link (no other styling changed) */
+.lang-switcher .is-active { font-weight: 700; }
+</style>
+
 <script>
-/* Force EN to the exact homepage URL even if a router/pjax tries to intercept */
 (function () {
+  var HOME_EN = 'https://annafoldberg.github.io/';
+  var KEY = 'activeLang';
+
   var en = document.getElementById('lang-en');
-  if (!en) return;
-  var url = 'https://annafoldberg.github.io/';
-  en.setAttribute('href', url);
+  var da = document.getElementById('lang-da');
+  var it = document.getElementById('lang-it');
+  var links = [en, da, it];
 
-  // Handle click robustly
-  en.addEventListener('click', function (e) {
-    try { e.preventDefault(); } catch(_) {}
-    // Use assign (keeps history); replace() if you prefer no back button step
-    window.location.assign(url);
-  }, { passive: false });
+  function setActive(code) {
+    links.forEach(function (a) {
+      if (!a) return;
+      a.classList.remove('is-active');
+      a.removeAttribute('aria-current');
+    });
+    var el = document.querySelector('.lang-switcher a[data-lang="' + code + '"]');
+    if (el) {
+      el.classList.add('is-active');
+      el.setAttribute('aria-current', 'true');
+    }
+    try { localStorage.setItem(KEY, code); } catch (_) {}
+  }
 
-  // Extra belt-and-suspenders for some interceptors
-  en.addEventListener('mousedown', function () {
-    en.href = url;
-  });
+  // Force EN to exact homepage URL (as before)
+  if (en) {
+    en.setAttribute('href', HOME_EN);
+    en.addEventListener('click', function (e) {
+      // Persist choice *before* navigating
+      setActive('en');
+      try { e.preventDefault(); } catch(_) {}
+      window.location.assign(HOME_EN);
+    }, { passive: false });
+    // Extra belt-and-suspenders for some interceptors
+    en.addEventListener('mousedown', function () { en.href = HOME_EN; });
+  }
+
+  // Persist DA/IT when clicked; let normal navigation happen
+  if (da) {
+    da.addEventListener('click', function () { setActive('da'); });
+  }
+  if (it) {
+    it.addEventListener('click', function () { setActive('it'); });
+  }
+
+  // On load: show whichever was last clicked; if none, infer from URL once
+  var stored = null;
+  try { stored = localStorage.getItem(KEY); } catch (_) {}
+  if (!stored) {
+    var p = (window.location.pathname || '').toLowerCase();
+    if (p === '/da' || p.indexOf('/da/') === 0) stored = 'da';
+    else if (p === '/it' || p.indexOf('/it/') === 0) stored = 'it';
+    else stored = 'en';
+  }
+  setActive(stored);
 })();
 </script>
