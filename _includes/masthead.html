@@ -31,28 +31,23 @@
 
         <!-- Main nav links -->
         {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
-        {%- assign active = site.active_lang | default: default_lang | downcase -%}
-        {%- assign L = site.data.locales[active] | default: site.data.locales[default_lang] -%}
-        {%- assign lang_home = '/' | append: active | append: '/' -%}
+        {%- assign active = page.lang | default: site.active_lang | default: default_lang | downcase -%}
+        {%- assign LOC = site.data.locales[active] | default: site.data.locales[default_lang] -%}
+        {%- assign NAV = LOC.nav | default: site.data.locales[default_lang].nav -%}
         
         <!-- Main nav links -->
         <ul class="visible-links">
-          {%- assign NAV = L.nav | default: site.data.locales[default_lang].nav -%}
           {%- for pair in NAV -%}
             {%- assign slug = pair[0] -%}
             {%- assign label = pair[1] -%}
         
-            {%- if active == default_lang -%}
-              {%- capture href -%}/{{ slug }}/{%- endcapture -%}
-            {%- else -%}
-              {%- capture href -%}/{{ active }}/{{ slug }}/{%- endcapture -%}
-            {%- endif -%}
+            {%- capture href -%}/{{ active }}/{{ slug }}/{%- endcapture -%}
         
             <li class="masthead__menu-item">
               <a href="{{ href | relative_url }}">{{ label }}</a>
             </li>
           {%- endfor -%}
-        </ul>
+</ul>
         <!-- Mobile overflow toggle -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[active].menu_label | default: "Toggle menu" }}</span>
