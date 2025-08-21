@@ -3,7 +3,6 @@ layout: two_col
 title: "Projekter"
 collection_name: projects
 lang: da
-permalink: /da/projects/index.html
 ---
+{% include breadcrumb.html %}
 {% include collection-stream.html %}
-<p>page.lang = {{ page.lang }}</p>
