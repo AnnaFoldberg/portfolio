@@ -4,13 +4,18 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
 
+        {%- comment -%}
+        Site logo (links to the localized root)
+        {%- endcomment -%}
         {% unless logo_path == empty %}
           <a class="site-logo" href="{{ '/' | localized_url }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
-        <!-- Site title (left) -->
+        {%- comment -%}
+        Site title (left)
+        {%- endcomment -%}
         <a class="site-title" href="{{ '/' | localized_url }}">
           {{ site.masthead_title | default: site.title }}
           {% if site.subtitle %}
@@ -18,18 +23,32 @@
           {% endif %}
         </a>
 
-        <!-- Language switcher (left group) -->
+        {%- comment -%}
+        Language switcher (pass the active language, not page.lang)
+        {%- endcomment -%}
         <div class="lang-switcher--masthead">
-          {% include lang-switcher.html current_lang=page.lang %}
+          {% include lang-switcher.html current_lang=site.active_lang %}
         </div>
 
-        {%- comment -%} Language from the current page (authoritative) {%- endcomment -%}
-        {%- assign hlang = page.lang | default: site.default_lang | default: 'en' -%}
+        {%- comment -%}
+        Determine language for this render. Prefer Polyglot’s site.active_lang,
+        then fall back to page.lang, then site.default_lang, then 'en'.
+        {%- endcomment -%}
+        {%- assign hlang = site.active_lang | default: page.lang | default: site.default_lang | default: 'en' -%}
 
-        {%- comment -%} Load from _data/locales/<lang>.yml {%- endcomment -%}
-        {%- assign loc = site.data.locales[hlang] | default: site.data.locales[site.default_lang] | default: site.data.locales.en -%}
-        {%- assign items = loc.main -%}
+        {%- comment -%}
+        Load localized strings from _data/locales/<lang>.yml.
+        Fallbacks: default_lang -> en.
+        {%- endcomment -%}
+        {%- assign loc = site.data.locales[hlang]
+            | default: site.data.locales[site.default_lang]
+            | default: site.data.locales.en -%}
 
+        {%- assign items = loc.main
+            | default: site.data.locales[site.default_lang].main
+            | default: site.data.locales.en.main -%}
+
+        {%- if items -%}
         <ul class="visible-links">
           {%- for link in items -%}
             <li class="masthead__menu-item">
@@ -37,16 +56,26 @@
             </li>
           {%- endfor -%}
         </ul>
+        {%- endif -%}
 
-        <!-- Mobile overflow toggle (theme default) -->
+        {%- comment -%}
+        Mobile overflow toggle (localized label).
+        Uses site.active_lang to match the page language.
+        Expects a structure like:
+          _data/ui-text/<lang>.yml:
+            menu_label: "Toggle menu"
+        If absent, falls back to the English label.
+        {%- endcomment -%}
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">
-            {{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}
+            {{ site.data.ui-text[site.active_lang].menu_label
+               | default: site.data.ui-text[site.default_lang].menu_label
+               | default: "Toggle menu" }}
           </span>
           <div class="navicon"></div>
         </button>
-        <ul class="hidden-links hidden"></ul>
 
+        <ul class="hidden-links hidden"></ul>
       </nav>
     </div>
   </div>
