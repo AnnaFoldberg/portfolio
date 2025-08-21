@@ -2,3 +2,10 @@ left_rail:
   categories: "Kategorier"
   tags: "Tags"
   clear: "Ryd filtre"
+
+breadcrumb:
+  home: "Home"
+  segment_labels:
+    projects: "Projekter"
+    notes: "Noter"
+    log: "Log"
