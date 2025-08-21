@@ -30,54 +30,29 @@
         </div>
 
         <!-- Main nav links -->
+        {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
+        {%- assign active = site.active_lang | default: default_lang | downcase -%}
+        {%- assign L = site.data.locales[active] | default: site.data.locales[default_lang] -%}
+        {%- assign lang_home = '/' | append: active | append: '/' -%}
+        
+        <!-- Main nav links -->
         <ul class="visible-links">
-          {%- assign L = site.data.locales[site.active_lang].nav -%}
-
-          {%- for link in L -%}
-            {%- assign url = link.url | default:'/' -%}
-
-            {%- comment -%} External links: leave untouched {%- endcomment -%}
-            {%- if url contains '://' -%}
-              {%- assign label = link.title -%}
-              <li class="masthead__menu-item"><a href="{{ url }}">{{ label }}</a></li>
-              {%- continue -%}
-            {%- endif -%}
-
-            {%- comment -%}
-            Normalize: drop any leading language segment (en/da/it/etc)
-            so we can rebuild with the ACTIVE language (like breadcrumb’s lang_home).
-            {%- endcomment -%}
-            {%- assign parts = url | split:'/' -%}
-            {%- assign tokens = "" | split:"" -%}
-            {%- for p in parts -%}
-              {%- if p != '' and not (langs contains p) -%}
-                {%- assign tokens = tokens | push: p -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- assign slug = tokens[0] | downcase -%}
-
-            {%- comment -%} Labels from locales: nav:, then breadcrumb.segment_labels:, else link.title {%- endcomment -%}
-            {%- assign label = link.title -%}
-            {%- if L and L[slug] -%}
-              {%- assign label = L[slug] -%}
-            {%- endif -%}
-
-            {%- comment -%} Rebuild clean path and prefix with active language (like breadcrumb’s lang_home) {%- endcomment -%}
-            {%- assign path = '/' | append: tokens | join:'/' -%}
-            {%- if url != '/' and url | slice:-1,1 == '/' -%}{%- assign path = path | append:'/' -%}{%- endif -%}
-
+          {%- assign NAV = L.nav | default: site.data.locales[default_lang].nav -%}
+          {%- for pair in NAV -%}
+            {%- assign slug = pair[0] -%}    {# key, e.g., "projects" #}
+            {%- assign label = pair[1] -%}   {# value, e.g., "Progetti" #}
+        
             {%- if active == default_lang -%}
-              {%- assign href = path -%}
+              {%- capture href -%}/{{ slug }}/{%- endcapture -%}
             {%- else -%}
-              {%- capture href -%}/{{ active }}{{ path }}{%- endcapture -%}
+              {%- capture href -%}/{{ active }}/{{ slug }}/{%- endcapture -%}
             {%- endif -%}
-
+        
             <li class="masthead__menu-item">
-              <a href="{{ href | replace: '//', '/' }}">{{ label }}</a>
+              <a href="{{ href | relative_url }}">{{ label }}</a>
             </li>
           {%- endfor -%}
         </ul>
-
         <!-- Mobile overflow toggle -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[active].menu_label | default: "Toggle menu" }}</span>
