@@ -5,13 +5,13 @@
       <nav id="site-nav" class="greedy-nav">
 
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ '/' | relative_url }}">
+          <a class="site-logo" href="{{ '/' | localized_url }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
         <!-- Site title (left) -->
-        <a class="site-title" href="{{ '/' | relative_url }}">
+        <a class="site-title" href="{{ '/' | localized_url }}">
           {{ site.masthead_title | default: site.title }}
           {% if site.subtitle %}
             <span class="site-subtitle">{{ site.subtitle }}</span>
@@ -20,29 +20,21 @@
 
         <!-- Language switcher placed right after the title (left group) -->
         <div class="lang-switcher--masthead">
-          {% include lang-switcher.html current_lang=page.lang %}
+          {% include lang-switcher.html current_lang=site.active_lang %}
         </div>
 
-        {%- comment -%} Language from URL only: /da/... -> da, /it/... -> it, else en {%- endcomment -%}
-        {%- assign path = page.url | to_s | downcase -%}
-        {%- assign hlang = 'en' -%}
-        {%- if path == '/da' or path contains '/da/' -%}{%- assign hlang = 'da' -%}{%- endif -%}
-        {%- if path == '/it' or path contains '/it/' -%}{%- assign hlang = 'it' -%}{%- endif -%}
+        {%- comment -%} Determine active language the polyglot way {%- endcomment -%}
+        {%- assign hlang = site.active_lang | default: page.lang | default: site.default_lang | default: 'en' -%}
 
-        {%- comment -%} Load _data/navigation/<lang>.yml; fallback to en.yml {%- endcomment -%}
-        {%- assign navroot = site.data.navigation -%}
-        {%- assign navdata = navroot[hlang] | default: navroot.en -%}
-        {%- assign items = navdata.main -%}
+        {%- comment -%} Load _data/navigation/<lang>.yml; fallback to default/en {%- endcomment -%}
+        {%- assign navroot  = site.data.navigation -%}
+        {%- assign navdata  = navroot[hlang] | default: navroot[site.default_lang] | default: navroot.en -%}
+        {%- assign items    = navdata.main -%}
 
         <ul class="visible-links">
           {%- for link in items -%}
-            {%- if hlang == 'en' -%}
-              {%- assign href = link.url -%}
-            {%- else -%}
-              {%- capture href -%}/{{ hlang }}{{ link.url }}{%- endcapture -%}
-            {%- endif -%}
             <li class="masthead__menu-item">
-              <a href="{{ href | replace: '//','/' }}">{{ link.title }}</a>
+              <a href="{{ link.url | localized_url }}">{{ link.title }}</a>
             </li>
           {%- endfor -%}
         </ul>
