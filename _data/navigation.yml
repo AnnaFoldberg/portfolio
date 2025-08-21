@@ -1,0 +1,26 @@
+en:
+  main:
+    - title: "Projects"
+      url: /projects/
+    - title: "Notes"
+      url: /notes/
+    - title: "Log"
+      url: /log/
+
+da:
+  main:
+    - title: "Projekter"
+      url: /projects/
+    - title: "Noter"
+      url: /notes/
+    - title: "Log"
+      url: /log/
+
+it:
+  main:
+    - title: "Progetti"
+      url: /projects/
+    - title: "Note"
+      url: /notes/
+    - title: "Log"
+      url: /log/
