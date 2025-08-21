@@ -5,13 +5,25 @@
       <nav id="site-nav" class="greedy-nav">
 
         {%- comment -%}
-        Determine the page's language ONCE and keep it in a local var.
-        Do this BEFORE any includes/filters that might mutate site.active_lang.
+        Determine language from URL to avoid any global mutation.
+        URL like: /it/projects/foo  -> lang = "it"
+        Fallbacks: page.lang -> site.default_lang -> "en"
         {%- endcomment -%}
-        {%- assign hlang = site.active_lang | default: page.lang | default: site.default_lang | default: 'en' -%}
+        {%- assign _segs = page.url | split:'/' -%}
+        {%- assign _url_lang = _segs[1] -%}
+        {%- assign _url_lang_lc = _url_lang | downcase -%}
+        {%- assign hlang = _url_lang_lc -%}
+        {%- unless hlang == 'en' or hlang == 'da' or hlang == 'it' -%}
+          {%- assign hlang = page.lang | default: site.default_lang | default: 'en' -%}
+        {%- endunless -%}
 
         {%- comment -%}
-        Load localized strings from _data/locales/<lang>.yml with sensible fallbacks.
+        Language-aware home prefix, e.g. "/it/".
+        {%- endcomment -%}
+        {%- assign lang_home = '/' | append: hlang | append: '/' -%}
+
+        {%- comment -%}
+        Load localized strings from _data/locales/<lang>.yml with hard fallbacks.
         {%- endcomment -%}
         {%- assign loc = site.data.locales[hlang]
             | default: site.data.locales[site.default_lang]
@@ -21,18 +33,18 @@
             | default: site.data.locales.en.main -%}
 
         {%- comment -%}
-        Site logo (link explicitly localized to hlang).
+        Site logo (link to lang root without using localized_url).
         {%- endcomment -%}
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ '/' | localized_url: hlang }}">
+          <a class="site-logo" href="{{ lang_home | relative_url }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
         {%- comment -%}
-        Site title (left) — also localized with explicit hlang.
+        Site title (link to lang root).
         {%- endcomment -%}
-        <a class="site-title" href="{{ '/' | localized_url: hlang }}">
+        <a class="site-title" href="{{ lang_home | relative_url }}">
           {{ site.masthead_title | default: site.title }}
           {% if site.subtitle %}
             <span class="site-subtitle">{{ site.subtitle }}</span>
@@ -40,8 +52,8 @@
         </a>
 
         {%- comment -%}
-        Language switcher. Pass the current lang as a param,
-        but don't rely on site.active_lang after this include.
+        Language switcher — pass the resolved language explicitly.
+        (Whatever this include does cannot affect our already-resolved hlang.)
         {%- endcomment -%}
         <div class="lang-switcher--masthead">
           {% include lang-switcher.html current_lang=hlang %}
@@ -50,15 +62,21 @@
         {%- if items -%}
         <ul class="visible-links">
           {%- for link in items -%}
+            {%- comment -%}
+            Build a language-specific URL without localized_url.
+            link.url is expected like "/projects/".
+            {%- endcomment -%}
+            {%- assign link_path = link.url | remove_first:'/' -%}
             <li class="masthead__menu-item">
-              <a href="{{ link.url | localized_url: hlang }}">{{ link.title }}</a>
+              <a href="{{ lang_home | append: link_path | relative_url }}">{{ link.title }}</a>
             </li>
           {%- endfor -%}
         </ul>
         {%- endif -%}
 
         {%- comment -%}
-        Mobile overflow toggle (localized label using the captured hlang).
+        Mobile overflow toggle label — look up in _data/ui-text/<lang>.yml,
+        then fall back sanely.
         {%- endcomment -%}
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">
