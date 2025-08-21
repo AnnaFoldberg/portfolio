@@ -18,18 +18,17 @@
           {% endif %}
         </a>
 
-        <!-- Language switcher placed right after the title (left group) -->
+        <!-- Language switcher (left group) -->
         <div class="lang-switcher--masthead">
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
 
-        {%- comment -%} Use page.lang as the authoritative current language {%- endcomment -%}
+        {%- comment -%} Language from the current page (authoritative) {%- endcomment -%}
         {%- assign hlang = page.lang | default: site.default_lang | default: 'en' -%}
 
-        {%- comment -%} Load _data/navigation/<lang>.yml; fallback to default/en {%- endcomment -%}
-        {%- assign navroot  = site.data.navigation -%}
-        {%- assign navdata  = navroot[hlang] | default: navroot[site.default_lang] | default: navroot.en -%}
-        {%- assign items    = navdata.main -%}
+        {%- comment -%} Load from _data/locales/<lang>.yml {%- endcomment -%}
+        {%- assign loc = site.data.locales[hlang] | default: site.data.locales[site.default_lang] | default: site.data.locales.en -%}
+        {%- assign items = loc.main -%}
 
         <ul class="visible-links">
           {%- for link in items -%}
