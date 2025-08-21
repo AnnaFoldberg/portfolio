@@ -1,18 +1,17 @@
 {%- comment -%}
-Lang Switcher (polyglot-aware, default-lang fix, pages+collections)
-- Current language is bold
-- Tries to link to the *same* page in each language
-  1) First search site.pages (for index/normal pages) by ref
-  2) Then search the collection (for collection items) by ref/slug
-- Fallback: language home (default -> "/", others -> "/<lang>/")
-Assumes you give matching pages the same `ref:` across languages.
+Lang Switcher (polyglot-aware, robust)
+- Current language = page.lang (fallback: site.active_lang, site.default_lang)
+- Finds counterpart in site.pages by ref (index/normal pages)
+- Finds counterpart in the current collection by ref/slug (collection items)
+- Default language uses "/" as home; others use "/<lang>/"
 {%- endcomment -%}
 
-{%- assign current_lang = site.active_lang | default: site.default_lang -%}
+{%- assign current_lang = page.lang | default: site.active_lang | default: site.default_lang -%}
 {%- assign langs = site.languages -%}
 
 <ul class="lang-switcher">
 {%- for L in langs -%}
+  {%- comment -%} Display label (from _data/locales/<L>.yml if present) {%- endcomment -%}
   {%- assign label = L | upcase -%}
   {%- if site.data.locales and site.data.locales[L] and site.data.locales[L].lang_name -%}
     {%- assign label = site.data.locales[L].lang_name -%}
@@ -20,7 +19,7 @@ Assumes you give matching pages the same `ref:` across languages.
 
   {%- assign target_url = nil -%}
 
-  {%- comment -%} 1) Try to find counterpart among site.pages (good for index/normal pages) {%- endcomment -%}
+  {%- comment -%} 1) Try pages (great for collection index/normal pages) {%- endcomment -%}
   {%- if page.ref -%}
     {%- assign page_matches = site.pages | where: "lang", L | where: "ref", page.ref -%}
     {%- assign page_candidate = page_matches | first -%}
@@ -29,7 +28,7 @@ Assumes you give matching pages the same `ref:` across languages.
     {%- endif -%}
   {%- endif -%}
 
-  {%- comment -%} 2) If not found and this is a collection item, look in the collection {%- endcomment -%}
+  {%- comment -%} 2) Try the collection (for collection items) {%- endcomment -%}
   {%- if target_url == nil and page.collection -%}
     {%- assign items = site[page.collection] | where: "lang", L -%}
     {%- assign candidate = nil -%}
@@ -48,7 +47,7 @@ Assumes you give matching pages the same `ref:` across languages.
     {%- endif -%}
   {%- endif -%}
 
-  {%- comment -%} 3) Fallback to language home (default lang -> "/") {%- endcomment -%}
+  {%- comment -%} 3) Fallback to language home (default -> "/") {%- endcomment -%}
   {%- if target_url == nil -%}
     {%- if L == site.default_lang -%}
       {%- assign target_url = "/" -%}
