@@ -1,9 +1,9 @@
 {%- comment -%}
-Lang Switcher — forced absolute EN
+Lang Switcher — forced EN homepage + active bold
 - EN always → https://annafoldberg.github.io/
 - DA → /da/
 - IT → /it/
-- No active/bold state
+- The current language link is wrapped in <strong>
 {%- endcomment -%}
 
 <ul class="lang-switcher">
@@ -11,31 +11,40 @@ Lang Switcher — forced absolute EN
     <a id="lang-en" href="https://annafoldberg.github.io/" rel="external noopener noreferrer">EN</a>
   </li>
   <li class="lang-item">
-    <a href="/da/" hreflang="da">DA</a>
+    <a id="lang-da" href="/da/" hreflang="da">DA</a>
   </li>
   <li class="lang-item">
-    <a href="/it/" hreflang="it">IT</a>
+    <a id="lang-it" href="/it/" hreflang="it">IT</a>
   </li>
 </ul>
 
 <script>
-/* Force EN to the exact homepage URL even if a router/pjax tries to intercept */
 (function () {
+  // Force EN always to homepage
   var en = document.getElementById('lang-en');
-  if (!en) return;
   var url = 'https://annafoldberg.github.io/';
   en.setAttribute('href', url);
-
-  // Handle click robustly
   en.addEventListener('click', function (e) {
-    try { e.preventDefault(); } catch(_) {}
-    // Use assign (keeps history); replace() if you prefer no back button step
+    e.preventDefault();
     window.location.assign(url);
-  }, { passive: false });
-
-  // Extra belt-and-suspenders for some interceptors
-  en.addEventListener('mousedown', function () {
-    en.href = url;
   });
+
+  // Bold the active language
+  var path = window.location.pathname.toLowerCase();
+
+  var active = 'en'; // default
+  if (path.startsWith('/da/')) active = 'da';
+  else if (path.startsWith('/it/')) active = 'it';
+  else if (path === '/da' || path === '/da/') active = 'da';
+  else if (path === '/it' || path === '/it/') active = 'it';
+
+  var activeEl = document.getElementById('lang-' + active);
+  if (activeEl) {
+    // Replace <a> with <strong>
+    var strong = document.createElement('strong');
+    strong.textContent = activeEl.textContent;
+    strong.setAttribute('aria-current', 'true');
+    activeEl.replaceWith(strong);
+  }
 })();
 </script>
