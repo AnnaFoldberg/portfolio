@@ -3,10 +3,10 @@ layout: default
 ---
 
 <div class="rail-page">
-  {% if page.breadcrumbs != false %}
-    {% include breadcrumbs.html %}
+  {% if page.collection_name %}
+    {% include breadcrumb.html %}
   {% endif %}
-
+  
   <div class="rail-container">
     <div class="rail-layout">
       {% include left-rail.html %}
