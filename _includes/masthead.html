@@ -29,7 +29,8 @@
         {%- assign T = site.data.locales[hlang] | default: site.data.locales[default_lang] -%}
         
         <ul class="visible-links">
-          {%- for link in site.data.navigation.main -%}
+          {%- assign nav = site.data.navigation[hlang] | default: site.data.navigation[default_lang] -%}
+          {%- for link in nav.main -%}
             {%- comment -%} find slug = first non-empty token of link.url {%- endcomment -%}
             {%- assign parts = link.url | split:'/' -%}
             {%- assign slug = '' -%}
