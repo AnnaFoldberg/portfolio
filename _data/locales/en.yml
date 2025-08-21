@@ -1,5 +1,10 @@
 lang_name: EN
 
+nav:
+    projects: "Projects"
+    notes: "Notes"
+    log: "Log"
+
 left_rail:
   categories: "Categories"
   tags: "Tags"
