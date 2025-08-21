@@ -31,8 +31,9 @@
 
         <!-- Main nav links -->
         <ul class="visible-links">
-          {%- assign nav = site.data.navigation[active] | default: site.data.navigation[default_lang] -%}
-          {%- for link in nav.main -%}
+          {%- assign L = site.data.locales[site.active_lang].nav -%}
+
+          {%- for link in L -%}
             {%- assign url = link.url | default:'/' -%}
 
             {%- comment -%} External links: leave untouched {%- endcomment -%}
