@@ -3,6 +3,6 @@ layout: two_col
 title: "Projects"
 collection_name: projects
 lang: en
-permalink: /projects/
 ---
+{% include breadcrumb.html %}
 {% include collection-stream.html %}
