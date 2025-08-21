@@ -1,22 +1,31 @@
+{%- comment -%}
+  _includes/lang-switcher.html
+{%- endcomment -%}
+
 {%- assign default_lang = site.default_lang | downcase -%}
 {%- assign languages    = site.languages -%}
 {%- assign baseurl      = site.baseurl | default: "" -%}
 
-{%- comment %} 1) Determine current language (prefer page.lang, else infer from URL) {%- endcomment -%}
-{%- assign current_lang = page.lang | downcase | default: default_lang -%}
-
-{%- if current_lang == default_lang -%}
+{%- comment %}
+  1) Determine current language: prefer page.lang, else infer from first URL segment.
+{%- endcomment -%}
+{%- if page.lang -%}
+  {%- assign current_lang = page.lang | downcase -%}
+{%- else -%}
+  {%- assign current_lang = default_lang -%}
   {%- assign parts = page.url | split: "/" -%}
   {%- assign first = parts[1] | downcase -%}
   {%- for L in languages -%}
     {%- assign lc = L | downcase -%}
-    {%- if first == lc and lc != default_lang -%}
+    {%- if first == lc -%}
       {%- assign current_lang = lc -%}
     {%- endif -%}
   {%- endfor -%}
 {%- endif -%}
 
-{%- comment %} 2) Compute the path WITHOUT any lang prefix (even if someone linked /en/…) {%- endcomment -%}
+{%- comment %}
+  2) Compute path WITHOUT any lang prefix (so switching keeps you on the same page).
+{%- endcomment -%}
 {%- assign parts = page.url | split: "/" -%}
 {%- assign first = parts[1] | downcase -%}
 {%- assign has_any_prefix = false -%}
@@ -35,6 +44,7 @@
   {%- assign normalized_path = "/" -%}
 {%- else -%}
   {%- assign normalized_path = "/" | append: path_without_lang -%}
+  {%- comment %} Preserve trailing slash if current page has one {%- endcomment -%}
   {%- if page.url != "/" and page.url | slice: -1, 1 == "/" and normalized_path | slice: -1, 1 != "/" -%}
     {%- assign normalized_path = normalized_path | append: "/" -%}
   {%- endif -%}
