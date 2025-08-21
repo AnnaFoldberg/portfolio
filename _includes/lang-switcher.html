@@ -1,35 +1,48 @@
 {%- comment -%}
-Lang Switcher (jekyll-polyglot, robust)
-- current_lang from page.lang, else first URL segment if in site.languages, else site.default_lang
-- Cross-links by ref/slug across pages & collections
-- Default language uses "/" root; others use "/<lang>/"
+Lang Switcher (jekyll-polyglot, final)
+- Determines current_lang strictly from URL prefix (no site.active_lang)
+- EN (default) always links to the root path version (no /en/ prefix)
+- When cross-language "ref" lookups fail (common with polyglot's scoped site.pages),
+  we transform the current URL by swapping/removing the first segment.
 {%- endcomment -%}
 
 {%- assign langs = site.languages -%}
+{%- assign default_lang = site.default_lang | default: 'en' | downcase -%}
 
-{%- comment -%} Determine current_lang robustly (no site.active_lang) {%- endcomment -%}
-{%- assign current_lang = page.lang | to_s | downcase -%}
-{%- if current_lang == '' -%}
-  {%- assign parts = page.url | to_s | downcase | split:'/' -%}
-  {%- assign seg = '' -%}
-  {%- for p in parts -%}
-    {%- if p != '' -%}
-      {%- assign seg = p -%}
-      {%- break -%}
-    {%- endif -%}
-  {%- endfor -%}
-  {%- if seg != '' and langs contains seg -%}
-    {%- assign current_lang = seg -%}
-  {%- else -%}
-    {%- assign current_lang = site.default_lang | to_s | downcase -%}
-  {%- endif -%}
+{%- comment -%} Detect current language from URL; if none, assume default_lang {%- endcomment -%}
+{%- assign url_str = page.url | to_s -%}
+{%- assign parts = url_str | split:'/' -%}
+{%- assign first_seg = '' -%}
+{%- for p in parts -%}
+  {%- if p != '' -%}{%- assign first_seg = p | downcase -%}{%- break -%}{%- endif -%}
+{%- endfor -%}
+{%- if first_seg != '' and langs contains first_seg -%}
+  {%- assign current_lang = first_seg -%}
+{%- else -%}
+  {%- assign current_lang = default_lang -%}
 {%- endif -%}
+
+{%- comment -%} Compute the "rest of path" after the first non-empty segment {%- endcomment -%}
+{%- assign rest_path = '' -%}
+{%- assign seen_first = false -%}
+{%- for p in parts -%}
+  {%- if p == '' -%}
+    {%- continue -%}
+  {%- endif -%}
+  {%- if seen_first == false -%}
+    {%- assign seen_first = true -%}
+    {%- assign first_token = p -%}
+  {%- else -%}
+    {%- capture rest_path -%}{{ rest_path }}/{{ p }}{%- endcapture -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- if rest_path == '' -%}{%- assign rest_path = '/' -%}{%- endif -%}
 
 <ul class="lang-switcher">
 {%- for L in langs -%}
-  {%- assign Lnorm = L | to_s | downcase -%}
+  {%- assign Lnorm = L | downcase -%}
 
-  {%- comment -%} Optional human label from _data/locales/<L>.yml {%- endcomment -%}
+  {%- comment -%} Optional localized label {%- endcomment -%}
   {%- assign label = L | upcase -%}
   {%- if site.data.locales and site.data.locales[Lnorm] and site.data.locales[Lnorm].lang_name -%}
     {%- assign label = site.data.locales[Lnorm].lang_name -%}
@@ -37,39 +50,61 @@ Lang Switcher (jekyll-polyglot, robust)
 
   {%- assign target_url = nil -%}
 
-  {%- comment -%} 1) Match normal pages by ref {%- endcomment -%}
+  {%- comment -%} 1) Try counterpart via ref (works only if polyglot exposes other langs here) {%- endcomment -%}
   {%- if page.ref -%}
-    {%- assign page_candidate = site.pages | where: "lang", Lnorm | where: "ref", page.ref | first -%}
-    {%- if page_candidate and page_candidate.url -%}
-      {%- assign target_url = page_candidate.url -%}
-    {%- endif -%}
-  {%- endif -%}
-
-  {%- comment -%} 2) Match within the current collection {%- endcomment -%}
-  {%- if target_url == nil and page.collection -%}
-    {%- assign items = site[page.collection] | where: "lang", Lnorm -%}
-    {%- assign candidate = nil -%}
-
-    {%- if page.ref -%}
-      {%- assign candidate = items | where: "ref", page.ref | first -%}
-    {%- endif -%}
-
-    {%- if candidate == nil -%}
-      {%- assign pslug = page.slug | default: page.name | split: "." | first -%}
-      {%- assign candidate = items | where: "slug", pslug | first -%}
-    {%- endif -%}
-
+    {%- assign candidate = site.pages | where: "lang", Lnorm | where: "ref", page.ref | first -%}
     {%- if candidate and candidate.url -%}
       {%- assign target_url = candidate.url -%}
     {%- endif -%}
   {%- endif -%}
 
-  {%- comment -%} 3) Fallback to language home (default -> "/") {%- endcomment -%}
+  {%- comment -%} 2) Try current collection by ref/slug (same caveat as above) {%- endcomment -%}
+  {%- if target_url == nil and page.collection -%}
+    {%- assign items = site[page.collection] | where: "lang", Lnorm -%}
+    {%- assign cand = nil -%}
+    {%- if page.ref -%}
+      {%- assign cand = items | where: "ref", page.ref | first -%}
+    {%- endif -%}
+    {%- if cand == nil -%}
+      {%- assign pslug = page.slug | default: page.name | split: "." | first -%}
+      {%- assign cand = items | where: "slug", pslug | first -%}
+    {%- endif -%}
+    {%- if cand and cand.url -%}
+      {%- assign target_url = cand.url -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%}
+  3) Guaranteed fallback by transforming current URL:
+     - If page is already prefixed with a language (first_seg in langs):
+         * For default lang: drop the prefix -> rest_path
+         * For non-default: replace prefix with /Lnorm + rest_path
+     - If page has no language prefix:
+         * For default lang: keep page.url
+         * For non-default: prepend /Lnorm to page.url
+  {%- endcomment -%}
   {%- if target_url == nil -%}
-    {%- if Lnorm == site.default_lang -%}
+    {%- if first_seg != '' and langs contains first_seg -%}
+      {%- if Lnorm == default_lang -%}
+        {%- assign target_url = rest_path -%}
+      {%- else -%}
+        {%- capture target_url -%}/{{ Lnorm }}{{ rest_path }}{%- endcapture -%}
+      {%- endif -%}
+    {%- else -%}
+      {%- if Lnorm == default_lang -%}
+        {%- assign target_url = page.url -%}
+      {%- else -%}
+        {%- capture target_url -%}/{{ Lnorm }}{{ page.url }}{%- endcapture -%}
+      {%- endif -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} 4) As a last resort, go to language homes (EN -> "/", others -> "/<L>/") {%- endcomment -%}
+  {%- if target_url == nil or target_url == '' -%}
+    {%- if Lnorm == default_lang -%}
       {%- assign target_url = "/" -%}
     {%- else -%}
-      {%- assign target_url = "/" | append: Lnorm | append: "/" -%}
+      {%- capture target_url -%}/{{ Lnorm }}/{%- endcapture -%}
     {%- endif -%}
   {%- endif -%}
 
@@ -77,7 +112,7 @@ Lang Switcher (jekyll-polyglot, robust)
     {%- if Lnorm == current_lang -%}
       <strong aria-current="true">{{ label }}</strong>
     {%- else -%}
-      <a href="{{ target_url | relative_url }}" hreflang="{{ Lnorm }}">{{ label }}</a>
+      <a href="{{ target_url | replace: '//', '/' | relative_url }}" hreflang="{{ Lnorm }}">{{ label }}</a>
     {%- endif -%}
   </li>
 {%- endfor -%}
