@@ -1,14 +1,15 @@
 {%- comment -%}
-Lang Switcher (jekyll-polyglot)
-- Bolds current language
-- Links to same doc/collection page in other languages when possible
-- Falls back to language home if no counterpart exists
-- Default language uses "/" instead of "/<lang>/"
+Lang Switcher (polyglot-aware, default-lang fix, pages+collections)
+- Current language is bold
+- Tries to link to the *same* page in each language
+  1) First search site.pages (for index/normal pages) by ref
+  2) Then search the collection (for collection items) by ref/slug
+- Fallback: language home (default -> "/", others -> "/<lang>/")
+Assumes you give matching pages the same `ref:` across languages.
 {%- endcomment -%}
 
 {%- assign current_lang = site.active_lang | default: site.default_lang -%}
 {%- assign langs = site.languages -%}
-{%- assign coll = page.collection | default: page.collection_name -%}
 
 <ul class="lang-switcher">
 {%- for L in langs -%}
@@ -17,12 +18,22 @@ Lang Switcher (jekyll-polyglot)
     {%- assign label = site.data.locales[L].lang_name -%}
   {%- endif -%}
 
-  {%- comment -%} Compute target URL {%- endcomment -%}
   {%- assign target_url = nil -%}
-  {%- if coll -%}
-    {%- assign items = site[coll] | where: "lang", L -%}
 
+  {%- comment -%} 1) Try to find counterpart among site.pages (good for index/normal pages) {%- endcomment -%}
+  {%- if page.ref -%}
+    {%- assign page_matches = site.pages | where: "lang", L | where: "ref", page.ref -%}
+    {%- assign page_candidate = page_matches | first -%}
+    {%- if page_candidate and page_candidate.url -%}
+      {%- assign target_url = page_candidate.url -%}
+    {%- endif -%}
+  {%- endif -%}
+
+  {%- comment -%} 2) If not found and this is a collection item, look in the collection {%- endcomment -%}
+  {%- if target_url == nil and page.collection -%}
+    {%- assign items = site[page.collection] | where: "lang", L -%}
     {%- assign candidate = nil -%}
+
     {%- if page.ref -%}
       {%- assign candidate = items | where: "ref", page.ref | first -%}
     {%- endif -%}
@@ -32,16 +43,17 @@ Lang Switcher (jekyll-polyglot)
       {%- assign candidate = items | where: "slug", pslug | first -%}
     {%- endif -%}
 
-    {%- if candidate -%}
+    {%- if candidate and candidate.url -%}
       {%- assign target_url = candidate.url -%}
     {%- endif -%}
   {%- endif -%}
 
+  {%- comment -%} 3) Fallback to language home (default lang -> "/") {%- endcomment -%}
   {%- if target_url == nil -%}
     {%- if L == site.default_lang -%}
-      {%- assign target_url = '/' -%}
+      {%- assign target_url = "/" -%}
     {%- else -%}
-      {%- assign target_url = '/' | append: L | append: '/' -%}
+      {%- assign target_url = "/" | append: L | append: "/" -%}
     {%- endif -%}
   {%- endif -%}
 
