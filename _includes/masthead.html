@@ -21,25 +21,20 @@
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
 
-        {%- assign langs = site.languages -%}
-        {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
-        
-        {%- comment -%} Determine language: prefer page.lang, else URL prefix, else default {%- endcomment -%}
-        {%- assign hlang = page.lang | to_s | downcase -%}
-        {%- if hlang == '' -%}
-          {%- assign firstseg = page.url | split:'/' | slice: 1, 1 | first | downcase -%}
-          {%- assign hlang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
-        {%- endif -%}
-        
-        {%- comment -%} Load from _data/navigation/<lang>.yml, fallback to default_lang {%- endcomment -%}
+        {%- comment -%} Language from URL only: /da/... -> da, /it/... -> it, else en {%- endcomment -%}
+        {%- assign path = page.url | to_s | downcase -%}
+        {%- assign hlang = 'en' -%}
+        {%- if path == '/da' or path contains '/da/' -%}{%- assign hlang = 'da' -%}{%- endif -%}
+        {%- if path == '/it' or path contains '/it/' -%}{%- assign hlang = 'it' -%}{%- endif -%}
+
+        {%- comment -%} Load _data/navigation/<lang>.yml; fallback to en.yml {%- endcomment -%}
         {%- assign navroot = site.data.navigation -%}
-        {%- assign navdata = navroot[hlang] -%}
-        {%- if navdata == nil -%}{%- assign navdata = navroot[default_lang] -%}{%- endif -%}
+        {%- assign navdata = navroot[hlang] | default: navroot.en -%}
         {%- assign items = navdata.main -%}
-        
+
         <ul class="visible-links">
           {%- for link in items -%}
-            {%- if hlang == default_lang -%}
+            {%- if hlang == 'en' -%}
               {%- assign href = link.url -%}
             {%- else -%}
               {%- capture href -%}/{{ hlang }}{{ link.url }}{%- endcapture -%}
@@ -49,7 +44,8 @@
             </li>
           {%- endfor -%}
         </ul>
-  <!-- Mobile overflow toggle (theme default) -->
+
+        <!-- Mobile overflow toggle (theme default) -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}</span>
           <div class="navicon"></div>
