@@ -24,28 +24,29 @@
         <!-- Main nav links (stay centered/right as usual) -->
         {%- assign langs = site.languages -%}
         {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
+        
+        {%- comment -%} Detect language from URL prefix (/da/, /it/); else default {%- endcomment -%}
         {%- assign firstseg = page.url | split:'/' | slice: 1, 1 | first | downcase -%}
-        {%- assign hlang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
-        {%- assign T = site.data.locales[hlang] | default: site.data.locales[default_lang] -%}
+        {%- assign hlang = default_lang -%}
+        {%- if firstseg and langs contains firstseg -%}{%- assign hlang = firstseg -%}{%- endif -%}
+        
+        {%- comment -%} Load locale dictionaries with safe fallbacks {%- endcomment -%}
+        {%- assign locales = site.data.locales -%}
+        {%- assign T = locales[hlang] | default: locales[default_lang] | default: empty -%}
+        {%- assign Tnav = T.nav | default: empty -%}
+        {%- assign Tseg = T.breadcrumb.segment_labels | default: empty -%}
         
         <ul class="visible-links">
           {%- for link in site.data.navigation.main -%}
-            {%- comment -%} find slug = first non-empty token of link.url {%- endcomment -%}
+            {%- comment -%} slug = first non-empty token of link.url (e.g. "/projects/" -> "projects") {%- endcomment -%}
             {%- assign parts = link.url | split:'/' -%}
             {%- assign slug = '' -%}
             {%- for p in parts -%}{%- if p != '' -%}{%- assign slug = p | downcase -%}{%- break -%}{%- endif -%}{%- endfor -%}
         
-            {%- comment -%} label from locales with fallbacks {%- endcomment -%}
-            {%- assign label = '' -%}
-            {%- if T and T.nav and T.nav[slug] -%}
-              {%- assign label = T.nav[slug] -%}
-            {%- elsif T and T.breadcrumb and T.breadcrumb.segment_labels and T.breadcrumb.segment_labels[slug] -%}
-              {%- assign label = T.breadcrumb.segment_labels[slug] -%}
-            {%- else -%}
-              {%- assign label = link.title -%}
-            {%- endif -%}
+            {%- comment -%} Look up translation: nav.slug -> breadcrumb.segment_labels.slug -> fallback to English title {%- endcomment -%}
+            {%- assign label = Tnav[slug] | default: Tseg[slug] | default: link.title -%}
         
-            {%- comment -%} build href with language prefix only when not default {%- endcomment -%}
+            {%- comment -%} Build href: prefix only when not default language (keep your working URL behavior) {%- endcomment -%}
             {%- if hlang == default_lang -%}
               {%- assign href = link.url -%}
             {%- else -%}
