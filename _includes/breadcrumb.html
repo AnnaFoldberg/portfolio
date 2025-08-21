@@ -1,5 +1,4 @@
 {%- comment -%} _includes/breadcrumb.html {%- endcomment -%}
-{% if page.show_breadcrumb %}
   {%- assign L = site.data.locales[site.active_lang].breadcrumb -%}
   {%- assign home_label = L.home | default: "Home" -%}
 
@@ -29,4 +28,3 @@
     {%- endfor -%}
   </nav>
   {%- endif -%}
-{% endif %}
