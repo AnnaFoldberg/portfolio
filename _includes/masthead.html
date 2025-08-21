@@ -1,12 +1,11 @@
 {% capture logo_path %}{{ site.logo }}{% endcapture %}
 
-{%- comment -%}
-Language + locale (match breadcrumb.html behavior)
-{%- endcomment -%}
+{%- comment -%} Language + locale (match breadcrumb.html behavior) {%- endcomment -%}
 {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
 {%- assign active = site.active_lang | default: default_lang | downcase -%}
 {%- assign L = site.data.locales[active] | default: site.data.locales[default_lang] -%}
 {%- assign lang_home = '/' | append: active | append: '/' -%}
+{%- assign langs = site.languages -%}
 
 <div class="masthead">
   <div class="masthead__inner-wrap">
@@ -25,7 +24,7 @@ Language + locale (match breadcrumb.html behavior)
           {% if site.subtitle %}<span class="site-subtitle">{{ site.subtitle }}</span>{% endif %}
         </a>
 
-        <!-- Language switcher placed right after the title (left group) -->
+        <!-- Language switcher -->
         <div class="lang-switcher--masthead">
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
@@ -36,30 +35,27 @@ Language + locale (match breadcrumb.html behavior)
           {%- for link in nav.main -%}
             {%- assign url = link.url | default:'/' -%}
 
-            {%- comment -%} External links: leave label and href untouched {%- endcomment -%}
+            {%- comment -%} External links: leave untouched {%- endcomment -%}
             {%- if url contains '://' -%}
               {%- assign label = link.title -%}
-              {%- if L.nav and L.nav[link.title | downcase] -%}
-                {%- assign label = L.nav[link.title | downcase] -%}
-              {%- endif -%}
               <li class="masthead__menu-item"><a href="{{ url }}">{{ label }}</a></li>
               {%- continue -%}
             {%- endif -%}
 
             {%- comment -%}
-            Compute slug in the same spirit as breadcrumb: work with segments,
-            but we don't derive language from URL — we already have site.active_lang.
+            Normalize: drop any leading language segment (en/da/it/etc)
+            so we can rebuild with the ACTIVE language (like breadcrumb’s lang_home).
             {%- endcomment -%}
             {%- assign parts = url | split:'/' -%}
             {%- assign tokens = "" | split:"" -%}
             {%- for p in parts -%}
-              {%- if p != '' and p != active -%} {# mirror breadcrumb: drop ONLY the active lang segment #}
+              {%- if p != '' and not (langs contains p) -%}
                 {%- assign tokens = tokens | push: p -%}
               {%- endif -%}
             {%- endfor -%}
             {%- assign slug = tokens[0] | downcase -%}
 
-            {%- comment -%} Label from locales (nav:, then breadcrumb.segment_labels:, else link.title) {%- endcomment -%}
+            {%- comment -%} Labels from locales: nav:, then breadcrumb.segment_labels:, else link.title {%- endcomment -%}
             {%- assign label = link.title -%}
             {%- if L.nav and L.nav[slug] -%}
               {%- assign label = L.nav[slug] -%}
@@ -67,10 +63,7 @@ Language + locale (match breadcrumb.html behavior)
               {%- assign label = L.breadcrumb.segment_labels[slug] -%}
             {%- endif -%}
 
-            {%- comment -%}
-            Build a clean language-agnostic path from tokens and then prefix with active,
-            exactly like breadcrumb’s lang_home idea.
-            {%- endcomment -%}
+            {%- comment -%} Rebuild clean path and prefix with active language (like breadcrumb’s lang_home) {%- endcomment -%}
             {%- assign path = '/' | append: tokens | join:'/' -%}
             {%- if url != '/' and url | slice:-1,1 == '/' -%}{%- assign path = path | append:'/' -%}{%- endif -%}
 
@@ -86,7 +79,7 @@ Language + locale (match breadcrumb.html behavior)
           {%- endfor -%}
         </ul>
 
-        <!-- Mobile overflow toggle (theme default) -->
+        <!-- Mobile overflow toggle -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[active].menu_label | default: "Toggle menu" }}</span>
           <div class="navicon"></div>
