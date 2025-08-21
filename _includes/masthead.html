@@ -13,7 +13,9 @@
         <!-- Site title (left) -->
         <a class="site-title" href="{{ '/' | relative_url }}">
           {{ site.masthead_title | default: site.title }}
-          {% if site.subtitle %}<span class="site-subtitle">{{ site.subtitle }}</span>{% endif %}
+          {% if site.subtitle %}
+            <span class="site-subtitle">{{ site.subtitle }}</span>
+          {% endif %}
         </a>
 
         <!-- Language switcher placed right after the title (left group) -->
@@ -47,7 +49,9 @@
 
         <!-- Mobile overflow toggle (theme default) -->
         <button class="greedy-nav__toggle hidden" type="button">
-          <span class="visually-hidden">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}</span>
+          <span class="visually-hidden">
+            {{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}
+          </span>
           <div class="navicon"></div>
         </button>
         <ul class="hidden-links hidden"></ul>
