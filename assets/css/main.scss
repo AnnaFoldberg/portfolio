@@ -335,3 +335,25 @@ body, h1, h2, h3, h4, h5, h6 {
 .site-footer {
   display: none !important;
 }
+
+/* Breadcrumb styling */
+nav.breadcrumb {
+  margin: 0 0 1.5rem 0;   /* space underneath */
+  padding: 0.25rem 0;     /* some vertical breathing room */
+  font-size: 0.9rem;      /* slightly smaller than body text */
+  color: #666;            /* muted text color */
+}
+
+nav.breadcrumb a {
+  color: var(--link-color, #0077cc);
+  text-decoration: none;
+}
+
+nav.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+nav.breadcrumb .crumb-current {
+  font-weight: 600; /* bold current page */
+  color: #333;      /* darker than the link color */
+}
