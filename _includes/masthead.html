@@ -30,24 +30,30 @@
         </div>
 
         <!-- Main nav links -->
-        {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
-        {%- assign active = page.lang | default: site.active_lang | default: default_lang | downcase -%}
-        {%- assign LOC = site.data.locales[active] | default: site.data.locales[default_lang] -%}
-        {%- assign NAV = LOC.nav | default: site.data.locales[default_lang].nav -%}
+        {%- comment -%} Detect language from URL (mirror breadcrumb behavior) {%- endcomment -%}
+        {%- assign langs = site.languages | default: "en,da,it" | downcase | split: "," -%}
+        {%- assign default_lang = site.default_lang | default:"en" | downcase -%}
+        {%- assign firstseg = page.url | split:"/" | slice: 1, 1 | first | downcase -%}
+        {%- assign active = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
         
-        <!-- Main nav links -->
+        {%- assign NAV = site.data.locales[active].nav | default: site.data.locales[default_lang].nav -%}
+        
         <ul class="visible-links">
           {%- for pair in NAV -%}
-            {%- assign slug = pair[0] -%}
-            {%- assign label = pair[1] -%}
+            {%- assign slug = pair[0] -%}   {# e.g., "projects" #}
+            {%- assign label = pair[1] -%}  {# e.g., "Progetti" / "Projekter" / "Projects" #}
         
-            {%- capture href -%}/{{ active }}/{{ slug }}/{%- endcapture -%}
+            {%- if active == default_lang -%}
+              {%- capture href -%}/{{ slug }}/{%- endcapture -%}
+            {%- else -%}
+              {%- capture href -%}/{{ active }}/{{ slug }}/{%- endcapture -%}
+            {%- endif -%}
         
             <li class="masthead__menu-item">
               <a href="{{ href | relative_url }}">{{ label }}</a>
             </li>
           {%- endfor -%}
-</ul>
+        </ul>
         <!-- Mobile overflow toggle -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[active].menu_label | default: "Toggle menu" }}</span>
