@@ -39,8 +39,8 @@
         <ul class="visible-links">
           {%- assign NAV = L.nav | default: site.data.locales[default_lang].nav -%}
           {%- for pair in NAV -%}
-            {%- assign slug = pair[0] -%}    {# key, e.g., "projects" #}
-            {%- assign label = pair[1] -%}   {# value, e.g., "Progetti" #}
+            {%- assign slug = pair[0] -%}
+            {%- assign label = pair[1] -%}
         
             {%- if active == default_lang -%}
               {%- capture href -%}/{{ slug }}/{%- endcapture -%}
