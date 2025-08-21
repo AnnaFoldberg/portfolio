@@ -1,0 +1,36 @@
+{%- assign L = site.data.locales[site.active_lang].breadcrumb -%}
+{%- assign home_label = L.home | default: "Home" -%}
+
+{%- comment -%}
+Split URL and remove empty segments and the language folder (en/da/it...).
+Examples:
+  /da/projects/some-item/      -> ["projects","some-item"]
+  /it/notes/                   -> ["notes"]
+{%- endcomment -%}
+{%- assign raw_segments = page.url | split:'/' | reject:'' -%}
+{%- assign segments = "" | split:"" -%}
+{%- for seg in raw_segments -%}
+  {%- if seg != site.active_lang -%}
+    {%- assign segments = segments | push: seg -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- capture path %}{% endcapture -%}
+<nav class="breadcrumb">
+  <a href="{{ '/' | relative_url }}">{{ home_label }}</a>
+  {%- for seg in segments -%}
+    {%- assign path = path | append:'/' | append: seg -%}
+    {%- assign label = seg | replace:'-',' ' | capitalize -%}
+    {%- if L.segment_labels and L.segment_labels[seg] -%}
+      {%- assign label = L.segment_labels[seg] -%}
+    {%- endif -%}
+
+    {%- if forloop.last -%}
+      <!-- Last crumb: prefer page.title; fallback to translated segment label -->
+      {%- assign last_label = page.title | default: label -%}
+      &nbsp;/&nbsp;<span class="crumb-current">{{ last_label }}</span>
+    {%- else -%}
+      &nbsp;/&nbsp;<a href="{{ path | relative_url }}">{{ label }}</a>
+    {%- endif -%}
+  {%- endfor -%}
+</nav>
