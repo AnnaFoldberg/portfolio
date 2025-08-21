@@ -2,3 +2,10 @@ left_rail:
   categories: "Categorie"
   tags: "Tag"
   clear: "Elimina filtri"
+
+breadcrumb:
+  home: "Home"
+  segment_labels:
+    projects: "Progetti"
+    notes: "Note"
+    log: "Log"
