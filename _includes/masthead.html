@@ -1,17 +1,25 @@
 {% capture logo_path %}{{ site.logo }}{% endcapture %}
+{%- assign langs = site.languages -%}
+{%- assign default_lang = site.default_lang | default:'en' | downcase -%}
+{%- assign active = site.active_lang | default: default_lang | downcase -%}
+{%- assign T = site.data.locales[active] | default: site.data.locales[default_lang] -%}
+
+{%- comment -%} Build a language-aware home path like breadcrumb.html {%- endcomment -%}
+{%- assign lang_home = '/' | append: active | append: '/' -%}
+
 <div class="masthead">
   <div class="masthead__inner-wrap">
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
 
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ '/' | relative_url }}">
+          <a class="site-logo" href="{{ (active == default_lang ? '/' : lang_home) | relative_url }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
         <!-- Site title (left) -->
-        <a class="site-title" href="{{ '/' | relative_url }}">
+        <a class="site-title" href="{{ (active == default_lang ? '/' : lang_home) | relative_url }}">
           {{ site.masthead_title | default: site.title }}
           {% if site.subtitle %}<span class="site-subtitle">{{ site.subtitle }}</span>{% endif %}
         </a>
@@ -21,21 +29,15 @@
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
 
-        <!-- Main nav links (stay centered/right as usual) -->
-        {%- assign langs = site.languages -%}
-        {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
-        {%- assign firstseg = page.url | split:'/' | slice: 1, 1 | first | downcase -%}
-        {%- assign hlang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
-        {%- assign T = site.data.locales[hlang] | default: site.data.locales[default_lang] -%}
-        
+        <!-- Main nav links (center/right) -->
         <ul class="visible-links">
-          {%- assign nav = site.data.navigation[hlang] | default: site.data.navigation[default_lang] -%}
+          {%- assign nav = site.data.navigation[active] | default: site.data.navigation[default_lang] -%}
           {%- for link in nav.main -%}
-            {%- comment -%} find slug = first non-empty token of link.url {%- endcomment -%}
+            {%- comment -%} slug = first non-empty token of link.url {%- endcomment -%}
             {%- assign parts = link.url | split:'/' -%}
             {%- assign slug = '' -%}
             {%- for p in parts -%}{%- if p != '' -%}{%- assign slug = p | downcase -%}{%- break -%}{%- endif -%}{%- endfor -%}
-        
+
             {%- comment -%} label from locales with fallbacks {%- endcomment -%}
             {%- assign label = '' -%}
             {%- if T and T.nav and T.nav[slug] -%}
@@ -45,22 +47,23 @@
             {%- else -%}
               {%- assign label = link.title -%}
             {%- endif -%}
-        
-            {%- comment -%} build href with language prefix only when not default {%- endcomment -%}
-            {%- if hlang == default_lang -%}
+
+            {%- comment -%} Build href with language prefix only when not default {%- endcomment -%}
+            {%- if active == default_lang -%}
               {%- assign href = link.url -%}
             {%- else -%}
-              {%- capture href -%}/{{ hlang }}{{ link.url }}{%- endcapture -%}
+              {%- capture href -%}/{{ active }}{{ link.url }}{%- endcapture -%}
             {%- endif -%}
-        
+
             <li class="masthead__menu-item">
               <a href="{{ href | replace: '//', '/' }}">{{ label }}</a>
             </li>
           {%- endfor -%}
         </ul>
-        <!-- Mobile overflow toggle (theme default) -->
+
+        <!-- Mobile overflow toggle -->
         <button class="greedy-nav__toggle hidden" type="button">
-          <span class="visually-hidden">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}</span>
+          <span class="visually-hidden">{{ site.data.ui-text[active].menu_label | default: "Toggle menu" }}</span>
           <div class="navicon"></div>
         </button>
         <ul class="hidden-links hidden"></ul>
