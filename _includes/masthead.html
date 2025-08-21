@@ -24,29 +24,14 @@
         <!-- Main nav links (stay centered/right as usual) -->
         {%- assign langs = site.languages -%}
         {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
-        
-        {%- comment -%} Detect language from URL prefix (/da/, /it/); else default {%- endcomment -%}
         {%- assign firstseg = page.url | split:'/' | slice: 1, 1 | first | downcase -%}
-        {%- assign hlang = default_lang -%}
-        {%- if firstseg and langs contains firstseg -%}{%- assign hlang = firstseg -%}{%- endif -%}
+        {%- assign hlang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
         
-        {%- comment -%} Load locale dictionaries with safe fallbacks {%- endcomment -%}
-        {%- assign locales = site.data.locales -%}
-        {%- assign T = locales[hlang] | default: locales[default_lang] | default: empty -%}
-        {%- assign Tnav = T.nav | default: empty -%}
-        {%- assign Tseg = T.breadcrumb.segment_labels | default: empty -%}
+        {%- assign navdata = site.data["navigation." | append: hlang] 
+            | default: site.data["navigation." | append: default_lang] -%}
         
         <ul class="visible-links">
-          {%- for link in site.data.navigation.main -%}
-            {%- comment -%} slug = first non-empty token of link.url (e.g. "/projects/" -> "projects") {%- endcomment -%}
-            {%- assign parts = link.url | split:'/' -%}
-            {%- assign slug = '' -%}
-            {%- for p in parts -%}{%- if p != '' -%}{%- assign slug = p | downcase -%}{%- break -%}{%- endif -%}{%- endfor -%}
-        
-            {%- comment -%} Look up translation: nav.slug -> breadcrumb.segment_labels.slug -> fallback to English title {%- endcomment -%}
-            {%- assign label = Tnav[slug] | default: Tseg[slug] | default: link.title -%}
-        
-            {%- comment -%} Build href: prefix only when not default language (keep your working URL behavior) {%- endcomment -%}
+          {%- for link in navdata.main -%}
             {%- if hlang == default_lang -%}
               {%- assign href = link.url -%}
             {%- else -%}
@@ -54,7 +39,7 @@
             {%- endif -%}
         
             <li class="masthead__menu-item">
-              <a href="{{ href | replace: '//', '/' }}">{{ label }}</a>
+              <a href="{{ href | replace: '//','/' }}">{{ link.title }}</a>
             </li>
           {%- endfor -%}
         </ul>
