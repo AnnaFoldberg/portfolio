@@ -4,80 +4,65 @@
     <div class="masthead__menu">
       <nav id="site-nav" class="greedy-nav">
 
-        {%- comment -%}
-        Resolve language ONCE from URL; never rely on mutable globals.
-        Accept only en/da/it; otherwise hard-fallback to 'en'.
-        {%- endcomment -%}
-        {%- assign __mh_segments = page.url | split:'/' -%}
-        {%- assign __mh_candidate = __mh_segments[1] | downcase -%}
-        {%- if __mh_candidate == 'en' or __mh_candidate == 'da' or __mh_candidate == 'it' -%}
-          {%- assign __mh_lang = __mh_candidate -%}
-        {%- else -%}
-          {%- assign __mh_lang = 'en' -%}
-        {%- endif -%}
-
-        {%- comment -%} Language-specific root like "/it/" {%- endcomment -%}
-        {%- assign __mh_home = '/' | append: __mh_lang | append: '/' -%}
-
-        {%- comment -%}
-        Pull localized nav items with hard fallbacks.
-        {%- endcomment -%}
-        {%- assign __mh_loc = site.data.locales[__mh_lang]
-          | default: site.data.locales.en -%}
-        {%- assign __mh_items = __mh_loc.main
-          | default: site.data.locales.en.main -%}
-
-        {%- comment -%} Logo (links to language root) {%- endcomment -%}
         {% unless logo_path == empty %}
-          <a class="site-logo" href="{{ __mh_home | relative_url }}">
+          <a class="site-logo" href="{{ '/' | relative_url }}">
             <img src="{{ logo_path | relative_url }}" alt="{{ site.masthead_title | default: site.title }}">
           </a>
         {% endunless %}
 
-        {%- comment -%} Site title (links to language root) {%- endcomment -%}
-        <a class="site-title" href="{{ __mh_home | relative_url }}">
+        <!-- Site title (left) -->
+        <a class="site-title" href="{{ '/' | relative_url }}">
           {{ site.masthead_title | default: site.title }}
-          {% if site.subtitle %}
-            <span class="site-subtitle">{{ site.subtitle }}</span>
-          {% endif %}
+          {% if site.subtitle %}<span class="site-subtitle">{{ site.subtitle }}</span>{% endif %}
         </a>
 
-        {%- comment -%}
-        Render the NAV MENU *before* any includes, using only our local vars.
-        {%- endcomment -%}
-        {%- if __mh_items -%}
-          <ul class="visible-links">
-            {%- for __mh_link in __mh_items -%}
-              {%- assign __mh_path = __mh_link.url | remove_first:'/' -%}
-              <li class="masthead__menu-item">
-                <a href="{{ __mh_home | append: __mh_path | relative_url }}">{{ __mh_link.title }}</a>
-              </li>
-            {%- endfor -%}
-          </ul>
-        {%- endif -%}
+        <!-- Language switcher placed right after the title (left group) -->
+        <div class="lang-switcher--masthead">
+          {% include lang-switcher.html current_lang=page.lang %}
+        </div>
 
-        {%- comment -%}
-        Mobile overflow toggle label (optional localization).
-        Uses the same resolved language; safe fallbacks to English.
-        {%- endcomment -%}
+        <!-- Main nav links (stay centered/right as usual) -->
+        {%- assign langs = site.languages -%}
+        {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
+        {%- assign firstseg = page.url | split:'/' | slice: 1, 1 | first | downcase -%}
+        {%- assign hlang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
+        {%- assign T = site.data.locales[hlang] | default: site.data.locales[default_lang] -%}
+        
+        <ul class="visible-links">
+          {%- for link in site.data.navigation.main -%}
+            {%- comment -%} find slug = first non-empty token of link.url {%- endcomment -%}
+            {%- assign parts = link.url | split:'/' -%}
+            {%- assign slug = '' -%}
+            {%- for p in parts -%}{%- if p != '' -%}{%- assign slug = p | downcase -%}{%- break -%}{%- endif -%}{%- endfor -%}
+        
+            {%- comment -%} label from locales with fallbacks {%- endcomment -%}
+            {%- assign label = '' -%}
+            {%- if T and T.nav and T.nav[slug] -%}
+              {%- assign label = T.nav[slug] -%}
+            {%- elsif T and T.breadcrumb and T.breadcrumb.segment_labels and T.breadcrumb.segment_labels[slug] -%}
+              {%- assign label = T.breadcrumb.segment_labels[slug] -%}
+            {%- else -%}
+              {%- assign label = link.title -%}
+            {%- endif -%}
+        
+            {%- comment -%} build href with language prefix only when not default {%- endcomment -%}
+            {%- if hlang == default_lang -%}
+              {%- assign href = link.url -%}
+            {%- else -%}
+              {%- capture href -%}/{{ hlang }}{{ link.url }}{%- endcapture -%}
+            {%- endif -%}
+        
+            <li class="masthead__menu-item">
+              <a href="{{ href | replace: '//', '/' }}">{{ label }}</a>
+            </li>
+          {%- endfor -%}
+        </ul>
+        <!-- Mobile overflow toggle (theme default) -->
         <button class="greedy-nav__toggle hidden" type="button">
-          <span class="visually-hidden">
-            {{ site.data.ui-text[__mh_lang].menu_label
-               | default: site.data.ui-text.en.menu_label
-               | default: "Toggle menu" }}
-          </span>
+          <span class="visually-hidden">{{ site.data.ui-text[site.locale].menu_label | default: "Toggle menu" }}</span>
           <div class="navicon"></div>
         </button>
-
         <ul class="hidden-links hidden"></ul>
-
-        {%- comment -%}
-        Finally include the language switcher.
-        It can’t affect the already-rendered menu or overwrite our local vars.
-        {%- endcomment -%}
-        <div class="lang-switcher--masthead">
-          {% include lang-switcher.html current_lang=__mh_lang %}
-        </div>
 
       </nav>
     </div>
