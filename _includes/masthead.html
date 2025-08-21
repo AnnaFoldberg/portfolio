@@ -29,25 +29,38 @@
           {% include lang-switcher.html current_lang=page.lang %}
         </div>
 
-        <!-- Main nav links (localized) -->
+        <!-- Main nav links (strictly polyglot, mirrors breadcrumb logic) -->
+        {%- assign default_lang = site.default_lang | default:'en' | downcase -%}
+        {%- assign langs = site.languages | default:'en,da,it' | downcase | split:',' -%}
+        
+        {%- comment -%}
+        Prefer site.active_lang if set; otherwise derive from the URL’s first segment,
+        exactly like breadcrumb.html does.
+        {%- endcomment -%}
+        {%- assign firstseg = page.url | split:'/' | slice:1,1 | first | downcase -%}
+        {%- assign derived_lang = (firstseg and langs contains firstseg) ? firstseg : default_lang -%}
+        {%- assign active_lang = site.active_lang | default: derived_lang | downcase -%}
+        
+        {%- comment -%} Load localized nav labels; fall back to default file safely {%- endcomment -%}
+        {%- assign Lnav = site.data.locales[active_lang].nav | default: site.data.locales[default_lang].nav -%}
+        
         {%- assign nav_slugs = "projects,notes,log" | split: "," -%}
         <ul class="visible-links">
           {%- for slug in nav_slugs -%}
             {%- assign slug = slug | strip -%}
             {%- assign label = Lnav[slug] | default: slug | replace:'-',' ' | capitalize -%}
-
+        
             {%- if active_lang == default_lang -%}
               {%- capture href -%}/{{ slug }}/{%- endcapture -%}
             {%- else -%}
               {%- capture href -%}/{{ active_lang }}/{{ slug }}/{%- endcapture -%}
             {%- endif -%}
-
+        
             <li class="masthead__menu-item">
               <a href="{{ href | relative_url }}">{{ label }}</a>
             </li>
           {%- endfor -%}
         </ul>
-
         <!-- Mobile overflow toggle -->
         <button class="greedy-nav__toggle hidden" type="button">
           <span class="visually-hidden">{{ site.data.ui-text[active_lang].menu_label | default: "Toggle menu" }}</span>
